@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7C078D8E2E3B339200FB7CAC"
-               BuildableName = "FluidVoice.app"
+               BuildableName = "PratiLekh.app"
                BlueprintName = "fluid"
-               ReferencedContainer = "container:Fluid.xcodeproj">
+               ReferencedContainer = "container:PratiLekh.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -37,7 +37,7 @@
                BlueprintIdentifier = "7CDB0A1F2F3C4D5600FB7CAD"
                BuildableName = "FluidDictationIntegrationTests.xctest"
                BlueprintName = "FluidDictationIntegrationTests"
-               ReferencedContainer = "container:Fluid.xcodeproj">
+               ReferencedContainer = "container:PratiLekh.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7C078D8E2E3B339200FB7CAC"
-            BuildableName = "FluidVoice.app"
+            BuildableName = "PratiLekh.app"
             BlueprintName = "fluid"
-            ReferencedContainer = "container:Fluid.xcodeproj">
+            ReferencedContainer = "container:PratiLekh.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -74,9 +74,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7C078D8E2E3B339200FB7CAC"
-            BuildableName = "FluidVoice.app"
+            BuildableName = "PratiLekh.app"
             BlueprintName = "fluid"
-            ReferencedContainer = "container:Fluid.xcodeproj">
+            ReferencedContainer = "container:PratiLekh.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

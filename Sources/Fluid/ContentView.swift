@@ -1298,7 +1298,7 @@ struct ContentView: View {
                 .accessibilityHidden(!self.settingsNavigation.isPresented)
         }
         .clipped()
-        .navigationTitle(self.settingsNavigation.isPresented ? "Settings" : "FluidVoice")
+        .navigationTitle(self.settingsNavigation.isPresented ? "Settings" : "PratiLekh")
         .tint(self.theme.palette.accent)
         .animation(self.modeTransitionAnimation, value: self.settingsNavigation.isPresented)
     }
@@ -4826,7 +4826,7 @@ extension ContentView {
     private func positionWindowBesideSystemSettings(requestID: UUID) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
             guard self.accessibilityGuideRequestID == requestID else { return }
-            guard let window = NSApp.windows.first(where: { $0.isVisible && $0.title == "FluidVoice" }) ?? NSApp.keyWindow else {
+            guard let window = NSApp.windows.first(where: { $0.isVisible && $0.title == "PratiLekh" }) ?? NSApp.keyWindow else {
                 return
             }
 
@@ -4995,7 +4995,7 @@ extension ContentView {
     private func cancelAccessibilityPermissionFlow() {
         self.finishAccessibilityPermissionFlow()
         NSApp.activate(ignoringOtherApps: true)
-        (NSApp.windows.first { $0.isVisible && $0.title == "FluidVoice" } ?? NSApp.keyWindow)?
+        (NSApp.windows.first { $0.isVisible && $0.title == "PratiLekh" } ?? NSApp.keyWindow)?
             .makeKeyAndOrderFront(nil)
     }
 

@@ -1,118 +1,62 @@
-# FluidVoice
+# PratiLekh
 
-<p align="center">
-  <a href="https://github.com/altic-dev/FluidVoice/stargazers"><img src="https://img.shields.io/github/stars/altic-dev/FluidVoice?style=social" alt="GitHub stars"/></a>
-  <a href="https://github.com/sponsors/altic-dev"><img src="https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?logo=githubsponsors&logoColor=white" alt="Sponsor FluidVoice"/></a>
-  <a href="https://x.com/fluidvoiceapp"><img src="https://img.shields.io/badge/X-%40fluidvoiceapp-black?logo=x&logoColor=white" alt="X @fluidvoiceapp"/></a>
-  <br />
-  <a href="https://huggingface.co/nvidia/parakeet_realtime_eou_120m-v1"><img src="https://img.shields.io/badge/Models-Nemotron%20Speech%203.5%20%7C%20Parakeet%20Flash%20%7C%20Parakeet%20v3%20%26%20v2%20%7C%20Cohere%20%7C%20Apple%20Speech%20%7C%20Whisper-blue" alt="Supported Models"/></a>
-  <br /><br />
-  <a href="https://trendshift.io/repositories/16601?utm_source=repository-badge&utm_medium=badge&utm_campaign=badge-repository-16601" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/16601" alt="altic-dev%2FFluidVoice | Trendshift" width="250" height="55"/></a>
-</p>
+**On-device dictation for Indian courts.**
 
-Open source voice-to-text dictation app for macOS with on-device AI enhancement.
+PratiLekh is a macOS menu-bar dictation app for recording evidence and drafting judgements,
+orders, and depositions — a virtual stenographer that transcribes speech locally on your Mac
+and is being tuned to recognize Indian legal terminology, Indian personal names, and Indian
+place names.
 
-**Install with Homebrew:** `brew install --cask fluidvoice`
-
-**Manual download:** [latest release](https://github.com/altic-dev/FluidVoice/releases/latest)
-
-> [!NOTE]
-> FluidVoice is on macOS today. **iOS and Windows are on the way** — join the waitlist to get notified when we launch: **[altic.dev/fluid/waitlist](https://www.altic.dev/fluid/waitlist)**
-
+It is a fork of [FluidVoice](https://github.com/altic-dev/FluidVoice), an open-source
+voice-to-text dictation app for macOS, adapted for the Indian courtroom setting. See
+[**Attribution**](#attribution) below and [`PRATILEKH_PLAN.md`](PRATILEKH_PLAN.md)
+for what's changed and what's planned.
 
 > [!IMPORTANT]
-> This project is free and open source under GPLv3. If FluidVoice is useful to you, please star the repository — it helps visibility and keeps development going.
+> PratiLekh is local-first by design: speech-to-text runs on-device, and analytics/telemetry
+> is disabled. AI-assisted formatting can optionally call a cloud provider, but that is
+> **off by default** and must be explicitly enabled — appropriate given the confidentiality of
+> courtroom evidence and draft judgements. See [Privacy](#privacy) below.
 
 ---
 
-## Support FluidVoice
+## Status
 
-If FluidVoice helps you, you can support continued development and future platform work for iOS and Windows on [GitHub Sponsors](https://github.com/sponsors/altic-dev).
-
----
-
-## What's New in 1.6.0
-
-- **Insanely fast Parakeet** — rebuilt Parakeet implementation with pretty much zero delay between speaking and seeing words on screen
-- **Fluid Intelligence** — fully local AI model for on-device dictation enhancement. No cloud, no API keys, no data leaving your Mac
-- **Better Theming** — adaptive light/dark theme with a compact toolbar switcher
-- **Refreshed Onboarding** — language-first voice engine setup, real dictation tryout, and AI enhancement setup in one clean pass
-
-> [!WARNING]
-> Based on early feedback, Fluid Intelligence may cause you to unsubscribe from other dictation apps and save money. You've been warned.
-
-## Fluid Intelligence
-
-FluidVoice is fully open source under GPLv3. **Fluid Intelligence** is a separate, privately maintained local AI runtime that powers advanced on-device dictation enhancement — smart formatting, context-aware capitalization, and post-processing — all running locally on your Mac.
-
-The app works great on its own with any supported speech model and optional cloud AI providers. Fluid Intelligence adds a fully local, private AI layer for users who want on-device enhancement without sending data anywhere.
-
-We're keeping Fluid Intelligence private for now so we can sustainably offer the core dictation experience for free. This may change in the future.
-
----
-
-## Fluid Intelligence Sneak Peek
-
-<table>
-  <tr>
-    <td width="50%" align="center"><b>Email Template</b></td>
-    <td width="50%" align="center"><b>Flowers</b></td>
-  </tr>
-  <tr>
-    <td width="50%"><video src="https://github.com/user-attachments/assets/36747e9d-1ea3-4d27-8d38-eaacb6d57285" width="100%"></video></td>
-    <td width="50%"><video src="https://github.com/user-attachments/assets/5f6063ab-0506-4687-b825-c7bf4ab66ed6" width="100%"></video></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><b>Change Time & Name</b></td>
-    <td width="50%" align="center"><b>Emoji</b></td>
-  </tr>
-  <tr>
-    <td width="50%"><video src="https://github.com/user-attachments/assets/6c7a7c4c-17a8-453d-8eff-1aa1fa9f6077" width="100%"></video></td>
-    <td width="50%"><video src="https://github.com/user-attachments/assets/04e00f3d-a602-448d-9bde-50b5e8f61ac6" width="100%"></video></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><b>Hyphens & Numbers</b></td>
-    <td width="50%"></td>
-  </tr>
-  <tr>
-    <td width="50%"><video src="https://github.com/user-attachments/assets/47175f2b-9f06-452e-b892-42488e4ba536" width="100%"></video></td>
-    <td width="50%"></td>
-  </tr>
-</table>
-
-## Demo
-
-### Command Mode — Take any action on your Mac using FluidVoice
-
-https://github.com/user-attachments/assets/ffb47afd-1621-432a-bdca-baa4b8526301
-
-### Write Mode — Write or rewrite text in any text box in any app
-
-https://github.com/user-attachments/assets/c57ef6d5-f0a1-4a3f-a121-637533442c24
+This fork is under active adaptation. Core dictation (on-device speech-to-text, Command Mode,
+Write Mode, per-app prompt configuration) works today, inherited from FluidVoice. The
+India-specific work — legal-term/name/place vocabulary, document-type formatting for evidence
+vs. judgement drafting, courtroom speaker roles, and case metadata — is tracked phase-by-phase
+in [`PRATILEKH_PLAN.md`](PRATILEKH_PLAN.md).
 
 ---
 
 ## Features
 
-- **Fluid Intelligence** — on-device AI enhancement for smart formatting, context-aware capitalization, and post-processing, all running locally on your Mac with zero data leaving your machine
-- **Command Mode** — control your Mac by voice: launch apps, run shortcuts, trigger system actions, and automate workflows without touching the keyboard
-- **Write Mode** — write or rewrite text directly in any text field across any app. Select text and rewrite it, or dictate new content inline
-- **Live Preview** — real-time transcription overlay with notch support, so you see words appear as you speak
-- **Multiple Speech Models** — Nemotron Speech 3.5, Parakeet Flash, Parakeet TDT v3 & v2, Cohere Transcribe, Apple Speech, and Whisper. Pick the model that fits your language and latency needs
-- **AI Enhancement** — optional post-processing via OpenAI, Groq, custom providers, or local Fluid Intelligence for cleaner, more accurate transcripts
-- **Audio History** — optional local recording history with budget controls and ZIP export, so you can review past dictations without cloud storage
-- **Today-Usage Stats** — daily usage tracking at a glance with a stats header card and toolbar pill
-- **Adaptive Theming** — light/dark theme that follows your system, with a compact toolbar switcher
+- **On-device speech-to-text** — multiple local speech models to choose from depending on
+  language coverage, accuracy, and latency needs (see [Supported Models](#supported-models))
+- **Command Mode** — control your Mac by voice: launch apps, run shortcuts, trigger system
+  actions, and automate workflows without touching the keyboard
+- **Write Mode** — write or rewrite text directly in any text field across any app. Select
+  text and rewrite it, or dictate new content inline — useful for drafting and revising orders
+  or judgements directly in your document editor
+- **Live Preview** — real-time transcription overlay so you see words appear as you speak,
+  useful for verifying accuracy while recording evidence
+- **Custom Dictionary & Vocabulary Boosting** — teach the app specific words, names, and
+  phrases so recognition improves over time; the seam being used to seed Indian legal
+  terminology, names, and place names (see the plan doc)
+- **Per-App / Per-Context Prompt Profiles** — assign different formatting instructions to
+  different apps or contexts, so dictation output adapts to whatever you're drafting
+- **AI Enhancement (opt-in)** — optional post-processing via a cloud provider (OpenAI, Groq,
+  custom endpoint) or a local private AI model, for cleaner, better-formatted transcripts.
+  Disabled by default — see [Privacy](#privacy)
+- **Audio History** — optional local recording history with budget controls and ZIP export,
+  so you can review past dictations without cloud storage
 - **Global Hotkey** — instant voice capture from anywhere, no app switching needed
-- **Smart Typing** — direct insertion into any app via accessibility APIs for reliable, app-independent text entry
-- **Menu Bar Integration** — quick access, status, and settings from the menu bar
-- **Auto-Updates** — seamless updates with an optional beta channel for early previews
-- **Per-App Configuration** — assign different prompt sets to different apps, so your dictation adapts to whatever you're working in. Fully optional
-- **Notch-Aware Overlay** — transcription overlay that fits cleanly around the MacBook notch, or use a standard overlay if your Mac doesn't have one
-- **Local-First** — your voice and text never leave your machine unless you opt in to a cloud AI provider
-- **Fastest Parakeet on Mac** — one of the fastest native implementations of Parakeet on macOS, with near-instant transcription and minimal latency
-- **Configurable Overlay** — choose from pill-shaped to large overlay sizes to show live preview, or keep it minimal. Everything is optional
-- **Everything is Optional** — AI enhancement, Fluid Intelligence, audio history, detailed analytics, and beta builds are optional. The core dictation experience works out of the box with zero configuration beyond permissions and a hotkey
+- **Smart Typing** — direct insertion into any app via accessibility APIs for reliable,
+  app-independent text entry
+- **Adaptive Theming** — light/dark theme that follows your system
+- **Local-First** — your voice and text never leave your machine unless you explicitly opt in
+  to a cloud AI provider; analytics/telemetry is disabled entirely in this fork
 
 ---
 
@@ -124,62 +68,55 @@ https://github.com/user-attachments/assets/c57ef6d5-f0a1-4a3f-a121-637533442c24
 | Nemotron 3.5 Multilingual | Higher-accuracy multilingual dictation | ~40 languages | ~530 MB | Apple Silicon |
 | [Parakeet Flash (Beta)](https://huggingface.co/nvidia/parakeet_realtime_eou_120m-v1) | Lowest-latency live English dictation | English | ~250 MB | Apple Silicon |
 | Parakeet TDT v3 | Fast default multilingual dictation | [25 languages](#parakeet-tdt-v3-languages) | ~500 MB | Apple Silicon |
-| Parakeet TDT v2 | Fastest English-only dictation | [English](#parakeet-tdt-v2-languages) | ~500 MB | Apple Silicon |
+| Parakeet TDT v2 | Fastest English-only dictation | English | ~500 MB | Apple Silicon |
 | Cohere Transcribe | High-accuracy multilingual dictation | [14 languages](#cohere-transcribe-languages) | ~1.4 GB | Apple Silicon |
-| Apple Speech | Zero-download native macOS speech | [System languages](#apple-speech-languages) | Built-in | Apple Silicon + Intel |
-| Whisper Tiny / Base / Small / Medium / Large | Broad compatibility, including Intel Macs | [99 languages](#whisper-language-support) | ~75 MB to ~2.9 GB | Apple Silicon + Intel |
+| Apple Speech | Zero-download native macOS speech | System languages | Built-in | Apple Silicon + Intel |
+| Whisper Tiny / Base / Small / Medium / Large | Broad compatibility, including Intel Macs; currently the best option for Indian-accented English and Hindi | [99 languages](#whisper-language-support) | ~75 MB to ~2.9 GB | Apple Silicon + Intel |
+
+None of these models ship with Indian-legal-specific tuning out of the box — accuracy on
+Indian names, places, and legal terms depends on the custom vocabulary/dictionary work
+described in [`PRATILEKH_PLAN.md`](PRATILEKH_PLAN.md). Whisper is currently the
+recommended starting point for Indian-accented English dictation.
 
 ### Parakeet TDT v3 Languages
 
 Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Spanish, Swedish, and Ukrainian.
 
-### Parakeet TDT v2 Languages
-
-English.
-
 ### Cohere Transcribe Languages
 
 English, French, German, Italian, Spanish, Portuguese, Greek, Dutch, Polish, Mandarin, Japanese, Korean, Vietnamese, and Arabic.
 
-### Apple Speech Languages
-
-System language support depends on the macOS speech recognition languages available on your machine.
-
 ### Whisper Language Support
 
-Whisper supports up to 99 languages, depending on the model size you choose.
+Whisper supports up to 99 languages, including Hindi, depending on the model size you choose.
 
 ---
 
 ## Quick Start
 
-1. **Install** with Homebrew:
-   ```bash
-   brew install --cask fluidvoice
-   ```
-   Or download the [latest release](https://github.com/altic-dev/FluidVoice/releases/latest).
+PratiLekh is not currently published as a signed release or Homebrew cask — build it from
+source (see [Building from Source](#building-from-source) below).
 
-2. **Grant permissions** — FluidVoice will ask for microphone and accessibility access. Both are required for dictation and typing into other apps.
-
-3. **Set your hotkey** — pick a global hotkey in settings that triggers voice capture from anywhere.
-
-4. **Go through onboarding** — choose your voice model based on your language and latency needs. Models range from zero-download Apple Speech to high-accuracy Nemotron and Whisper.
-
-5. **(Optional) Enable Fluid Intelligence** — download the local AI model during onboarding for on-device dictation enhancement. Everything runs locally, no data leaves your Mac.
-
-6. **(Optional) Bring your own AI provider** — add an OpenAI, Groq, or custom provider API key for cloud-based enhancement. Keys are stored securely in macOS Keychain. Select "Always allow" for key access.
-
-7. **(Optional) Opt in to beta builds** — `Settings → Automatic Updates → Beta Releases` for early access to new features.
+1. **Build and run** the app from Xcode or via `./build.sh`.
+2. **Grant permissions** — PratiLekh will ask for microphone and accessibility access. Both
+   are required for dictation and typing into other apps.
+3. **Set your hotkey** — pick a global hotkey in settings that triggers voice capture from
+   anywhere.
+4. **Go through onboarding** — choose your voice model. Whisper (Medium or Large) is the
+   recommended starting point for Indian-accented English dictation.
+5. **Build out your custom dictionary** — add case-relevant names, places, and legal terms as
+   you encounter recognition gaps (`Settings → Custom Dictionary`).
+6. **(Optional) Enable AI enhancement** — only if you're comfortable with the provider's data
+   handling for your use case. Off by default; see [Privacy](#privacy).
 
 ---
 
 ## Requirements
 
 - macOS 15.0 (Sequoia) or later
-- Apple Silicon Mac for all models
-- Intel Macs supported via Whisper models (from 1.5.1+)
+- Apple Silicon Mac for most models
+- Intel Macs supported via Whisper and Apple Speech models
 - ~1 GB disk space for a voice model
-- ~3.5 GB disk space for the Fluid Intelligence model (optional)
 - Microphone access
 - Accessibility permissions for typing
 
@@ -188,9 +125,9 @@ Whisper supports up to 99 languages, depending on the model size you choose.
 ## Building from Source
 
 ```bash
-git clone https://github.com/altic-dev/FluidVoice.git
-cd FluidVoice
-open Fluid.xcodeproj
+git clone https://github.com/SilviusSpark/PratiLekh.git
+cd PratiLekh
+open PratiLekh.xcodeproj
 ```
 
 Build and run in Xcode. All dependencies are managed via Swift Package Manager.
@@ -201,12 +138,15 @@ Run a signed Debug build using the script:
 ./build.sh
 ```
 
-The signed build is written to `DerivedData/Build/Products/Debug/FluidVoice Debug.app`.
+This needs an Apple Development signing identity for your own Team ID
+(`Xcode → Settings → Accounts`, then `Manage Certificates`). A free Personal Team is
+sufficient for local development. See `./build.sh` output for guidance if none is found.
+
+The signed build is written to `DerivedData/Build/Products/Debug/PratiLekh Debug.app`.
 Keep launching that product after each rebuild so macOS can preserve its Accessibility
 authorization.
 
-For CI or contributors who do not have a signing identity, use the explicit unsigned
-fallback:
+For CI, or to build without a signing identity at all:
 
 ```bash
 ./build.sh unsigned
@@ -215,68 +155,58 @@ fallback:
 Unsigned builds are tied to a specific executable version and may require Accessibility
 permission to be removed and granted again after rebuilding.
 
----
-
-## Contributing
-
-Contributions are welcome! Please create an issue first to discuss major changes before submitting a pull request.
-
-### Development Setup
-
-1. Clone and open in Xcode as above.
-2. **Signing:** `FluidVoice → Signing & Capabilities → Automatically manage signing → pick your Team` (Personal Team is fine). If you have certificates for multiple teams, select one without changing the project by running `FLUIDVOICE_DEVELOPMENT_TEAM=YOUR_TEAM_ID ./build.sh`.
-3. Build and run — SPM handles dependencies.
-4. **(Optional) Pre-commit hook** to prevent accidental team ID commits:
-   ```bash
-   cp scripts/check-team-id.sh .git/hooks/pre-commit
-   chmod +x .git/hooks/pre-commit
-   ```
-
-### Pull Request Guidelines
-
-- **One feature or fix per PR** — keep changes focused and atomic
-- **Create an issue first** so work is trackable before review
-- **Discuss non-trivial changes** before opening a PR
-- **Follow the PR template**
-- **Test thoroughly** on your machine
-- **Never commit personal team IDs or API keys**
-- **Check `git diff`** before committing
-
----
-
-## Run Integration Tests
+### Run Integration Tests
 
 ```bash
-xcodebuild test -project Fluid.xcodeproj -scheme Fluid -destination 'platform=macOS'
+xcodebuild test -project PratiLekh.xcodeproj -scheme PratiLekh -destination 'platform=macOS'
 ```
 
-CI uses unsigned builds:
+CI-equivalent unsigned run:
 
 ```bash
-xcodebuild test -project Fluid.xcodeproj -scheme Fluid -destination 'platform=macOS' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+xcodebuild test -project PratiLekh.xcodeproj -scheme PratiLekh -destination 'platform=macOS' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 ```
+
+### Formatting & Linting
+
+```bash
+./scripts/format-and-lint.sh
+```
+
+Runs SwiftFormat then `swiftlint --strict` (auto-installs both via Homebrew if missing).
 
 ---
 
-## Privacy & Analytics
+## Development Notes
 
-FluidVoice is **local-first**. Your voice, audio, and transcribed text never leave your machine unless you explicitly opt in to a cloud AI provider.
+- See [`CLAUDE.md`](CLAUDE.md) for the architecture map, build/test conventions, and
+  fork-specific workflow rules (useful context whether you're a human contributor or an AI
+  coding assistant working in this repo).
+- See [`PRATILEKH_PLAN.md`](PRATILEKH_PLAN.md) for the phased roadmap and design
+  decisions made so far.
+- `DEVELOPMENT_TEAM` in the Xcode project is set to whoever last configured signing locally —
+  don't commit changes to it. If you have certificates for multiple teams, select one without
+  changing the project by running `PRATILEKH_DEVELOPMENT_TEAM=YOUR_TEAM_ID ./build.sh`.
+- Optional pre-commit hook to guard against accidentally committing a different team ID:
+  ```bash
+  cp scripts/check-team-id.sh .git/hooks/pre-commit
+  chmod +x .git/hooks/pre-commit
+  ```
+  Update `OFFICIAL_TEAM_ID` in that script to your own team ID first.
 
-### What's Collected
+---
 
-FluidVoice records one anonymous activity signal per local day and uploads the week's buffered signals together after the week ends. Detailed anonymous analytics are enabled by default and can be disabled at any time from `Settings → Share Detailed Anonymous Analytics`; when disabled, only the weekly activity batch is sent.
+## Privacy
 
-**Daily activity:**
+PratiLekh is **local-first**. Speech-to-text runs entirely on-device. Your voice, audio, and
+transcribed text never leave your machine unless you explicitly enable a cloud AI provider for
+post-processing — which is off by default.
 
-- A random installation ID, activity date, app version, and macOS platform label
+**Analytics/telemetry is disabled entirely in this fork** (the upstream PostHog integration
+point still exists in code but its key is cleared, so no events are ever sent — see
+`Sources/Fluid/Analytics/AnalyticsConfig.swift`).
 
-**With detailed analytics enabled:**
-
-- Daily feature and model usage totals
-- Onboarding progress
-- Model download starts and high-level outcomes
-
-**Not Collected:**
+**Never collected, regardless of settings:**
 
 - Voice, raw audio, or transcribed text
 - Selected text, prompts, or AI responses
@@ -285,16 +215,19 @@ FluidVoice records one anonymous activity signal per local day and uploads the w
 
 ---
 
-## Community
+## Attribution
 
-Join our Discord: https://discord.gg/VUPHaKSvYV
+PratiLekh is a fork of [FluidVoice](https://github.com/altic-dev/FluidVoice) by
+[altic-dev](https://github.com/altic-dev), licensed under the
+[GNU General Public License, Version 3.0 (GPLv3)](LICENSE). Substantial credit for the core
+dictation engine, on-device speech models integration, Command Mode, Write Mode, and overall
+app architecture belongs to the upstream FluidVoice project and its contributors.
 
-Follow development on X: [@fluidvoiceapp](https://x.com/fluidvoiceapp)
-
----
+"Fluid Intelligence," referenced in some upstream code paths, is a separate, privately
+maintained local AI runtime belonging to the upstream project — it is not part of this fork's
+own code and this fork does not extend or redistribute it.
 
 ## License
 
-From 2026-02-23 onward, this project is licensed under the [GNU General Public License, Version 3.0 (GPLv3)](LICENSE).
-
-Versions published before this date were licensed under Apache License 2.0.
+This project is licensed under the [GNU General Public License, Version 3.0 (GPLv3)](LICENSE),
+inherited from the upstream FluidVoice project.

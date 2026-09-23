@@ -584,7 +584,7 @@ struct CustomDictionaryView: View {
         VStack(alignment: .leading, spacing: self.theme.metrics.spacing.sm) {
             Text("Change it to")
                 .font(self.theme.typography.captionStrong)
-            TextField("FluidVoice", text: self.$manualReplacement)
+            TextField("PratiLekh", text: self.$manualReplacement)
                 .dictionaryInputChrome()
                 .onSubmit { self.addManualReplacementIfValid() }
             Text("This is what appears in your transcription.")
@@ -1158,7 +1158,7 @@ struct CustomDictionaryView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("Word or Phrase")
                     .font(self.theme.typography.captionStrong)
-                TextField("FluidVoice", text: self.$boostTermText)
+                TextField("PratiLekh", text: self.$boostTermText)
                     .font(self.theme.typography.bodySmall)
                     .dictionaryInputChrome()
                     .onSubmit { self.saveBoostTermIfValid() }
@@ -3463,7 +3463,7 @@ struct AddDictionaryEntrySheet: View {
                 Text("This is what will appear in the final transcription.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                TextField("FluidVoice", text: self.$replacement)
+                TextField("PratiLekh", text: self.$replacement)
                     .dictionaryInputChrome()
                     .onSubmit { self.saveIfValid() }
             }
@@ -3615,7 +3615,7 @@ struct EditDictionaryEntrySheet: View {
                 Text("This is what will appear in the final transcription.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                TextField("FluidVoice", text: self.$replacement)
+                TextField("PratiLekh", text: self.$replacement)
                     .dictionaryInputChrome()
                     .onSubmit { self.saveIfValid() }
             }

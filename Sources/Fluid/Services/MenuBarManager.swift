@@ -989,7 +989,7 @@ final class MenuBarManager: NSObject, ObservableObject, NSMenuDelegate {
         guard window.styleMask.contains(.titled) else { return false }
         guard window.canBecomeKey else { return false }
         guard window.isMiniaturized == false else { return false }
-        return window.title == "FluidVoice" || window.title.contains("FluidVoice")
+        return window.title == "PratiLekh" || window.title.contains("PratiLekh")
     }
 
     @objc private func openPreferences() {
@@ -1051,7 +1051,7 @@ final class MenuBarManager: NSObject, ObservableObject, NSMenuDelegate {
             backing: .buffered,
             defer: false
         )
-        window.title = "FluidVoice"
+        window.title = "PratiLekh"
         window.animationBehavior = .none
         window.minSize = self.mainWindowMinimumSize
         window.isReleasedWhenClosed = false

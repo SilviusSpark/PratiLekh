@@ -17,6 +17,9 @@ struct FluidApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     init() {
+        // Must run before any singleton below touches Application Support.
+        AppSupportMigration.migrateFluidVoiceDataIfNeeded()
+
         // Use the shared singleton instance
         _appServices = StateObject(wrappedValue: AppServices.shared)
     }
