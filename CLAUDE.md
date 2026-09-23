@@ -36,6 +36,17 @@ xcodebuild test -project PratiLekh.xcodeproj -scheme PratiLekh -destination 'pla
 ./scripts/format-and-lint.sh # swiftformat + swiftlint --strict (auto-installs via brew if missing)
 ```
 
+- **Two distinct test mechanisms exist, don't conflate them.** `Sources/Fluid` is a
+  `PBXFileSystemSynchronizedRootGroup` — new files there are picked up automatically, no
+  `project.pbxproj` edit needed. The `FluidDictationIntegrationTests` XCTest target is **not**
+  synchronized — every file is an explicit `PBXFileReference`/`PBXBuildFile` entry, so adding a
+  new XCTest file requires a `project.pbxproj` edit. For pure-logic code with no UI/ASR/audio
+  dependency, prefer this repo's other existing convention instead: a standalone
+  `@main`-enum `Tests/*.swift` file with `precondition`-based assertions, compiled and run via
+  `xcrun swiftc -parse-as-library <sources> <test file> -o <bin> && <bin>` from a
+  `scripts/test_*.sh` runner (see `scripts/test_provider_model_verification.sh`,
+  `scripts/test_legal_language.sh`) — zero `project.pbxproj` involvement.
+
 - `DEVELOPMENT_TEAM` in the pbxproj is currently the original FluidVoice vendor's Team ID
   (`V4J43B279J`) — this needs to be the user's own team for signed builds. Don't change it
   yourself without being asked; prefer `./build.sh unsigned` for verification builds.

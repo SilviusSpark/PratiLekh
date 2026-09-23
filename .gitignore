@@ -212,7 +212,8 @@ scratch/
 
 assets/
 .swiftpm/
-scripts/
+scripts/*
+!scripts/test_legal_language.sh
 
 # Benchmark / eval reports (local-only)
 benchmark_reports/

@@ -86,33 +86,60 @@ README rewritten, build verified (`./build.sh unsigned` succeeds). Signing: no s
 is installed on this machine; the decision (2026-09-22) was to build unsigned for now rather
 than set up a Team ID — `DEVELOPMENT_TEAM` deliberately left at the original vendor's value.
 
-**Not yet committed to git** — see the commit recommendation delivered alongside this plan
-revision.
+Committed as `7b782dade34d4ec810a8c01a714bbbbb3908e508` on `main`.
 
-## Phase 1 — Legal Language Architecture
+## Phase 1 — Legal Language Architecture — ✅ Complete
 
 **Purpose:** build the foundation before any legal content exists, so Phase 2 onward is
 populating data into a designed system rather than growing an ad hoc one.
 
-**Principal deliverables:**
-- A versioned vocabulary/resource **pack** format (schema + version field, load/merge order).
-- **Precedence and override rules** between built-in, jurisdictional, and user vocabulary —
-  defined explicitly, not implied by load order accidents.
-- A clear data/code separation between **recognition vocabulary/hints** (what gets fed to an
-  ASR provider to improve recognition) and **deterministic text normalization** (what
-  transforms already-recognized text into correct legal form) — these are different concerns
-  today conflated in `ParakeetVocabularyStore`'s single-provider vocabulary boosting.
-- **Provider-specific vocabulary adapters** — an abstraction so a pack's canonical vocabulary
-  can be translated into Parakeet boosting terms, Whisper prompt tokens, or a future engine's
-  format, without the pack format itself knowing about any one engine.
-- A **pure, testable legal-normalization boundary** — a module with no UI/ASR side effects,
-  taking recognized text in and returning normalized text plus provenance metadata out.
-- A **provenance model** carried through the pipeline (see cross-cutting principle 2).
-- Extension-point design for `ASRService`, `ContentView`, and `SettingsStore` that keeps this
-  system's growth out of those files as much as possible.
+**Delivered** (`Sources/Fluid/LegalLanguage/`, 12 files — `Packs/`, `Resolution/`,
+`Recognition/`, `Normalization/`, plus the `LegalLanguageCoordinator` facade):
+- A versioned vocabulary/resource **pack** format (`LanguagePack`: id, semantic version, kind,
+  recognition entries, normalization entries), with a `PackLoader` that validates schema/version
+  and a `PackRepository` in-memory holder.
+- **Precedence and override rules** (`PrecedenceResolver`): `user > jurisdiction > builtin`,
+  rank derived from `pack.kind` (order-independent), override never mutates a lower-precedence
+  pack's stored entries. Same-rank/same-value contributions deduplicate to a clean resolution;
+  same-rank/different-value contributions produce a structured `PackConflict`, never a silent
+  pick. Recognition entries resolve differently from normalization entries: recognition is a
+  pure alias union (no conflict concept — two packs' hints for the same term are never
+  ambiguous), while normalization is a value-producing mapping where disagreement is genuine
+  ambiguity.
+- **Provider-specific vocabulary adapters** (`ProviderCapabilityResolver`,
+  `RecognitionVocabularyAdapter`): a name-keyed, PratiLekh-side capability lookup — deliberately
+  *not* a change to `TranscriptionProvider` or any provider file. Every key was verified against
+  the real `name` property in each provider's source (not guessed). Only `FluidAudioProvider`'s
+  real (Apple Silicon) implementation has a confirmed recognition-hint mechanism today
+  (`ParakeetVocabularyStore` + `AsrManager.configureVocabularyBoosting`, cap 256 terms); every
+  other current provider name safely resolves to `.none` rather than an assumed capability.
+- A **pure, testable legal-normalization boundary** (`LegalNormalizer` protocol +
+  `LookupTableNormalizer`, Phase 1's one conformance): evaluates each resolved-table entry
+  independently against the input text. A cleanly resolved match is applied; a conflicted match
+  is left unchanged in the output and recorded as declined. One `NormalizationOutcome` may
+  legitimately contain both applied and declined changes — an unrelated conflict never blocks
+  an otherwise-safe transformation elsewhere in the same text. "No matching trigger" is always
+  `unchanged`, never `declined`; `declined` is reserved for genuine, resolver-detected ambiguity.
+- **Provenance**, scoped to what Phase 1 needs: `NormalizationOutcome` carries `recognized`
+  (untouched input), `normalized`, `appliedChanges`, `declinedChanges`. No speculative
+  `.aiProposed`/`.final` stage wrapper — extend when those stages actually exist (Phase 7+).
+- **Zero changes to any existing FluidVoice production source file** — confirmed via `git diff`
+  showing only new files plus a narrowly-scoped `.gitignore` exception (to track the new test
+  runner without registering it in the hosted XCTest target). `ASRService`, `ContentView`,
+  `SettingsStore`, `TranscriptionProvider`, `ParakeetVocabularyStore`, and every provider file
+  are untouched. No live wiring into the transcription pipeline — the complete flow (fixture
+  pack → loading → precedence resolution → recognition adaptation → normalization →
+  `NormalizationOutcome`) is proven by coordinator-level tests using fixture packs only.
+- **Tests**: 5 standalone `xcrun swiftc`-compiled assertion suites under `Tests/`, run via
+  `scripts/test_legal_language.sh` — following this repo's existing pure-logic test convention
+  (same pattern as `scripts/test_provider_model_verification.sh`) rather than the Xcode-hosted
+  `FluidDictationIntegrationTests` target, since that target requires per-file
+  `project.pbxproj` registration (no synchronized group, unlike `Sources/Fluid`) and no such
+  edit was made.
 
-This phase produces interfaces, protocols, and minimal scaffolding/tests — not real legal
-content.
+**Deferred, as designed:** any real pack content (Phase 2), overlapping/tokenized trigger
+matching (documented limitation, revisit in Phase 3 if real content needs it), live recognition-
+hint wiring into any provider, Court Privacy Mode hooks, AI cleanup.
 
 ## Phase 2 — Indian Legal Core
 
