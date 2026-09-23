@@ -33,3 +33,10 @@ for task_test_file in \
     xcrun swiftc -parse-as-library $task_sources "$task_test_file" -o "$task_test_dir/$task_binary_name"
     "$task_test_dir/$task_binary_name"
 done
+
+# IndianLegalCorePackTests reads the production pack JSON directly (this
+# standalone binary has no app bundle, so it can't use BuiltInPacks'
+# Bundle.main lookup) -- pass the file's path as argv[1].
+# shellcheck disable=SC2086
+xcrun swiftc -parse-as-library $task_sources Tests/IndianLegalCorePackTests.swift -o "$task_test_dir/IndianLegalCorePackTests"
+"$task_test_dir/IndianLegalCorePackTests" "$(pwd)/Sources/Fluid/Resources/indian_legal_core.default.json"

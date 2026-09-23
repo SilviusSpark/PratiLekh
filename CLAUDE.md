@@ -45,7 +45,11 @@ xcodebuild test -project PratiLekh.xcodeproj -scheme PratiLekh -destination 'pla
   `@main`-enum `Tests/*.swift` file with `precondition`-based assertions, compiled and run via
   `xcrun swiftc -parse-as-library <sources> <test file> -o <bin> && <bin>` from a
   `scripts/test_*.sh` runner (see `scripts/test_provider_model_verification.sh`,
-  `scripts/test_legal_language.sh`) — zero `project.pbxproj` involvement.
+  `scripts/test_legal_language.sh`) — zero `project.pbxproj` involvement. These standalone
+  binaries have **no app bundle**, so `Bundle.main` resource lookups (e.g. `BuiltInPacks`
+  loading a bundled `LanguagePack` JSON) don't resolve inside them — pass the file's path as a
+  `CommandLine.arguments` entry from the runner script instead of trying to exercise
+  `Bundle.main` in that harness (see `IndianLegalCorePackTests.swift`).
 
 - `DEVELOPMENT_TEAM` in the pbxproj is currently the original FluidVoice vendor's Team ID
   (`V4J43B279J`) — this needs to be the user's own team for signed builds. Don't change it

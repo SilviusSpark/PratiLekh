@@ -141,20 +141,69 @@ populating data into a designed system rather than growing an ad hoc one.
 matching (documented limitation, revisit in Phase 3 if real content needs it), live recognition-
 hint wiring into any provider, Court Privacy Mode hooks, AI cleanup.
 
-## Phase 2 — Indian Legal Core
+## Phase 2 — Indian Legal Core — ✅ Complete
 
-**Purpose:** populate the first real vocabulary/normalization pack using Phase 1's
-architecture.
+**Purpose:** populate the first real vocabulary pack using Phase 1's architecture, scoped to
+actual trial-court/Magistrate dictation rather than a general legal glossary.
 
-**Principal deliverables:**
-- **Indian Legal Core** pack, prioritizing current law — BNS (Bharatiya Nyaya Sanhita), BNSS
-  (Bharatiya Nagarik Suraksha Sanhita), BSA (Bharatiya Sakshya Adhiniyam) — while retaining IPC,
-  CrPC, and the Indian Evidence Act for legacy-case dictation.
-- Recognition hints and citation-normalization rules for statutory references under both the
-  new and legacy codes.
-- Common procedural/judicial terminology and Latin legal maxims as recognition hints.
-- Explicitly deferred to later extensions of this same pack mechanism: CPC, other common
-  statutes, and broader procedural vocabulary.
+**Delivered:**
+- `Sources/Fluid/Resources/indian_legal_core.default.json` — the built-in Indian Legal Core
+  pack (`id: indian-legal-core`, `kind: builtin`, `version: 1.0.0`), **77 recognition entries,
+  0 normalization entries**, across six categories: BNS/BNSS/BSA (current codes), IPC/CrPC/
+  Indian Evidence Act (legacy codes, coexisting without any conversion mapping), CPC/civil
+  procedure, cross-cutting judicial/procedural terminology (the largest category — bail/
+  remand/custody, cognizance/charge/plea, evidence recording, sentencing — curated from live
+  research against India Code, MHA/BPRD official texts, and Supreme Court judgment usage
+  rather than model memory), institutional/role abbreviations, and a deliberately trimmed set
+  of trial-relevant Latin expressions (appellate/precedent-only Latin — ratio decidendi, obiter
+  dicta, stare decisis, de novo, review/curative petition, cross-objection, first appeal — was
+  researched and then excluded as out of scope for trial-court dictation, not merely deferred
+  for lack of evidence).
+- `Sources/Fluid/LegalLanguage/Packs/BuiltInPacks.swift` — the minimum production integration
+  seam (`BuiltInPacks.indianLegalCore(bundle:)`, loads the bundled JSON via `PackLoader`).
+  Nothing calls it yet — the pack is proven via coordinator-level tests only. No live wiring
+  into `ASRService` or any provider was made or attempted.
+- **Zero normalization entries by design**: every candidate normalization proposed during
+  curation (statute-abbreviation casing, "Hon'ble" expansion, charge-sheet spelling variants)
+  was explicitly stripped per review decisions; recognition aliases carry written variants
+  (e.g. `BNS`, `chargesheet`/`charge sheet`, `panchanama`) instead.
+- **No speculative phonetic aliases** — aliases are real written forms/abbreviations only
+  (verified against source), not guessed ASR-hint spellings. Empirical alias tuning against
+  FluidAudio's actual vocabulary-boosting mechanism is deferred, not attempted from memory.
+- **Zero changes to any existing FluidVoice production file** — only `scripts/test_legal_language.sh`
+  (our own Phase 1 file) was modified, to add the new pack's test to the suite.
+
+**Curation note**: "Panchnama" (not "Panchanama") was chosen as canonical — both spellings are
+used in Supreme Court judgments with no formal standardization, but "panchnama" is the more
+common form across recent SC usage and secondary legal sources; "panchanama" is retained as a
+recognition alias, not normalized between the two.
+
+**Curation methodology and provenance** (lightweight record, not a runtime data field —
+no per-entry source metadata was added to the Phase 1 schema):
+- **Statutory terminology** (statute names, short titles, official abbreviations) was sourced
+  from primary official material: India Code (indiacode.nic.in) bare-act text and Ministry of
+  Home Affairs / BPRD gazette-adjacent publications — for BNS, BNSS, BSA, IPC, CrPC, the Indian
+  Evidence Act, and CPC.
+- **Practical judicial/procedural terminology** (bail/remand/custody vocabulary, charge and
+  plea terminology, evidence-recording terms, sentencing terminology, institutional
+  abbreviations, common expressions) was sourced from judicial usage evidence — Supreme Court
+  judgment text, official/government-adjacent handbooks, and established legal-practice
+  sources — since these terms aren't statutorily "named" the way an Act's short title is.
+- These two source tiers were kept distinct throughout curation: a statute's official name is
+  authoritative by definition; a procedural term's inclusion depended on demonstrated usage,
+  not just plausibility.
+- The pack is deliberately scoped to **trial-court/Magistrate dictation** (bail, remand,
+  cognizance, charge, evidence recording, sentencing, common civil orders), not a general
+  legal glossary — appellate/precedent-discussion Latin (ratio decidendi, obiter dicta, stare
+  decisis, de novo, review/curative petition, cross-objection, first appeal) was researched and
+  deliberately excluded as out of scope for that focus, not left out for lack of evidence.
+- **No speculative phonetic aliases** were encoded (e.g. no "bee en es"-style spelled-out
+  guesses) — aliases are real written forms/abbreviations only. Empirical ASR-hint tuning
+  against FluidAudio's actual vocabulary-boosting mechanism is a separate, deferred task.
+- **Current and legacy statutes intentionally coexist with zero conversion mappings** between
+  them (no IPC↔BNS, CrPC↔BNSS, or Evidence Act↔BSA correspondence) — both eras are independently
+  valid vocabulary, and section-correspondence tables are explicitly out of scope, not just
+  unimplemented.
 
 ## Phase 3 — Legal Normalization Engine
 
