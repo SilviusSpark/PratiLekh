@@ -18,7 +18,10 @@ import Foundation
 /// engine is expected to replace this matching strategy when real,
 /// potentially-overlapping legal vocabulary is seeded.
 struct LookupTableNormalizer: LegalNormalizer {
-    func normalize(_ text: String, using table: ResolvedNormalizationTable) -> NormalizationPassResult {
+    func normalize(_ text: String, using context: NormalizationContext) -> NormalizationPassResult {
+        guard let table = context.resolvedTable else {
+            return NormalizationPassResult(text: text, appliedChanges: [], declinedChanges: [])
+        }
         var updatedText = text
         var applied: [AppliedNormalizationChange] = []
         var declined: [DeclinedNormalization] = []

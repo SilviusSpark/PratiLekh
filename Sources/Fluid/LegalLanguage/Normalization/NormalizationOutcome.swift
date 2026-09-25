@@ -23,7 +23,7 @@ struct NormalizationOutcome: Equatable {
 enum LegalNormalizationPipeline {
     static func run(
         recognizedText: String,
-        table: ResolvedNormalizationTable,
+        context: NormalizationContext,
         normalizers: [LegalNormalizer] = [LookupTableNormalizer()]
     ) -> NormalizationOutcome {
         var currentText = recognizedText
@@ -31,7 +31,7 @@ enum LegalNormalizationPipeline {
         var declined: [DeclinedNormalization] = []
 
         for normalizer in normalizers {
-            let result = normalizer.normalize(currentText, using: table)
+            let result = normalizer.normalize(currentText, using: context)
             currentText = result.text
             applied.append(contentsOf: result.appliedChanges)
             declined.append(contentsOf: result.declinedChanges)

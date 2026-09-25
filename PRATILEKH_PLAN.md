@@ -205,18 +205,60 @@ no per-entry source metadata was added to the Phase 1 schema):
   valid vocabulary, and section-correspondence tables are explicitly out of scope, not just
   unimplemented.
 
-## Phase 3 — Legal Normalization Engine
+## Phase 3 — Legal Normalization Engine — 🚧 In progress (first slice implemented, uncommitted)
 
 **Purpose:** build out deterministic normalization beyond statutory citations, using the
 boundary defined in Phase 1.
 
-**Principal deliverables:**
+**Core principle:** format what was dictated; never complete what was not dictated. Ambiguous
+or unsupported legally significant structures are preserved as dictated, never guessed.
+
+**Phase 3A — engine principles (established):** deterministic rule composition; partial
+success (one rule's decline never blocks another's safe application); a three-way outcome
+distinction (no candidate / applied / explicitly declined); span provenance for every applied
+or declined transformation; idempotence/stability where practical; no silent cross-rule
+overlap resolution; strict separation from future AI cleanup (Phase 7 owns protection of
+legal identifiers from generative alteration).
+
+**Phase 3B — rule-family method (established):** each family is a bounded design, reviewed
+against a human-readable golden corpus (positives, idempotence, declines, near-misses,
+dangerous negatives, mixed outcomes) *before* implementation.
+
+**Phase 3C / 3C.1 — first implemented slice, not completion of Phase 3.** Two families:
+1. *Statutory provision references* — `section N`, `section N <statute>`, and enumerated
+   `sections N, N and N <statute>`; unsupported shapes (read with, sub-sections, ranges,
+   ambiguous cross-statute compounds, statute-less lists) decline and are preserved.
+2. *Prosecution/defence witness references* — `PW-n` / `DW-n`; attached self-correction
+   declines.
+
+Design decisions on record:
+- Current and legacy statutes (BNS/BNSS/BSA vs. IPC/CrPC/Evidence Act) are never automatically
+  converted.
+- **Parsing is separate from rendering.** The normalizer produces a structured
+  `StatutoryProvisionReference` (ordered provisions, optional statute, source span). The
+  current neutral renderer emits expanded notation, e.g. `Sections 294, 323, 341 and 506 IPC`.
+  A future Phase 4 Judicial Dictation Profile/setting may render the same parsed structure as
+  `u/s 294/323/341/506 of IPC`. Such a preference changes presentation only — never detected
+  provisions, dictated order, statute identification, ambiguity decisions, provenance, or legal
+  meaning.
+- Provenance: applied/declined changes carry an optional `range` into the input text of the
+  pass that produced them; nil only where no meaningful span exists (Phase 1 table lookups) or
+  none can be determined reliably.
+- **Isolation:** Phase 3C is not wired into `ASRService`, `ContentView`, `MenuBarManager`, or
+  any provider; it is exercised by the standalone test suite only.
+
+**Deferred (each needs its own design/domain review before implementation):** exhibit
+references (needs research into Indian exhibit conventions), case numbers, dates, amounts,
+broader abbreviation rules, and any live-pipeline integration.
+
+**Remaining deliverables for Phase 3 as a whole:**
 - Case number normalization.
 - Date and amount normalization per legal-drafting convention.
-- Witness/exhibit reference normalization — formatting what the judge dictates (e.g., "Exhibit
-  P-1", "the witness's statement"), not inferring references from a multi-party transcript.
+- Exhibit reference normalization — formatting what the judge dictates, not inferring
+  references from a multi-party transcript.
 - Abbreviation expansion/contraction rules.
-- A normalization test suite that runs independent of ASR and UI.
+- Approved live-pipeline integration.
+- Normalization test suite independent of ASR and UI (in place: `scripts/test_legal_language.sh`).
 
 ## Phase 4 — Judicial Dictation Profiles
 

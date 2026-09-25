@@ -24,7 +24,7 @@ enum LookupTableNormalizerTests {
 
     private static func testUnchangedWhenNoTriggerPresent() {
         let table = ResolvedNormalizationTable(entries: [resolved("sec.", "Section")])
-        let result = LookupTableNormalizer().normalize("no triggers here", using: table)
+        let result = LookupTableNormalizer().normalize("no triggers here", using: NormalizationContext(resolvedTable: table, resolvedRecognitionVocabulary: nil))
         precondition(result.isUnchanged, "No matching trigger must be unchanged")
         precondition(result.text == "no triggers here")
         precondition(result.appliedChanges.isEmpty && result.declinedChanges.isEmpty)
@@ -35,7 +35,7 @@ enum LookupTableNormalizerTests {
             resolved("sec.", "Section"),
             resolved("distt.", "District"),
         ])
-        let result = LookupTableNormalizer().normalize("sec. 302, distt. court", using: table)
+        let result = LookupTableNormalizer().normalize("sec. 302, distt. court", using: NormalizationContext(resolvedTable: table, resolvedRecognitionVocabulary: nil))
         precondition(result.text == "Section 302, District court")
         precondition(result.appliedChanges.count == 2)
         precondition(result.declinedChanges.isEmpty)
@@ -46,7 +46,7 @@ enum LookupTableNormalizerTests {
         let table = ResolvedNormalizationTable(entries: [
             conflicted("distt.", [("jurisdiction-a", "District"), ("jurisdiction-b", "Dist.")]),
         ])
-        let result = LookupTableNormalizer().normalize("the distt. court", using: table)
+        let result = LookupTableNormalizer().normalize("the distt. court", using: NormalizationContext(resolvedTable: table, resolvedRecognitionVocabulary: nil))
         precondition(result.text == "the distt. court", "Conflicted trigger must be left unchanged in the output")
         precondition(result.appliedChanges.isEmpty)
         precondition(result.declinedChanges.count == 1)
@@ -63,7 +63,7 @@ enum LookupTableNormalizerTests {
             resolved("sec.", "Section"),
             conflicted("distt.", [("jurisdiction-a", "District"), ("jurisdiction-b", "Dist.")]),
         ])
-        let result = LookupTableNormalizer().normalize("sec. 302, distt. court", using: table)
+        let result = LookupTableNormalizer().normalize("sec. 302, distt. court", using: NormalizationContext(resolvedTable: table, resolvedRecognitionVocabulary: nil))
         precondition(result.text == "Section 302, distt. court", "Safe match applied, conflicted match left untouched")
         precondition(result.appliedChanges == [AppliedNormalizationChange(trigger: "sec.", replacement: "Section", sourcePackID: "fixture")])
         precondition(result.declinedChanges.count == 1 && result.declinedChanges[0].trigger == "distt.")
@@ -82,7 +82,7 @@ enum LookupTableNormalizerTests {
             recognitionEntries: [], normalizationEntries: [NormalizationEntry(trigger: "hon'ble", canonicalReplacement: "Hon'ble")]
         )
         let table = PrecedenceResolver.resolveNormalizationTable(from: [jurisdictionA, jurisdictionB])
-        let result = LookupTableNormalizer().normalize("hon'ble judge", using: table)
+        let result = LookupTableNormalizer().normalize("hon'ble judge", using: NormalizationContext(resolvedTable: table, resolvedRecognitionVocabulary: nil))
         precondition(result.text == "Hon'ble judge")
         precondition(result.appliedChanges.count == 1)
         precondition(result.declinedChanges.isEmpty, "Same-rank/same-value agreement must never be treated as a conflict")

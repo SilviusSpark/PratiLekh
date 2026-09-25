@@ -15,9 +15,16 @@ Sources/Fluid/LegalLanguage/Resolution/PrecedenceResolver.swift
 Sources/Fluid/LegalLanguage/Recognition/ProviderRecognitionCapability.swift
 Sources/Fluid/LegalLanguage/Recognition/ProviderCapabilityResolver.swift
 Sources/Fluid/LegalLanguage/Recognition/RecognitionVocabularyAdapter.swift
+Sources/Fluid/LegalLanguage/Normalization/NormalizationContext.swift
 Sources/Fluid/LegalLanguage/Normalization/LegalNormalizer.swift
 Sources/Fluid/LegalLanguage/Normalization/LookupTableNormalizer.swift
 Sources/Fluid/LegalLanguage/Normalization/NormalizationOutcome.swift
+Sources/Fluid/LegalLanguage/Normalization/WordTokenizer.swift
+Sources/Fluid/LegalLanguage/Normalization/SpokenNumberParser.swift
+Sources/Fluid/LegalLanguage/Normalization/StatuteRecognizer.swift
+Sources/Fluid/LegalLanguage/Normalization/StatutoryProvisionReference.swift
+Sources/Fluid/LegalLanguage/Normalization/StatutoryProvisionNormalizer.swift
+Sources/Fluid/LegalLanguage/Normalization/WitnessReferenceNormalizer.swift
 Sources/Fluid/LegalLanguage/LegalLanguageCoordinator.swift
 "
 
@@ -27,6 +34,9 @@ for task_test_file in \
     Tests/RecognitionVocabularyAdapterTests.swift \
     Tests/LookupTableNormalizerTests.swift \
     Tests/LegalLanguageCoordinatorTests.swift \
+    Tests/SpokenNumberParserTests.swift \
+    Tests/StatutoryProvisionNormalizerTests.swift \
+    Tests/WitnessReferenceNormalizerTests.swift \
 ; do
     task_binary_name=$(basename "$task_test_file" .swift)
     # shellcheck disable=SC2086
