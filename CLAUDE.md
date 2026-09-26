@@ -40,12 +40,13 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 1 — Legal Language Architecture | ✅ committed | `272518518ce7ccefedac71a74e48940c174dfdc0` |
 | 2 — Indian Legal Core (77 recognition entries, 0 normalization entries, source-curated, current+legacy statutes coexist, no phonetic aliases, pack loaded by `LegalDictationProcessor`; no recognition hints wired) | ✅ committed | `db250c455a7b733b1a80c8eb109cec2f8066e1dd` |
 | 3C + 3C.1 — First normalization rule families (statutory provisions, PW/DW witness refs) | ✅ committed (working tree clean after commit) | `e76ed599ef978abd7d8e494db0ed6c9f6b4136ce` |
+| 3D — Live legal normalization, Slices A+B (`LegalDictationProcessor`, `ContentView` seam, leading-capitalization protection) | ✅ committed | `0abf627` (full: `0abf627551be21153f833fa41215d90b396912ae`) |
 
-Branch `main`, 4 commits ahead of `origin/main`, nothing pushed. Verify with `git log`/
+Branch `main`, 5 commits ahead of `origin/main`, nothing pushed. Verify with `git log`/
 `git status` before stating commit state to the user.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
-families only). **Phase 3D (uncommitted until approved)** live-activates that normalization at one
+families only). **Phase 3D Slices A+B (committed, `0abf627`)** live-activate that normalization at one
 `ContentView` seam (see below); recognition boosting, custom-dictionary reconciliation and AI
 protection are not done. Phase 4 has not begun.
 Exhibits, case numbers, dates, amounts, and broader abbreviations remain deferred — each needs
@@ -273,6 +274,8 @@ legal normalization by design.
 
 ## Next action (as of this handoff)
 
-Phase 3C + 3C.1 is committed (`e76ed59`). Phase 3D Slices A+B are implemented and verified but
-not committed. Do not start Slice C (recognition hints), D (custom dictionary), E (AI
-protection), another normalization family, or Phase 4 without explicit approval.
+**Checkpoint:** Phase 3D Slices A+B are committed (`0abf627`). Deterministic statutory and
+witness normalization is active in the live stopped-dictation and reprocess paths, before
+optional AI. Streaming preview is untouched. Slices C (recognition hints), D (custom
+dictionary) and E (AI protection) have not started; no additional Phase 3 normalization family
+and no Phase 4 work has started. Do not begin any of them without explicit approval.
