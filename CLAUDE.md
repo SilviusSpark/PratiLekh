@@ -38,18 +38,16 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 |---|---|---|
 | 0 — Fork identity & rebrand | ✅ committed | `7b782dade34d4ec810a8c01a714bbbbb3908e508` |
 | 1 — Legal Language Architecture | ✅ committed | `272518518ce7ccefedac71a74e48940c174dfdc0` |
-| 2 — Indian Legal Core (77 recognition entries, 0 normalization entries, source-curated, current+legacy statutes coexist, no phonetic aliases, pack loadable but **not wired into live ASR**) | ✅ committed | `db250c455a7b733b1a80c8eb109cec2f8066e1dd` |
-| 3C + 3C.1 — First normalization rule families (statutory provisions, PW/DW witness refs) | **implemented locally, NOT committed** | — |
+| 2 — Indian Legal Core (77 recognition entries, 0 normalization entries, source-curated, current+legacy statutes coexist, no phonetic aliases, pack loaded by `LegalDictationProcessor`; no recognition hints wired) | ✅ committed | `db250c455a7b733b1a80c8eb109cec2f8066e1dd` |
+| 3C + 3C.1 — First normalization rule families (statutory provisions, PW/DW witness refs) | ✅ committed (working tree clean after commit) | `e76ed599ef978abd7d8e494db0ed6c9f6b4136ce` |
 
-Branch `main`, 3 commits ahead of `origin/main`, nothing pushed. **Do not claim a Phase 3
-commit exists — verify with `git log`/`git status` before stating commit state to the user.**
-As of this writing, `git status` shows Phase 3C/3C.1 as modified/untracked files in
-`Sources/Fluid/LegalLanguage/` and three new `Tests/*.swift` files — inspect current
-`git status`/`git diff` directly rather than trusting this table if time has passed.
+Branch `main`, 4 commits ahead of `origin/main`, nothing pushed. Verify with `git log`/
+`git status` before stating commit state to the user.
 
-**Phase 3 is not complete as a whole.** 3C+3C.1 is an independently-committable first
-checkpoint (two rule families only). Not wired into `ASRService`, `ContentView`,
-`MenuBarManager`, any provider, or the live transcription pipeline. Phase 4 has not begun.
+**Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
+families only). **Phase 3D (uncommitted until approved)** live-activates that normalization at one
+`ContentView` seam (see below); recognition boosting, custom-dictionary reconciliation and AI
+protection are not done. Phase 4 has not begun.
 Exhibits, case numbers, dates, amounts, and broader abbreviations remain deferred — each needs
 its own design/legal-domain review pass before implementation, not opportunistic addition.
 
@@ -156,8 +154,8 @@ over guessing.
   belongs in a later, separate jurisdiction pack (not built yet). Speculative phonetic ASR
   aliases (e.g. "bee en es") are deferred until empirical testing against the real ASR
   pipeline — the pack contains only real written forms/abbreviations.
-- `BuiltInPacks.swift` loads the bundled pack via `Bundle.main` — nothing in the app calls it
-  yet; it's exercised by tests only.
+- `BuiltInPacks.swift` loads the bundled pack via `Bundle.main`; `LegalDictationProcessor.shared`
+  is its only production caller.
 
 **Phase 3A/3B safety decisions (govern all normalizer design, current and future):**
 - Deterministic rule composition; one rule/family's decline never blocks another's safe
@@ -175,8 +173,7 @@ over guessing.
   statute, is fair game to change as part of that citation's reformatting).
 - No live pipeline integration until a phase explicitly approves it.
 
-**Phase 3C + 3C.1 implementation (current, uncommitted — verify against `git status` for
-drift):**
+**Phase 3C + 3C.1 implementation (committed in `e76ed59`):**
 
 *Engine evolution* (Phase 1 files, extended, not redesigned): `NormalizationContext`
 (minimal — optional resolved table + optional resolved recognition vocabulary, no speculative
@@ -257,10 +254,25 @@ writing. Re-verify all of the above before trusting this statement if time has p
   alongside unrelated work, and don't expand an approved family's grammar without a matching
   review.
 
+**Phase 3D live integration (Slices A+B):** `LegalDictationProcessor` (`LegalLanguage/`) wraps
+the builtin pack + `LegalLanguageCoordinator`; returns `NormalizationOutcome` (normalized text +
+provenance). `ContentView` calls it in `processStoppedTranscription` (after spoken punctuation
+and spoken-send, before AI) and in `reprocessDictationText`; the result stays in scope through
+the AI branch for Phase 7. Always on, no setting. Streaming preview, `ASRService`, providers and
+API/file paths are deliberately untouched (a test script check enforces that `Services/` never
+references the processor). `pendingAIReprocessText` is intentionally left holding pre-legal text
+because `reprocessDictationText` re-runs the deterministic chain itself.
+Leading-capitalization protection: `NormalizationOutcome.protectsLeadingCapitalization(of:)`
+(LegalDictationProcessor.swift) is true only when an *applied* change owned the first token; it is
+passed as `preserveLeadingCapitalization:` (default false) to `ASRService.applyGAAVFormatting` and
+`applyContinuousDictationFormatting` in both ContentView pipelines. Already-canonical text with no
+applied change is deliberately not protected; general protected spans are Phase 7. The other
+GAAV/continuous call sites (prompt test, history undo) are unchanged.
+Known open items: history "undo AI" restores pre-legal raw text; custom dictionary runs *before*
+legal normalization by design.
+
 ## Next action (as of this handoff)
 
-Phase 3C + 3C.1 (including the span-provenance fix and `PRATILEKH_PLAN.md` closeout) is
-implemented, verified and staged but **not committed** — commit only after explicit approval.
-**Do not begin Phase 4 or another normalization family before that commit lands and is
-explicitly approved.** Each further family (exhibits, case numbers, dates, amounts) needs its
-own design/domain review first.
+Phase 3C + 3C.1 is committed (`e76ed59`). Phase 3D Slices A+B are implemented and verified but
+not committed. Do not start Slice C (recognition hints), D (custom dictionary), E (AI
+protection), another normalization family, or Phase 4 without explicit approval.

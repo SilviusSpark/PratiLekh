@@ -5864,7 +5864,9 @@ final class ASRService: ObservableObject {
     /// This is useful for search queries, form fields, or casual text input.
     ///
     /// Feature requested by maxgaav – thank you for the suggestion!
-    static func applyGAAVFormatting(_ text: String) -> String {
+    /// `preserveLeadingCapitalization` keeps the first character as-is when it belongs to a token
+    /// produced by legal normalization (see `NormalizationOutcome.protectsLeadingCapitalization`).
+    static func applyGAAVFormatting(_ text: String, preserveLeadingCapitalization: Bool = false) -> String {
         guard !text.isEmpty else { return text }
 
         var result = text
@@ -5873,7 +5875,7 @@ final class ASRService: ObservableObject {
             result.removeLast()
         }
 
-        if SettingsStore.shared.gaavLowercaseFirstLetterEnabled, let first = result.first, first.isUppercase {
+        if SettingsStore.shared.gaavLowercaseFirstLetterEnabled, !preserveLeadingCapitalization, let first = result.first, first.isUppercase {
             result = first.lowercased() + result.dropFirst()
         }
 
@@ -5886,7 +5888,13 @@ final class ASRService: ObservableObject {
     /// Spacing and context-aware capitalization are independently controlled.
     ///
     /// Implements the chaining behavior requested in GitHub issue #390.
-    static func applyContinuousDictationFormatting(_ text: String, precedingText: String) -> String {
+    /// `preserveLeadingCapitalization` prevents lowercasing a leading legal-normalization token;
+    /// capitalizing at a sentence boundary is unaffected.
+    static func applyContinuousDictationFormatting(
+        _ text: String,
+        precedingText: String,
+        preserveLeadingCapitalization: Bool = false
+    ) -> String {
         guard !text.isEmpty else { return text }
         let spacingEnabled = SettingsStore.shared.continuousDictationSpacingEnabled
         let smartCapsEnabled = SettingsStore.shared.contextAwareCapitalizationEnabled
@@ -5899,7 +5907,7 @@ final class ASRService: ObservableObject {
             let boundaryCharacter = self.lastCapitalizationBoundaryCharacter(in: precedingTrimmed)
             if boundaryCharacter == nil || boundaryCharacter?.isSentenceEndingPunctuation == true {
                 result = self.replacingFirstLetter(in: result, transform: { $0.uppercased() })
-            } else {
+            } else if !preserveLeadingCapitalization {
                 result = self.replacingFirstLetter(in: result, transform: { $0.lowercased() })
             }
         }

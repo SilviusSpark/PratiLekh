@@ -2697,6 +2697,10 @@ struct ContentView: View {
         )
         self.updateSpokenSendIndicatorForFinalParse(shouldSend: spokenSendParse.shouldSend)
         let normalizedTranscribedText = spokenSendParse.text
+        // Deterministic legal normalization runs before optional AI. The full
+        // result (provenance included) stays in scope through the AI branch.
+        let legalNormalization = LegalDictationProcessor.shared.process(normalizedTranscribedText)
+        let legalNormalizedText = legalNormalization.normalized
         let sendsExistingDraft = spokenSendParse.shouldSend &&
             normalizedTranscribedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
 
@@ -2713,7 +2717,7 @@ struct ContentView: View {
         if shouldUseAI {
             DebugLogger.shared.debug("Routing transcription through AI post-processing", source: "ContentView")
             postProcessingModel = postProcessingModelInfo.model
-            let postProcessingInputChars = normalizedTranscribedText.count
+            let postProcessingInputChars = legalNormalizedText.count
             let postProcessingStart = ProcessInfo.processInfo.systemUptime
             let processingFeedback = self.makeAIProcessingFeedback(lifecycleID: expectedOverlayLifecycleID)
             let refiningStatusTask = processingFeedback.statusTask
@@ -2727,7 +2731,7 @@ struct ContentView: View {
             do {
                 self.logAIProcessCall(pipelineID, postProcessingModelInfo, postProcessingInputChars)
                 let result = try await self.processTextWithAIMetrics(
-                    normalizedTranscribedText,
+                    legalNormalizedText,
                     overrideSystemPrompt: promptOverride,
                     dictationSlot: activeDictationSlot,
                     streamHandler: streamHandler,
@@ -2751,7 +2755,7 @@ struct ContentView: View {
                 )
                 aiFallbackReason = error.localizedDescription
                 aiFallbackNotificationError = DictationAIFailurePresentationPolicy.notificationMessage(for: error)
-                finalText = normalizedTranscribedText
+                finalText = legalNormalizedText
             }
             let postProcessingLatencyMs = Int(
                 ((ProcessInfo.processInfo.systemUptime - postProcessingStart) * 1000).rounded()
@@ -2766,7 +2770,7 @@ struct ContentView: View {
                 source: "ContentView"
             )
         } else {
-            finalText = normalizedTranscribedText
+            finalText = legalNormalizedText
         }
 
         // Normalize literal command and mention syntax after AI cleanup and before final user preferences.
@@ -2778,10 +2782,17 @@ struct ContentView: View {
         )
         // Apply GAAV formatting as the FINAL step (after AI post-processing)
         // This ensures the user's preference for no capitalization/period is respected
-        finalText = ASRService.applyGAAVFormatting(finalText)
+        finalText = ASRService.applyGAAVFormatting(
+            finalText,
+            preserveLeadingCapitalization: legalNormalization.protectsLeadingCapitalization(of: finalText)
+        )
         // Apply Continuous Dictation Mode after GAAV so smart caps use the field
         // context captured at recording start, and the trailing space enables chaining.
-        finalText = ASRService.applyContinuousDictationFormatting(finalText, precedingText: self.recordingPrecedingText)
+        finalText = ASRService.applyContinuousDictationFormatting(
+            finalText,
+            precedingText: self.recordingPrecedingText,
+            preserveLeadingCapitalization: legalNormalization.protectsLeadingCapitalization(of: finalText)
+        )
         finalText = ASRService.applyTerminalLiteralAutocompleteSpacing(
             finalText,
             appName: appInfo.name,
@@ -3660,7 +3671,9 @@ struct ContentView: View {
             bundleID: appInfo.bundleId,
             windowTitle: appInfo.windowTitle
         )
-        var finalText = normalizedTranscribedText
+        let legalNormalization = LegalDictationProcessor.shared.process(normalizedTranscribedText)
+        let legalNormalizedText = legalNormalization.normalized
+        var finalText = legalNormalizedText
         let shouldUseAI = DictationAIPostProcessingGate.isConfigured(for: .primary, appBundleID: appInfo.bundleId)
         if shouldUseAI {
             postProcessingModel = self.currentDictationAIModelInfo(
@@ -3670,7 +3683,7 @@ struct ContentView: View {
             let postProcessingStart = ProcessInfo.processInfo.systemUptime
             do {
                 let result = try await self.processTextWithAIMetrics(
-                    normalizedTranscribedText,
+                    legalNormalizedText,
                     dictationSlot: .primary
                 )
                 finalText = result.text
@@ -3682,7 +3695,7 @@ struct ContentView: View {
                 )
                 aiFallbackReason = error.localizedDescription
                 aiFallbackNotificationError = DictationAIFailurePresentationPolicy.notificationMessage(for: error)
-                finalText = normalizedTranscribedText
+                finalText = legalNormalizedText
             }
             aiProcessingDurationMilliseconds = Int(
                 ((ProcessInfo.processInfo.systemUptime - postProcessingStart) * 1000).rounded()
@@ -3695,11 +3708,18 @@ struct ContentView: View {
             bundleID: appInfo.bundleId,
             windowTitle: appInfo.windowTitle
         )
-        finalText = ASRService.applyGAAVFormatting(finalText)
+        finalText = ASRService.applyGAAVFormatting(
+            finalText,
+            preserveLeadingCapitalization: legalNormalization.protectsLeadingCapitalization(of: finalText)
+        )
         let precedingText = SettingsStore.shared.needsDictationFormattingContext
             ? TypingService.textBeforeCursorInFocusedField()
             : ""
-        finalText = ASRService.applyContinuousDictationFormatting(finalText, precedingText: precedingText)
+        finalText = ASRService.applyContinuousDictationFormatting(
+            finalText,
+            precedingText: precedingText,
+            preserveLeadingCapitalization: legalNormalization.protectsLeadingCapitalization(of: finalText)
+        )
         finalText = ASRService.applyTerminalLiteralAutocompleteSpacing(
             finalText,
             appName: appInfo.name,

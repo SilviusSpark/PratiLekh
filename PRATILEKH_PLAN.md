@@ -244,8 +244,24 @@ Design decisions on record:
 - Provenance: applied/declined changes carry an optional `range` into the input text of the
   pass that produced them; nil only where no meaningful span exists (Phase 1 table lookups) or
   none can be determined reliably.
-- **Isolation:** Phase 3C is not wired into `ASRService`, `ContentView`, `MenuBarManager`, or
-  any provider; it is exercised by the standalone test suite only.
+- **Isolation (3C):** the rule code itself is UI/ASR-free and tested standalone; live
+  activation is Phase 3D below.
+
+**Phase 3D — live activation of the existing deterministic normalization (Slices A+B).**
+`LegalDictationProcessor` (`LegalLanguage/`) owns the bundled Indian Legal Core and the
+coordinator. `ContentView` calls it on finalized dictation after all deterministic ASR/spoken-
+punctuation/spoken-send handling and *before* optional AI, in both AI-bearing pipelines (live
+stop and "reprocess"). The full result (with provenance) is kept in scope for a future Phase 7
+validator. Always on, no Settings UI. Not touched: streaming preview, `ASRService`, providers,
+recognition boosting, custom dictionary (runs before legal normalization, unchanged), history
+schema. Leading-capitalization protection: if an *applied* legal change owned the first token
+(provenance span at the start of the pass input), GAAV lowercase-first-letter and context-aware
+capitalization do not lowercase it (`NormalizationOutcome.protectsLeadingCapitalization`, passed
+as a defaulted parameter to those two formatters, in both AI-bearing pipelines). Text that
+merely looks canonical is not protected; this is not a general protected-span system (Phase 7).
+Known gap: history "undo AI" restores pre-legal raw text. Recognition-hint delivery to the one
+capable provider (Slice C), custom-dictionary reconciliation (D) and AI protected-span
+validation (E) remain deferred.
 
 **Deferred (each needs its own design/domain review before implementation):** exhibit
 references (needs research into Indian exhibit conventions), case numbers, dates, amounts,
