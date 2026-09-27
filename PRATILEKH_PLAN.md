@@ -428,13 +428,81 @@ against the already-produced transcript text. Phase 3G.B therefore cannot curren
 internal rescoring behavior for the six target cases. A reliable A/B latency comparison was also
 not available from existing surfaces and was not obtained.
 
-**Next planned activity:** a **read-only Phase 3G.C architecture investigation** into the smallest
-safe diagnostic seam for exposing already-computed CTC rescoring metadata during evaluation —
-specifically whether `ctcDetectedTerms`/`ctcAppliedTerms` (and any already-available
-score/similarity/rejection metadata) are sufficient to explain Phase 3G.B's zero-effect result,
-without modifying the FluidAudio dependency itself. Not yet performed. No implementation
-(threshold tuning, aliases, or a production vocabulary-boosting default) is authorized from Phase
-3G.B's evidence.
+A **read-only Phase 3G.C architecture investigation** followed directly, into the smallest safe
+diagnostic seam for exposing already-computed CTC rescoring metadata during evaluation — see
+"Phase 3G.C" immediately below for what it found and the resulting decision.
+
+**Phase 3G.C — CTC rescoring observability investigation (read-only; no code, config, or
+dependency change).** Traced the exact installed FluidAudio source (not upstream documentation)
+for `ASRResult.ctcDetectedTerms`/`ctcAppliedTerms` and the full CTC rescoring decision path.
+
+*`ctcDetectedTerms`/`ctcAppliedTerms` are not useful as-is:* both are `[String]?`, populated only
+from `RescoreOutput.replacements`, and every `RescoringResult` that ever enters that array is
+constructed with `shouldReplace == true` (the one code path that appends to it hardcodes this).
+The two fields are therefore effectively equivalent in the installed revision, and both are
+non-empty only when a replacement was already accepted and substituted into the transcript. A
+rejected candidate leaves no trace in either field — they cannot distinguish "not detected" from
+"detected but rejected," and carrying them through PratiLekh would add no diagnostic information
+beyond the boosted-vs-baseline `providerTranscript` comparison Phase 3G.A/B already perform.
+**Decision: the contemplated structural `ctcDetectedTerms`/`ctcAppliedTerms` diagnostic seam will
+not be implemented** — it would not answer the question it was proposed to answer.
+
+*The actual decision path (ordering matters):* candidate vocabulary term → transcript/string-
+similarity gating first → only if that gate passes, CTC acoustic scoring over the relevant audio
+window → boosted vocabulary CTC score compared against the original-phrase CTC score → accept/
+reject → accepted, non-overlapping replacements applied → only applied replacements reach the
+returned CTC metadata. The mechanism is not unconditional audio-based reconsideration of every
+word; it first requires the existing decoded text to already be textually similar enough to a
+registered vocabulary term.
+
+*Rejected-candidate evidence exists but is discarded:* once a candidate clears the similarity gate
+and reaches CTC evaluation, FluidAudio computes the candidate term, original phrase, similarity,
+both raw CTC scores, the boosted score, the audio span, and a decision reason — discarded
+immediately for rejected candidates rather than retained on `ASRResult`. Exposing it structurally
+would require modifying FluidAudio itself, not just PratiLekh's wrapper.
+
+*Existing debug logging:* Debug builds already emit this candidate-level CTC comparison
+information through Apple's unified logging when a candidate reaches CTC evaluation. A live
+debug-level log capture during a future run could observe this without source modification — but
+this was not captured during Phase 3G.B, cannot retroactively explain that run, and no further
+recognition experiment is currently authorized (not recorded as a planned next step).
+
+*Source-informed inference on `IPC`/`BNSS` (inference, not runtime proof that a specific gate
+fired during Phase 3G.B):* for `IPC → it c`, the individual observed fragments have low string
+similarity to `IPC`; the plausible concatenated form `itc` is closer but still below the
+configured `minSimilarity`; and the installed compound-matching path requires the vocabulary term
+to be at least 4 characters, so three-character targets (`IPC`, `BNS`, `CPC`) never use that
+multi-word compound path at all. For `BNSS → B and S S`, the four-character term can enter
+compound matching, but plausible fragment combinations from the observed text still land below
+the configured similarity threshold.
+
+*Threshold-field trace limitation (narrow, do not generalize):* `minCtcScore` and
+`minCombinedConfidence` exist in the loaded vocabulary configuration, but Phase 3G.C did not
+establish that they participate in the active term-centric `evaluateCTCMatch` acceptance
+comparison, which directly compares the boosted vocabulary CTC score against the original-phrase
+CTC score. This is a trace gap for this specific code path, not a claim those fields are unused
+everywhere in FluidAudio.
+
+**Architectural decision: the current recognition-tuning branch is closed after Phase 3G.C.** No
+current authorization for threshold tuning, aliases, another vocabulary-boosting experiment,
+modifying the three-character compound-length rule, modifying FluidAudio, exposing
+rejected-candidate score structures, a production vocabulary-boosting default, or a Phase 3G.D
+recognition experiment. This is an evidence/scope decision, not proof that recognition-side
+improvement is impossible — the evidence establishes only that continuing this path would now move
+beyond cheaply evaluating an existing, already-integrated mechanism and toward
+developing/modifying a specialized legal-ASR rescoring subsystem, a materially larger undertaking
+than the phase's original scope.
+
+**Next planned activity:** a **read-only architecture investigation/design** (not implementation)
+of a constrained, local PratiLekh Intelligence layer, starting from these principles: local/private
+processing; deterministic legal normalization remains authoritative for deterministic
+transformations; Intelligence must not silently replace the transcript wholesale; AI output is
+treated as proposals requiring validation/protection before application; statutory numbers and
+other protected legal tokens require particularly strict handling; the design should first
+investigate a text-first Intelligence layer, with audio-aware Intelligence remaining a possible
+later escalation path, not the default assumption; and the accumulated Phase 3G evidence must
+inform what uncertainty/provenance information such an Intelligence layer can realistically
+receive. Not yet performed; the Intelligence architecture is not finalized here.
 
 **Deferred (each needs its own design/domain review before implementation):** exhibit
 references (needs research into Indian exhibit conventions), case numbers, dates, amounts,
@@ -619,16 +687,21 @@ statute degradations attributed to the provider-return boundary, upstream of Pra
 preprocessing, with 0 regressions from 3G.A itself). The N01–N12 rerun is no longer a pending
 action for either phase. Phase 3G.A's attribution rules out PratiLekh's deterministic
 preprocessing interval as the source of the statute degradations but did **not** select the next
-intervention. The read-only recognition-capability investigation and Phase 3G.B's bounded
-canonical-vocabulary experiment followed directly from that (see "Phase 3G.B" above) — the
-experiment measured **zero effect** (no correction, no harm) on this fixed corpus under unchanged
-thresholds, and explicitly could not distinguish "not detected" from "detected but rejected"
-because `ctcDetectedTerms`/`ctcAppliedTerms` remain unexposed. **The next planned activity is a
-read-only Phase 3G.C investigation** into the smallest safe diagnostic seam for that metadata —
-not yet performed. That investigation, and any subsequent choice among the still-unranked
-directions (recognition-side improvements if supported; a constrained text-based PratiLekh
-Intelligence; eventually audio-aware intelligence), needs explicit review and approval before any
-implementation starts — none of these is authorized yet.
+intervention. The read-only recognition-capability investigation, Phase 3G.B's bounded
+canonical-vocabulary experiment (zero measured effect, no correction, no harm — see "Phase 3G.B"
+above), and Phase 3G.C's read-only CTC observability investigation (see "Phase 3G.C" above) all
+followed directly from that. **Phase 3G.C found that the two available CTC metadata fields cannot
+distinguish "not detected" from "detected but rejected" in the installed FluidAudio revision, and
+that the most likely explanation — by source-informed inference, not a runtime trace — is that the
+three/four-character canonical terms never clear the string-similarity/compound-length gates
+before CTC scoring runs at all.** **The recognition-tuning branch (3G.A/B/C) is now closed** as an
+evidence/scope decision, not as proof recognition-side improvement is impossible — continuing it
+would now mean developing/modifying a specialized legal-ASR rescoring subsystem, beyond this
+phase's original scope. **The next planned activity is a read-only architecture
+investigation/design of a constrained, local PratiLekh Intelligence layer** (text-first,
+proposals-not-replacement, deterministic normalization remaining authoritative, audio-aware
+intelligence as a later escalation path only) — not yet performed, not finalized, and not
+authorized to implement from this evidence alone.
 
 ## Note on deviation from the requested phase list
 
