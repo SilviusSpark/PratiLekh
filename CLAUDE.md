@@ -46,8 +46,9 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3E.2B — Targeted repetition diagnostics (N01–N12 statutory-number, Y01–Y10 date, P01–P06 punctuation) + a real-audio run (private, not committed) | ✅ references/tooling committed | `cefc209` (full: `cefc209a0780948d5198b5ccc7bbf0ab11edc333`) |
 | 3F.A — Fail-closed statutory-normalization safety (`hundred` continuation guard, fragmented-statute/suffix guard) | ✅ committed | `18313d7` (full: `18313d7a52d344c6ccd09fd02eb2ed776681290a`) |
 | 3F.B — Bounded grouped-number grammar (`thirty four`→34, etc.) | ✅ committed | `89a2846` (full: `89a2846f3ee3c773adef7f68d67e72629958f915`) |
+| 3G.A — Provider-transcript observability (`providerTranscript` stage, Local-API/evaluation seam only) | ✅ committed, real-audio validated | `08a2f24` (full: `08a2f24ac88ab44e6961f989ceceaefa9caf73c8`) |
 
-Local `main` is 13 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
+Local `main` is 15 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
 ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
@@ -55,7 +56,9 @@ families only). **Phase 3D Slices A+B (committed, `0abf627`)** live-activate tha
 `ContentView` seam (see below); recognition boosting, custom-dictionary reconciliation and AI
 protection are not done. **Phase 3F.A (committed, `18313d7`)** adds fail-closed safety to the
 statutory-number grammar; **Phase 3F.B (committed, `89a2846`)** adds the bounded grouped-number
-grammar itself — see "Phase 3F" below. Phase 4 has not begun.
+grammar itself — see "Phase 3F" below. **Phase 3G.A (committed, `08a2f24`)** adds observability of
+the transcription provider's own returned text ahead of PratiLekh's deterministic preprocessing —
+see "Phase 3G" below. Phase 4 has not begun.
 Exhibits, case numbers, dates, amounts, and broader abbreviations remain deferred — each needs
 its own design/legal-domain review pass before implementation, not opportunistic addition.
 
@@ -379,10 +382,10 @@ quality signal.
 5. Internal sentence-boundary punctuation remains unresolved from Phase 3E diagnostics (see
    below).
 
-For (1) and (2): both are upstream of the legal-normalization boundary this evaluation can
-currently observe. Do not attribute either specifically to the ASR provider, the custom
-dictionary, or spoken-punctuation processing — that attribution is not observable from
-`postASRDeterministic` alone.
+At the time of this run, (1) and (2) were upstream of the legal-normalization boundary this
+evaluation could observe, with no finer attribution possible from `postASRDeterministic` alone —
+see "Phase 3G.A" below, which narrows this further (both are already present at the provider-return
+boundary, upstream of PratiLekh's own preprocessing).
 
 **Phase 3F status:** 3F.A — implemented, committed, **and real-audio validated**. 3F.B —
 implemented, committed, **and real-audio validated** against the fixed N01–N12 corpus. Phase
@@ -392,6 +395,56 @@ the fixed real-audio sample are either upstream of legal normalization or delibe
 unsupported. **Phase 3F does not universally solve statutory dictation** — it does not touch
 statute-word recognition, `hundred`, dates, or punctuation.
 
+**Phase 3G.A — Provider-transcript observability (committed `08a2f24`, real-audio validated).**
+Adds one new observable value, `providerTranscript`: the text returned across the
+`TranscriptionProvider` boundary (`transcribeFinal`/`transcribeFile`), captured before PratiLekh's
+own filler removal, custom-dictionary substitution and spoken-punctuation formatting. Exposed only
+at the Local API/evaluation seam (`ASRService.transcribeSamplesForAPI`/`transcribeFileForAPI`,
+`InferenceAPIController`, `EvalRunner`, reported as a sibling field on `SampleRunRecord` rather than
+an entry in the scored `stages` list, so it doesn't shift what `postASRDeterministic` is scored
+against — see `Evaluation/README.md`). **`providerTranscript` is not necessarily raw acoustic/token
+decoder output** — a `TranscriptionProvider` implementation may already perform its own internal
+processing before returning this string, and that processing remains opaque to PratiLekh. No
+production transcription/normalization behavior was changed by this phase.
+
+*Real-audio validation, reusing the same N01–N12 recordings and provider (Parakeet TDT v2, English
+Only), against commit `08a2f24`:*
+- **Attribution result for the six previously known statute-degradation cases** (N01, N04, N05,
+  N06, N07, N12 — `IPC`→`it c`-style and `BNSS`→`B and S S`-style): **6/6 already present in
+  `providerTranscript`**, i.e. present at the provider-return boundary, upstream of PratiLekh's
+  filler-removal/custom-dictionary/spoken-punctuation preprocessing. **0/6 were introduced between
+  `providerTranscript` and `postASRDeterministic`; 0/6 were first introduced by legal
+  normalization.** This attributes *where relative to PratiLekh's own code* the degradation exists;
+  it does **not** identify *why* the provider produced it — do not read this as an acoustic-decoding
+  finding, since provider-internal processing before the returned string is not observable.
+  Correctly recognized cases (unaffected): N02, N03, N08, N09, N11. N10 (`five hundred six`) is not
+  a recognition-degradation case at all — the text is accurate; it remains an intentional
+  grammar-scope safe-decline (3F.A), not corruption.
+- **Regression check against the prior post-3F baseline, across the full 28-sample N/P/Y corpus:**
+  `postASRDeterministic` and `legalNormalized` were both **byte-for-byte identical to the prior
+  post-3F run for every sample** (0 differences). The five Phase 3F.B grouped-number corrections
+  remain correct, N10 still fails closed, N04/N12 still safely decline, and no new incorrect
+  legal-normalization transformation appeared. **Phase 3G.A introduced no measured
+  production-pipeline behavioral change** in this fixed corpus.
+- **Instrumentation limitation:** for all 28 real-audio samples, `providerTranscript` happened to
+  equal `postASRDeterministic` exactly, because none of these specific recordings exercised filler
+  removal, custom-dictionary substitution, or a literal spoken-punctuation word. This is a property
+  of this fixed corpus's content, not a defect — the committed synthetic evaluation tests (stub-server
+  cases in `scripts/test_evaluation.sh`) separately and directly demonstrate the instrumentation can
+  represent a genuine divergence when one exists. **This real-audio run does not comprehensively
+  validate every preprocessing transformation** — only that none of the three happened to fire here.
+
+**What this evidence does and does not establish:** it rules out PratiLekh's own currently-observed
+deterministic preprocessing interval (filler removal, custom dictionary, spoken-punctuation
+formatting) as the source of these six statute degradations. **It does not yet select the next
+intervention.** Remaining, unranked candidate directions include: recognition-side improvements, if
+the existing local ASR stack supports them; a constrained text-based PratiLekh Intelligence layer;
+or, eventually, audio-aware intelligence if later evidence justifies it. The next planned activity
+is a **read-only investigation** of recognition-side capabilities — specifically whether the
+current Parakeet/FluidAudio stack exposes safe contextual vocabulary biasing, hotwords, boosting,
+prompting, decoding controls, or an equivalent mechanism suitable for legal/statutory terminology.
+That investigation has not been performed yet and no Phase 3G.B is declared.
+
 ## Evaluation framework (Phase 3E.1, `Evaluation/`)
 
 Standalone tooling to measure where dictation fails, stage by stage. **Governing principle: the
@@ -399,8 +452,10 @@ reference is what the judge dictated, not what an evaluator or model thinks was 
 reward substituting a "better" provision/statute/fact/date/amount.** Synthetic references live in
 `Evaluation/References/synthetic/*.json`; **audio (even of synthetic scripts) and all run results
 stay outside Git** (the runner refuses in-repo `--out/--audio/--text-dir`). Stages are
-`postASRDeterministic` (`/v1/transcribe` output: after fillers, custom dictionary, spoken
-punctuation — NOT raw ASR; raw provider text is not observable) and `legalNormalized`. Metrics are
+`providerTranscript` (Phase 3G.A, observability only, audio runs only: the transcription
+provider's own returned text, before PratiLekh's preprocessing — still not raw ASR, since a
+provider may already do its own internal processing), `postASRDeterministic` (`/v1/transcribe`
+output: after fillers, custom dictionary, spoken punctuation), and `legalNormalized`. Metrics are
 never blended: WER/CER, exact critical tokens with preserved/recovered/unrecovered/corrupted
 transitions, normalization outcomes (false positives and incorrect transformations are severe),
 formatting. Run with `scripts/eval_run.sh`, test with `scripts/test_evaluation.sh`; the Local API
@@ -463,10 +518,15 @@ from the real-audio run (private results, not committed):
 
 1. **Real-audio evidence** — what actually happened when the user's recorded speech went through
    the app (the 3E.2A/3E.2B private runs above). Strongest evidence, but small samples.
-2. **`postASRDeterministic` text** — useful, but not raw provider output; it cannot currently
-   distinguish provider decoding from filler removal, custom dictionary, or spoken-punctuation
-   formatting, all of which run before this observable point.
-3. **Deterministic offline probes** (e.g. the Phase 3F.B N01–N12 result above) — prove what the
+2. **`providerTranscript` (Phase 3G.A)** — the text returned across the `TranscriptionProvider`
+   boundary, before PratiLekh's filler removal, custom dictionary, or spoken-punctuation formatting.
+   This separates "already present when the provider returned its text" from "introduced by
+   PratiLekh's own preprocessing" — but it is **not raw acoustic/token decoder output**; a provider
+   may already perform its own opaque internal processing before returning this string. Only
+   available for audio evaluated via the Local API (see `Evaluation/README.md`).
+3. **`postASRDeterministic` text** — the same value as before, after filler removal, custom
+   dictionary, and spoken-punctuation formatting. Still not raw provider output.
+4. **Deterministic offline probes** (e.g. the Phase 3F.B N01–N12 result above) — prove what the
    legal normalizer does with specific *text*; they do **not** prove the ASR will actually emit
    that text from speech.
 
@@ -486,44 +546,61 @@ from the real-audio run (private results, not committed):
 
 1. **Completed:** Phases 0–2, 3C+3C.1, 3D (live activation), 3E.1 (evaluation framework), 3E.2A and
    3E.2B (diagnostic corpora + real-audio runs, findings above), 3F.A (fail-closed statutory safety,
-   real-audio validated), 3F.B (bounded grouped-number grammar, real-audio validated), and the
-   post-3F N01–N12 real-audio validation itself (see "Phase 3F" above for the full findings).
-2. **Exact current `HEAD`:** `785921c7a64f1e1769684891ff02e9d85dd32586` ("Update project handoff
-   after Phase 3F"), branch `main`, 13 ahead of `origin/main`/0 behind, nothing pushed. Immediately
-   preceded by `89a2846f3ee3c773adef7f68d67e72629958f915` (Phase 3F.B), which is immediately
-   preceded by `18313d7a52d344c6ccd09fd02eb2ed776681290a` (Phase 3F.A).
-3. **No pending production/test change set.** Phase 3F.A and 3F.B are both fully committed; no
+   real-audio validated), 3F.B (bounded grouped-number grammar, real-audio validated), the post-3F
+   N01–N12 real-audio validation, and 3G.A (provider-transcript observability, real-audio validated
+   — see "Phase 3G.A" above for the full findings).
+2. **Exact current `HEAD`:** `08a2f24ac88ab44e6961f989ceceaefa9caf73c8` ("Add provider transcript
+   observability"), branch `main`, 15 ahead of `origin/main`/0 behind, nothing pushed. Immediately
+   preceded by the Phase 3F real-audio-validation and doc-handoff commits, `89a2846` (Phase 3F.B),
+   and `18313d7` (Phase 3F.A).
+3. **No pending production/test change set.** Phase 3F.A, 3F.B and 3G.A are all fully committed; no
    Swift source, test, or fixture changes are outstanding. Verify with `git status`/`git log`
    before trusting this if time has passed.
 4. **What 3F.A changed:** see "Phase 3F" above — `hundred`-continuation fail-closed decline;
-   fragmented-statute/suffix-ambiguity fail-closed decline. No grammar expansion. Now confirmed on
-   real audio (N10, N04/N12), not just unit tests.
+   fragmented-statute/suffix-ambiguity fail-closed decline. No grammar expansion. Confirmed on real
+   audio (N10, N04/N12), not just unit tests.
 5. **What 3F.B changed:** the bounded grouped-number grammar itself (see "Phase 3F" above) —
-   `[leading digit] + tens-word + [trailing digit]`, combined arithmetically. Now confirmed on real
+   `[leading digit] + tens-word + [trailing digit]`, combined arithmetically. Confirmed on real
    audio: 5/5 previously-corrupted grouped-number cases in the fixed N01–N12 corpus fixed, 0
    regressions.
-6. **Real-audio validation result (complete, not just deterministic offline):** corrupted critical
-   tokens 7→0, incorrect transformations 3→0, 0 regressions, comparing the identical N01–N12
-   recordings before (`cefc209`) and after (`785921c`) Phase 3F — see "Phase 3F" above for the full
-   case-by-case breakdown and the private result-directory paths.
-7. **Most important open evidence areas (none yet investigated, no solution selected):** (a)
-   statute-word recognition — `IPC` observed as `it c` in several N-series takes, upstream of the
-   observable legal-normalization boundary; (b) `BNSS` observed as fragmented letters (`B and S
-   S`) in some takes, same observability limit; (c) date/year phrasing reliability — no repeated
-   advantage for either phrasing established across 15 real-audio trials total; (d) punctuation —
-   strongly reproduced comma-for-internal-boundary pattern (22/22 across two rounds), provider-
-   vs-app attribution still unresolved; (e) `five hundred six`-style `hundred` dictation remains
-   deliberately unsupported (now fails safely, not corrupted) — whether to expand the grammar to
-   cover it is an open product question, not yet decided.
-8. **Exact immediate next action:** none of the above is pre-selected. The next architectural
-   decision is to choose, from the accumulated Phase 3E/3F evidence (this file's "Phase 3F",
-   "Evaluation framework", "Three layers of evidence" and "Diagnostic lessons" sections), among:
-   improving observability into upstream statute recognition, date/year handling, sentence-boundary
-   punctuation, or deliberately expanding the unsupported number grammar (e.g. `hundred`) if
-   product requirements justify it. That choice needs explicit review and approval before any
-   implementation starts — do not begin any of these now.
-9. **Must NOT be started yet:** date normalization, punctuation/sentence-boundary heuristics,
-   recognition boosting (Slice C), custom-dictionary reconciliation (Slice D), AI protection
-   (Slice E), raw-ASR instrumentation, expanding the `hundred`/number grammar, another
-   normalization family, evaluation-framework redesign, UI/history work, Phase 4 — none of these
-   are authorized by any evidence gathered so far.
+6. **What 3G.A changed:** added the `providerTranscript` observable value at the Local
+   API/evaluation seam only (see "Phase 3G.A" above) — no production transcription/normalization
+   behavior changed. Real-audio validated: 0 differences from the prior post-3F run across all 28
+   N/P/Y samples (both `postASRDeterministic` and `legalNormalized`), confirming no regression.
+7. **Statute-degradation attribution result (the reason 3G.A was built):** for the six previously
+   known degraded cases (N01, N04, N05, N06, N07, N12), **6/6 are already present in
+   `providerTranscript`** — i.e. at the provider-return boundary, upstream of PratiLekh's
+   filler-removal/custom-dictionary/spoken-punctuation preprocessing. 0/6 are introduced by that
+   preprocessing; 0/6 are first introduced by legal normalization. This is **not** established as
+   an acoustic-decoding finding — provider-internal processing before the returned string remains
+   opaque. N02, N03, N08, N09, N11 remain correctly recognized; N10 remains an intentional
+   grammar-scope safe-decline, not a recognition failure.
+8. **Instrumentation limitation to remember:** all 28 real-audio samples happened to have
+   `providerTranscript == postASRDeterministic`, because none of these specific recordings exercised
+   filler removal, custom-dictionary substitution, or a literal spoken-punctuation word. The
+   committed synthetic tests separately prove the instrumentation can represent a genuine
+   divergence; this real-audio run does not comprehensively validate every transformation.
+9. **Most important open evidence areas (none yet investigated, no solution selected):** (a) *now
+   ruled out*: PratiLekh's own deterministic preprocessing interval as the source of the six
+   statute degradations (3G.A's finding above) — this narrows, but does not yet select, the next
+   intervention; (b) date/year phrasing reliability — no repeated advantage for either phrasing
+   established across 15 real-audio trials total; (c) punctuation — strongly reproduced
+   comma-for-internal-boundary pattern (22/22 across two rounds), provider-vs-app attribution still
+   unresolved; (d) `five hundred six`-style `hundred` dictation remains deliberately unsupported
+   (now fails safely, not corrupted) — whether to expand the grammar to cover it is an open product
+   question, not yet decided.
+10. **Exact immediate next action:** a **read-only investigation** (not yet performed, not yet
+    authorized to implement anything from it) of recognition-side capabilities — specifically
+    whether the current Parakeet/FluidAudio ASR stack exposes safe contextual vocabulary biasing,
+    hotwords, boosting, prompting, decoding controls, or an equivalent mechanism suitable for
+    legal/statutory terminology. This is one candidate among several unranked intervention classes
+    (recognition-side improvements if supported; a constrained text-based PratiLekh Intelligence;
+    eventually audio-aware intelligence if later evidence justifies it) — the investigation itself
+    does not select or authorize any of them. No Phase 3G.B is declared.
+11. **Must NOT be started yet:** the recognition-side capability investigation itself (item 10) has
+    not been performed; do not implement anything from it before it happens and is reviewed. Also
+    not started: date normalization, punctuation/sentence-boundary heuristics, recognition boosting
+    (Slice C), custom-dictionary reconciliation (Slice D), AI protection (Slice E), expanding the
+    `hundred`/number grammar, another normalization family, evaluation-framework redesign,
+    text-based or audio-aware PratiLekh Intelligence design/implementation, UI/history work, Phase 4,
+    and Phase 3G.B (not declared) — none of these are authorized by any evidence gathered so far.
