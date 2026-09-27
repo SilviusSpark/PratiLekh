@@ -41,6 +41,8 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 2 — Indian Legal Core (77 recognition entries, 0 normalization entries, source-curated, current+legacy statutes coexist, no phonetic aliases, pack loaded by `LegalDictationProcessor`; no recognition hints wired) | ✅ committed | `db250c455a7b733b1a80c8eb109cec2f8066e1dd` |
 | 3C + 3C.1 — First normalization rule families (statutory provisions, PW/DW witness refs) | ✅ committed (working tree clean after commit) | `e76ed599ef978abd7d8e494db0ed6c9f6b4136ce` |
 | 3D — Live legal normalization, Slices A+B (`LegalDictationProcessor`, `ContentView` seam, leading-capitalization protection) | ✅ committed | `0abf627` (full: `0abf627551be21153f833fa41215d90b396912ae`) |
+| 3E.1 — Evaluation framework foundation (`Evaluation/`; substantively Phase 10's methodology deliverable, done early) | ✅ committed | `e916cbc` (full: `e916cbc4fbcfe1a10ba2021d30728b4ec8c1aaac`) |
+| 3E.2A — First controlled diagnostic corpus (D01–D10) + a real-audio baseline run (private, not committed) | ✅ references/tooling committed | `5619375` (full: `5619375d0406f67cf9abc385a78ba49fd6d50f47`) |
 
 Local `main` contains unpushed PratiLekh commits. Verify current ahead/behind state with Git rather than relying on this document.
 
@@ -283,8 +285,35 @@ punctuation — NOT raw ASR; raw provider text is not observable) and `legalNorm
 never blended: WER/CER, exact critical tokens with preserved/recovered/unrecovered/corrupted
 transitions, normalization outcomes (false positives and incorrect transformations are severe),
 formatting. Run with `scripts/eval_run.sh`, test with `scripts/test_evaluation.sh`; the Local API
-must be enabled in the app first (off by default). Known limitation: spoken-number vs digit forms
-count as WER errors (not addressed yet). See `Evaluation/README.md`.
+must be enabled in the app first (off by default — its enable flag is read once at app launch,
+with no live reload, so toggling it requires an app restart to take effect). Known limitation:
+spoken-number vs digit forms count as WER errors (not addressed yet). See `Evaluation/README.md`.
+
+**Diagnostic corpus + first real-audio baseline (Phase 3E.2A, `Evaluation/References/diagnostics-3e2a/`,
+D01-D10, see `Evaluation/DIAGNOSTICS_3E2A.md` for the case-by-case guide):** measurement only, no
+production change made from it. Findings from the first real-audio run (private results, not
+committed):
+- **D01–D03 (section-number phrasing):** for D01 (digit-by-digit, "three two three"), the text
+  reaching `LegalDictationProcessor` was *already* digits (`Section 323 IPC`) — the Phase 3
+  statutory normalizer's expected input never appeared, so this sample scored `notEvaluable`, not
+  `correctApplication`. D01's correctness in that run is therefore not attributable to our
+  normalizer; an earlier stage (which one is not observable from `postASRDeterministic`) already
+  converted it. For D02 ("three twenty three") and D03 ("three hundred twenty three"), the spoken
+  words survived recognition intact and the normalizer itself corrupted them — confirming the
+  documented findings (digit/tens concatenation -> `3203`; "hundred" outside the supported grammar
+  -> partial `Section 3`) with real audio.
+- **D04 vs. D05 (date phrasing):** in this single-take pair, the phrasing earlier called *less*
+  reliable produced a clean `12 July 2026`; the phrasing called *more* reliable came out with the
+  day as an ordinal and the year phrase garbled — the opposite of the manual-trial impression. One
+  take per phrasing; not a conclusion.
+- **D06-D10 (punctuation, 5 independent takes of one passage):** both internal sentence boundaries
+  became a comma in all 5/5 takes (never a full stop); the final (end-of-recording) boundary got a
+  full stop in 4/5. Looks positionally systematic within this small sample, not random — but five
+  takes of one passage/session doesn't establish it generalizes. `postASRDeterministic` cannot
+  separate the ASR model's own punctuation from the app's spoken-punctuation formatting stage.
+
+None of this was fixed. No date normalization, punctuation heuristics, statutory-grammar changes,
+or recognition boosting have been implemented from these findings — that decision is still open.
 
 ## Next action (as of this handoff)
 
@@ -292,4 +321,11 @@ count as WER errors (not addressed yet). See `Evaluation/README.md`.
 witness normalization is active in the live stopped-dictation and reprocess paths, before
 optional AI. Streaming preview is untouched. Slices C (recognition hints), D (custom
 dictionary) and E (AI protection) have not started; no additional Phase 3 normalization family
-and no Phase 4 work has started. Do not begin any of them without explicit approval.
+and no Phase 4 work has started.
+
+Phase 3E.1 (`e916cbc`) and 3E.2A's tooling/corpus (`5619375`) are committed; the first real-audio
+diagnostic baseline has been run and its findings are recorded above (results are private, not in
+Git). **No production fix has been made from these findings.** Do not begin fixing D02/D03's
+statutory-number parsing, date normalization, punctuation/sentence-boundary heuristics,
+recognition boosting, or any other production change implied by them — and do not begin Slice C,
+Slice D, Slice E, another normalization family, or Phase 4 — without explicit approval.

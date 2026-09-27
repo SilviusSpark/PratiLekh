@@ -205,7 +205,7 @@ no per-entry source metadata was added to the Phase 1 schema):
   valid vocabulary, and section-correspondence tables are explicitly out of scope, not just
   unimplemented.
 
-## Phase 3 — Legal Normalization Engine — 🚧 In progress (first slice implemented, uncommitted)
+## Phase 3 — Legal Normalization Engine — 🚧 In progress (3C/3C.1 and 3D committed; broader Phase 3 open)
 
 **Purpose:** build out deterministic normalization beyond statutory citations, using the
 boundary defined in Phase 1.
@@ -343,7 +343,7 @@ with real jurisdictional content.
 - Odisha court names, place names, and locally common personal-name patterns as a jurisdiction
   pack layered over the Indian Legal Core per the precedence rules from Phase 1.
 
-## Phase 10 — Dictation Accuracy Evaluation
+## Phase 10 — Dictation Accuracy Evaluation — 🚧 Foundation and first baseline in progress
 
 **Purpose:** assess real-world accuracy of the assembled stack and decide whether further STT
 investment is warranted.
@@ -352,6 +352,63 @@ investment is warranted.
 - An evaluation methodology and findings against representative Indian-legal dictation.
 - A go/no-go recommendation on investigating an India-tuned STT model (e.g., an AI4Bharat
   model), as a distinct future effort if warranted — not assumed necessary today.
+
+**Work done so far (session-labeled "Phase 3E.1"/"Phase 3E.2A" while implemented, substantively
+this phase's methodology-and-findings deliverable, done ahead of strict phase order the same way
+Phase 4 was earlier noted to draw on Phase 3 — see "Note on deviation" below):**
+
+- **Framework (`Evaluation/`, standalone, no app dependency):** JSON reference schema (dictated
+  `reference`, optional `intendedFinal`, critical tokens, `legalExpectations`); a runner
+  (`scripts/eval_run.sh`) that transcribes fixed private audio via the app's Local API or reads
+  post-ASR text, replays it through the real `LegalDictationProcessor`, and writes per-sample
+  JSON + a text summary. Metrics stay unblended: WER/CER, exact critical-token
+  state/transition (`preserved`/`recovered`/`unrecovered`/`corrupted`), normalization outcomes
+  (`correctApplication`/`correctDecline`/`correctNoCandidate`/`missedOpportunity`/`falsePositive`/
+  `incorrectTransformation`/`notEvaluable`), and formatting (case/punctuation) — never a single
+  blended score. **Governing principle: the reference is what the judge dictated, not what an
+  evaluator or model thinks was intended.** Audio (even of synthetic scripts) and all run results
+  stay outside Git; only synthetic reference JSON is committed. `postASRDeterministic` is the
+  provider's `/v1/transcribe` output after filler removal, custom dictionary and spoken
+  punctuation — **not raw ASR**; raw provider text remains unobservable.
+- **First controlled diagnostic corpus (`Evaluation/References/diagnostics-3e2a/`, D01–D10)**
+  investigating three behaviors reported from real trials: section-number phrasing (digit-by-digit
+  vs. mixed vs. hundreds-form), year/date phrasing, and sentence-punctuation repeatability across
+  five independent recordings of one passage. Each `legalExpectations` entry records the *desired*
+  outcome (e.g. `Section 323 IPC`), not a rewrite of current parser behavior, so a run's
+  classification is itself the diagnostic signal. D01 alone is a strict automated regression case;
+  D02/D03's current (defective) outputs are recorded as a documented baseline observation in
+  `Evaluation/DIAGNOSTICS_3E2A.md`, explicitly *not* frozen as a test requirement, so a future fix
+  needs no companion test edit.
+- **First real-audio baseline run (private results, not in Git) — findings:**
+  - **Section numbers:** for the digit-by-digit phrasing (D01), the ASR/deterministic-formatting
+    stage *already* emitted digits (`Section 323 IPC`) before the Phase 3 statutory normalizer ever
+    ran — the normalizer's expected trigger text wasn't present, so this sample scored
+    `notEvaluable` rather than `correctApplication`. That means D01's correctness in this run is
+    **not** attributable to `StatutoryProvisionNormalizer`; which of the app's earlier stages
+    performed the digit conversion is not observable from `postASRDeterministic` alone (evidence,
+    not settled attribution). For the mixed (D02) and hundreds-form (D03) phrasings, the spoken
+    words survived recognition intact (0% WER at that stage) and the corruption is specifically
+    the normalizer's — confirming the previously-documented parser-boundary findings (digit/tens
+    concatenation producing `3203`; "hundred" outside the supported grammar producing a
+    partial `Section 3`) using real audio rather than synthetic text.
+  - **Date phrasing (D04 vs. D05):** in this single-take pair, the phrasing manual trials called
+    *less* reliable ("Twenty Twenty Six") produced a clean canonical date (`12 July 2026`), while
+    the phrasing called *more* reliable ("Two thousand twenty six") came out with the day changed
+    to an ordinal and the year phrase garbled. This contradicts the manual-trial impression rather
+    than confirming it. One take per phrasing is evidence, not a conclusion — repeated recordings
+    per phrasing would be needed before treating either direction as established. No date
+    normalization was implemented or is proposed by this finding alone.
+  - **Punctuation (D06–D10):** across all 5 independently recorded takes of the same passage, both
+    *internal* sentence boundaries were rendered as a comma every single time (5/5), never a full
+    stop, with the following word left lowercase; the *final* boundary (end of recording) got a
+    genuine full stop in 4 of 5 takes. This looks positionally systematic within this small sample
+    (internal pause vs. end-of-recording pause treated differently), not random per-boundary
+    flakiness — but five takes of one passage in one session does not establish this generalizes.
+    Attribution between the ASR model's own punctuation and the app's spoken-punctuation
+    formatting stage is not resolvable from `postASRDeterministic` alone.
+- **Not yet done:** no production fix to any of the above; recognition-hint boosting (Slice C),
+  raw-provider instrumentation, date normalization, and punctuation/sentence-boundary heuristics
+  remain out of scope until a deliberate decision is made from this evidence.
 
 ## Note on deviation from the requested phase list
 

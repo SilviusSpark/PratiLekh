@@ -19,7 +19,10 @@
     },
     {
       "type": "statute",
-      "expected": "IPC"
+      "expected": "IPC",
+      "spokenForms": [
+        "ipc"
+      ]
     }
   ],
   "legalExpectations": [
@@ -29,5 +32,5 @@
       "replacement": "Section 323 IPC"
     }
   ],
-  "notes": "Phase 3E.2A: the hundreds-form expression for Section 323. As with D02, this is the DESIRED outcome -- do not expand production parsing merely to make this pass. 'hundred' is outside the approved SpokenNumberParser grammar (digit/tens words only), so this case is expected to surface a normalization gap, not a recognition gap."
+  "notes": "Phase 3E.2A: the hundreds-form expression for Section 323. As with D02, this is the DESIRED outcome -- do not expand production parsing merely to make this pass. 'hundred' is outside the approved SpokenNumberParser grammar (digit/tens words only), so this case is expected to surface a normalization gap, not a recognition gap. The statute token's 'ipc' spokenForm is a fixture correction (not a production change): a real-audio run produced lowercase 'ipc', which is the correct statute identity in non-canonical case, not a recognition or normalization failure -- spokenForm matching is case-insensitive by design, so this stops a casing artifact from scoring as a wrong/corrupted statute token. D01/D02 are not changed: their real-audio runs produced uppercase 'IPC', so there is no equivalent evidence-based justification for them."
 }
