@@ -49,6 +49,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3G.A — Provider-transcript observability (`providerTranscript` stage, Local-API/evaluation seam only) | ✅ committed, real-audio validated | `08a2f24` (full: `08a2f24ac88ab44e6961f989ceceaefa9caf73c8`) |
 | 3G.B — Legal-vocabulary recognition-boosting experiment (bounded runtime test, no committed code/config change — findings only) | ✅ documented | `25cfb32` (full: `25cfb327ea3a574f00050ec31364880890161a3e`) |
 | 3G.C — CTC rescoring observability investigation (read-only; recognition-tuning branch closed) | ✅ documented | `f462ce1` (full: `f462ce11e2888752fd731d903b4f06d3e40d2a41`) |
+| Intelligence V1 foundation — deterministic proposal/protected-span/validator types + adversarial unit tests (`Sources/Fluid/Intelligence/Safety/`); zero LLM/model/network integration | ✅ implemented, tests green; staged, pending architectural review | staged, not yet committed |
 
 Local `main` is 18 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
 ahead/behind state with Git rather than relying on this document.
@@ -942,23 +943,27 @@ from the real-audio run (private results, not committed):
     two rounds), provider-vs-app attribution still unresolved; (e) `five hundred six`-style
     `hundred` dictation remains deliberately unsupported (now fails safely, not corrupted) — whether
     to expand the grammar to cover it is an open product question, not yet decided.
-12. **The PratiLekh Intelligence investigation/design track is now complete** — see "PratiLekh
-    Intelligence architecture" above for the full record (Fluid Intelligence rejected as a
-    dependency; governing invariant "the model is replaceable, the safety contract is not";
-    three-task split; hybrid staged long-term architecture; Text-Only Intelligence Baseline /
-    Safety Contract V1 designed but not implemented; Intelligence V1–V4 planning framework).
-    **Exact immediate next action now:** implement the Text-Only Intelligence Safety Contract V1
-    foundation — proposal data types, protected-span representation, the deterministic validator,
-    and comprehensive deterministic unit tests (including deliberately hostile/mislabelled
-    proposals — see "Next milestone" under "PratiLekh Intelligence architecture" above for the
-    exact list) — with **zero LLM/model/network integration**. Only after that foundation's tests
-    pass should a local text model be connected for the first real proposal-generation experiment.
-13. **Must NOT be started yet:** the Intelligence validator/data-type implementation itself (item
-    12) has not been started — do not implement it merely because the design/investigation is
-    complete; this documentation update is itself the milestone that records the design, not an
-    authorization to build it in the same session. Connecting any model/provider, audio-aware
-    Intelligence, fine-tuning of any kind, and model selection (Ollama/LM Studio or otherwise) all
-    remain unauthorized until the V1 safety-contract foundation lands and is reviewed. The
+12. **The PratiLekh Intelligence investigation/design track is complete, and the V1 safety-contract
+    foundation is now implemented** (staged, pending architectural review — not yet committed as
+    of this entry): `Sources/Fluid/Intelligence/Safety/` (`IntelligenceProposal`, `ProtectedSpan`
+    + `ProtectedSpanKind`, `IntelligenceEditClassifier`, `ProposalDisposition` +
+    `ProposalRejectionReason`/`ReviewReason`, `IntelligenceSafetyAuthority`) plus a comprehensive
+    adversarial/positive-control unit-test suite (`Tests/EditClassificationTests.swift`,
+    `Tests/IntelligenceSafetyAuthorityTests.swift`, run via
+    `scripts/test_intelligence_safety.sh`) — **zero LLM/model/network integration**, exactly as
+    scoped. See "PratiLekh Intelligence architecture" above for the full design record (Fluid
+    Intelligence rejected as a dependency; governing invariant "the model is replaceable, the
+    safety contract is not"; three-task split; hybrid staged long-term architecture; Intelligence
+    V1–V4 planning framework). **No numeric proposal-count/span-length/aggregate-edit bounds were
+    implemented** — the committed design records that such a bound exists conceptually
+    ("excessive span") but never committed an exact value, and inventing one wasn't authorized;
+    this is an open item for whoever reviews this milestone, not a gap to fill silently.
+    **Exact immediate next action now:** architectural review of the staged foundation; only after
+    that review and a commit should a local text model be connected for the first real
+    proposal-generation experiment.
+13. **Must NOT be started yet:** connecting any model/provider, audio-aware Intelligence,
+    fine-tuning of any kind, and model selection (Ollama/LM Studio or otherwise) all remain
+    unauthorized until the V1 safety-contract foundation above is reviewed and committed. The
     recognition-tuning branch is closed — do not resume it: no threshold tuning, alias additions,
     another vocabulary-boosting experiment, modifying the three-character compound-length rule,
     modifying FluidAudio, exposing rejected-candidate score structures, a production

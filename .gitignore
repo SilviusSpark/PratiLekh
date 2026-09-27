@@ -216,6 +216,7 @@ scripts/*
 !scripts/test_legal_language.sh
 !scripts/test_evaluation.sh
 !scripts/eval_run.sh
+!scripts/test_intelligence_safety.sh
 
 # Evaluation audio (even of synthetic scripts) must never be committed
 Evaluation/**/*.wav
