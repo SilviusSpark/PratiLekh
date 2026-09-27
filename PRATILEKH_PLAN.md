@@ -493,16 +493,29 @@ beyond cheaply evaluating an existing, already-integrated mechanism and toward
 developing/modifying a specialized legal-ASR rescoring subsystem, a materially larger undertaking
 than the phase's original scope.
 
-**Next planned activity:** a **read-only architecture investigation/design** (not implementation)
-of a constrained, local PratiLekh Intelligence layer, starting from these principles: local/private
-processing; deterministic legal normalization remains authoritative for deterministic
-transformations; Intelligence must not silently replace the transcript wholesale; AI output is
-treated as proposals requiring validation/protection before application; statutory numbers and
-other protected legal tokens require particularly strict handling; the design should first
-investigate a text-first Intelligence layer, with audio-aware Intelligence remaining a possible
-later escalation path, not the default assumption; and the accumulated Phase 3G evidence must
-inform what uncertainty/provenance information such an Intelligence layer can realistically
-receive. Not yet performed; the Intelligence architecture is not finalized here.
+**Next planned activity — performed (investigation/design only, zero implementation).** The
+read-only architecture investigation/design of a constrained, local PratiLekh Intelligence layer
+was carried out across three follow-on milestones: a read-only Intelligence-layer safety/output-
+contract investigation; a read-only investigation into whether FluidVoice's own local "Fluid
+Intelligence" runtime is a viable PratiLekh dependency (it is not — an ownership/maintainability
+decision, not a criticism of FluidVoice); and a Version 1 text-only proposal/validator contract
+design (`Text-Only Intelligence Baseline / Safety Contract V1`) plus a further audio-aware
+architecture research investigation. **Full record lives in [`CLAUDE.md`](CLAUDE.md)'s "PratiLekh
+Intelligence architecture" section** — summarized here: the recommended long-term architecture is
+hybrid and staged (Parakeet first-pass ASR → deterministic normalization → an Intelligence
+Proposal Engine → a Deterministic Safety Authority), governed by the invariant **"the model is
+replaceable, the safety contract is not"** and a three-way task split (recognition repair /
+dictation interpretation / surface polishing), each with different evidence requirements and risk
+profiles. The Text-Only Intelligence Baseline (span-based proposals, exact source-text matching,
+independently re-derived edit categories, three-way protected-span semantics — resolved /
+unresolved / independently-protected, never treated as equivalent — and a zero-unsafe-accepted-
+edits raw-count target) is designed, not implemented, and not discarded; it is planned as
+Intelligence V1 in a four-generation, non-committal roadmap (V1 safety architecture, V2 recognition
+evidence, V3 audio-aware, V4 domain adaptation — see `CLAUDE.md` for the full breakdown). **The
+next authorized milestone is implementing the V1 safety-contract foundation** (proposal data
+types, protected-span representation, deterministic validator, hostile-input unit tests) with
+**zero LLM/model/network integration** — proving the safety boundary before any model is
+connected.
 
 **Deferred (each needs its own design/domain review before implementation):** exhibit
 references (needs research into Indian exhibit conventions), case numbers, dates, amounts,
@@ -697,11 +710,12 @@ three/four-character canonical terms never clear the string-similarity/compound-
 before CTC scoring runs at all.** **The recognition-tuning branch (3G.A/B/C) is now closed** as an
 evidence/scope decision, not as proof recognition-side improvement is impossible — continuing it
 would now mean developing/modifying a specialized legal-ASR rescoring subsystem, beyond this
-phase's original scope. **The next planned activity is a read-only architecture
-investigation/design of a constrained, local PratiLekh Intelligence layer** (text-first,
-proposals-not-replacement, deterministic normalization remaining authoritative, audio-aware
-intelligence as a later escalation path only) — not yet performed, not finalized, and not
-authorized to implement from this evidence alone.
+phase's original scope. **The next planned activity — a read-only architecture
+investigation/design of a constrained, local PratiLekh Intelligence layer — has since been
+performed** (text-first baseline plus audio-aware research; see "Next planned activity — performed"
+above and [`CLAUDE.md`](CLAUDE.md)'s "PratiLekh Intelligence architecture" section for the full
+record). Design and research only — **still not authorized to implement** beyond the V1
+safety-contract foundation described there.
 
 ## Note on deviation from the requested phase list
 

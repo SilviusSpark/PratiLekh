@@ -47,8 +47,10 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3F.A — Fail-closed statutory-normalization safety (`hundred` continuation guard, fragmented-statute/suffix guard) | ✅ committed | `18313d7` (full: `18313d7a52d344c6ccd09fd02eb2ed776681290a`) |
 | 3F.B — Bounded grouped-number grammar (`thirty four`→34, etc.) | ✅ committed | `89a2846` (full: `89a2846f3ee3c773adef7f68d67e72629958f915`) |
 | 3G.A — Provider-transcript observability (`providerTranscript` stage, Local-API/evaluation seam only) | ✅ committed, real-audio validated | `08a2f24` (full: `08a2f24ac88ab44e6961f989ceceaefa9caf73c8`) |
+| 3G.B — Legal-vocabulary recognition-boosting experiment (bounded runtime test, no committed code/config change — findings only) | ✅ documented | `25cfb32` (full: `25cfb327ea3a574f00050ec31364880890161a3e`) |
+| 3G.C — CTC rescoring observability investigation (read-only; recognition-tuning branch closed) | ✅ documented | `f462ce1` (full: `f462ce11e2888752fd731d903b4f06d3e40d2a41`) |
 
-Local `main` is 17 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
+Local `main` is 18 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
 ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
@@ -561,17 +563,206 @@ move beyond cheaply evaluating an existing, already-integrated mechanism and tow
 developing/modifying a specialized legal-ASR rescoring subsystem, which is a materially larger
 undertaking than the phase's original scope.
 
-**Next planned activity:** a **read-only architecture investigation/design** (not implementation)
-of a constrained, local PratiLekh Intelligence layer, starting from these principles: local/private
-processing; deterministic legal normalization remains authoritative for deterministic
-transformations; Intelligence must not silently replace the transcript wholesale; AI output is
-treated as proposals requiring validation/protection before application; statutory numbers and
-other protected legal tokens require particularly strict handling; the design should first
-investigate a **text-first** Intelligence layer, with audio-aware Intelligence remaining a
-possible later escalation path, not the default assumption; and the accumulated Phase 3G evidence
-(providerTranscript attribution, the CTC mechanism's actual behavior and limits) must inform what
-uncertainty/provenance information such an Intelligence layer can realistically receive. Not yet
-performed; the Intelligence architecture is not finalized here.
+**Next planned activity — performed; see "PratiLekh Intelligence architecture" immediately below
+for the full record.** The read-only architecture investigation/design of a constrained, local
+PratiLekh Intelligence layer (starting from the principles above) was carried out across three
+follow-on milestones: a read-only Intelligence-layer safety/output-contract investigation, a
+read-only investigation into whether FluidVoice's own local "Fluid Intelligence" runtime is a
+viable PratiLekh dependency, and a Version 1 text-only proposal/validator design plus a further
+read-only research investigation into the long-term (text-only vs. audio-aware vs. unified)
+architecture question. **No Intelligence code has been implemented from any of this** — it is
+design and research only.
+
+## PratiLekh Intelligence architecture (investigated and designed — not implemented)
+
+Three read-only/design-only milestones followed directly from the closed recognition-tuning
+branch above, producing architecture decisions and a first proposal-contract design, but **zero
+implementation**. Nothing in this section has been built; do not implement from it without an
+explicit, separate implementation milestone (see "Next milestone" at the end of this section).
+
+**Why Fluid Intelligence (FluidVoice's own local AI) is not a PratiLekh dependency — the lesson,
+not the dependency.** A read-only investigation (no PratiLekh or FluidVoice files edited) confirmed
+PratiLekh does not contain or link the proprietary `PrivateAIProviderBridge`; `PRIVATE_AI_PROVIDER`
+is not enabled in this build — not set anywhere in `PratiLekh.xcodeproj`'s compilation conditions,
+and never has been anywhere in this repo's Git history. The separately-installed
+`/Applications/FluidVoice.app` on this machine confirms local AI post-processing is technically
+real and viable: it runs a local MLX-based "Fluid Intelligence" runtime (a proprietary
+`fluid-intelligence-mlx` helper process, spawned via `Process`/pipes, plus an in-process
+`llama.cpp` fallback backend) against two custom-architecture model checkpoints (`fluid-1-nvfp4-mlx`,
+a Gemma-4-family MLX model, and an MTP speculative-decoding drafter). None of this is reusable by
+PratiLekh: the bridge's own dependency module (`FluidIntelligenceCore`) has no buildable/obtainable
+form anywhere on this machine; the helper binary is proprietary and its exact pipe protocol is
+unverified; the model checkpoints use custom architectures with no reusable inference code
+available to PratiLekh. **This is an architectural ownership/maintainability decision, not a
+criticism of FluidVoice** — PratiLekh's own generic `LLMClient` already has full, working support
+for local OpenAI-compatible servers (Ollama and LM Studio are pre-existing built-in providers,
+complete with local-endpoint detection and no-API-key handling) — that existing path is what
+PratiLekh Intelligence is architecturally built around, not Fluid Intelligence.
+
+**Governing principle (architectural invariant, not an experiment-specific observation):**
+> The model is replaceable. The safety contract is not.
+> The model proposes. Deterministic PratiLekh code decides what may affect the transcript.
+
+The Intelligence model/provider must never become the sole authority over judicial transcript
+content. No future milestone should weaken this invariant merely to make a correction easier to
+apply.
+
+**Three conceptually distinct Intelligence tasks — do not treat as one undifferentiated generative
+rewrite; each has different evidence requirements and a different risk profile:**
+1. **Recognition repair** — "what words did the judge actually say?" (e.g. ASR `it c` →
+   acoustically supported `IPC`; a misrecognized Indian legal term or proper noun). Best long-term
+   evidence may include original audio and recognition evidence. Legally consequential — the
+   strictest treatment: never autonomous, review-only at most, regardless of how the proposal is
+   backed.
+2. **Dictation interpretation** — "what did the judge intend to retain after an explicit
+   correction?" (`"15 March — sorry — 16 March"`, `"defendant — correction — plaintiff"`,
+   `"three years — strike that — two years"`). Explicit corrections, false starts and repair
+   structures belong here. An ambiguous correction must fail closed — preserve the original text,
+   never silently delete substantive dictated speech — rather than guess at a reparandum boundary.
+3. **Surface polishing** — "how should the retained dictation be written?" (punctuation,
+   capitalization, whitespace, conventional formatting). Text alone is generally sufficient. This
+   is the only category eligible for autonomous application in the V1 design below.
+
+**Long-term architecture direction — hybrid and staged, not a single unrestricted speech-language
+model:**
+```
+audio
+→ first-pass ASR (currently Parakeet/FluidAudio)
+→ deterministic ASR preprocessing
+→ deterministic legal normalization
+→ legalNormalized
+→ PratiLekh Intelligence Proposal Engine
+→ Deterministic Safety Authority
+→ final transcript
+```
+Long-term, Intelligence may additionally consume bounded original-audio evidence, ASR
+timestamps/alignment, decoder alternatives/N-best hypotheses if available, recognition
+confidence/evidence if available, static legal-domain context, and dynamic case vocabulary — but
+**targeted/bounded audio access is not a permanent invariant.** Prefer targeted audio
+re-examination of spans the deterministic pipeline already flags as suspect, where that's cheap to
+identify, while keeping broader utterance-level audio review open as a possibility if evaluation
+ever shows first-pass error detection has insufficient recall. This remains an experiment
+question, not a settled design.
+
+**Static vs. dynamic vocabulary — do not conflate:**
+- **Static legal-domain vocabulary** (IPC, BNS, BNSS, CrPC, CPC, BSA/Evidence Act, POCSO, NI Act,
+  recurring judicial terminology) — prefer contextual biasing, vocabulary mechanisms,
+  retrieval/context, or other evidence-backed adaptation before assuming fine-tuning is necessary.
+- **Dynamic case vocabulary** (accused, complainant, witnesses, advocates, villages, police
+  stations, organizations, unusual local place names) — fundamentally per-matter context; must
+  not be baked into globally distributed model weights. Likely long-term design: a per-matter
+  vocabulary/context mechanism supplied to recognition and/or Intelligence, not training.
+
+**Training/fine-tuning decision.** Training a speech-language foundation model from scratch is
+**not the plan**. Fine-tuning of any kind is **deferred** — no custom PratiLekh model should be
+trained merely because training is technically possible. Sequence: establish the architecture,
+evaluation methodology, and failure modes first; collect high-quality real judicial
+dictation/reference data; only then determine empirically whether adaptation is required. Possible
+future outcomes (none committed to): ASR/domain adaptation, LoRA/adapters for a second-pass model,
+personal/on-device adaptation, synthetic-data augmentation, or no fine-tuning at all if contextual
+mechanisms prove sufficient.
+
+**Training/evaluation data principle** (for whenever a dataset is eventually built): conceptually
+preserve, where applicable: original audio; first-pass ASR; deterministic intermediate text;
+legal-normalized text; an authoritative human-validated final reference; alignment/timestamps
+where available; legal-term, proper-name, and filler/disfluency annotations; explicit
+correction/reparandum spans; supplied dynamic vocabulary. **The authoritative reference represents
+what the judge actually dictated/intended to retain, not what an AI believes would be legally or
+stylistically preferable** — the same governing principle the `Evaluation/` framework already
+uses (see below). Real judicial dictation is the eventual gold standard; synthetic data may
+bootstrap rare-term/entity/correction evaluation but must never silently replace real-data
+validation.
+
+**Text-Only Intelligence Baseline / Safety Contract V1 — designed, not implemented, not
+discarded.** A complete design exists for a model-independent, span-based proposal/validator
+contract operating on `legalNormalized` alone. Its purpose is understood primarily as proving the
+safety architecture itself before audio complexity is added — not as a preview of final production
+behavior. Major decisions preserved:
+- Every proposal references the immutable `legalNormalized` source; exact `expectedSourceText`
+  matching only — **no fuzzy source alignment**; a mismatch is always a rejection.
+- Proposals are span-based (source range + expected text + replacement + category + optional
+  confidence/rationale), never free-text replacement.
+- The edit category a proposal claims for itself is **never trusted** — deterministic code always
+  independently re-derives the actual character-level edit category from the two strings before
+  deciding anything.
+- Protected spans have **three distinct semantics, not two**: deterministically **resolved** (an
+  applied normalization — no proposal at all permitted, not even review-only), deterministically
+  **unresolved** (a declined normalization — review-only permitted, since a decline means "we
+  don't know," not an alternative fact), and **independently protected** (dates, amounts, case
+  numbers, exhibits, names — categories with no existing recognizer at all, handled by a
+  deliberately coarse, over-inclusive heuristic gate, never a new Phase-3 normalizer).
+  **Applied and declined normalization must never be documented or implemented as equivalent.**
+- V1's autonomous-application scope is deliberately narrow: punctuation-only, capitalization-only,
+  and whitespace-only edits outside any protected span, each with an exact, testable predicate.
+  Everything else is review-only or forbidden for V1.
+- Semantic proposal failures (bad range, source mismatch, overlap, excessive span) are isolated to
+  the one proposal where safe; structural failures (malformed JSON, wrong schema version, no tool
+  call) invalidate the whole response.
+- Model-supplied confidence is **never an acceptance criterion**, for any reason, whether the
+  proposal is text-only or (later) audio-backed.
+- **Zero unsafe accepted edits is the hard target, reported as a raw violation count — never
+  folded into an aggregate score.**
+
+**Forward-compatibility decision.** Speculative audio-model fields (`acousticConfidence`,
+`alignmentEvidence`, `candidateAlternatives`, or other model-specific evidence structures) are
+**deliberately not frozen into V1** merely because they might be useful later. The requirement
+instead: the proposal/disposition taxonomy must **remain extensible** so future proposal classes
+such as `recognitionRepair` and `dictationCorrection` can be added later without breaking the
+deterministic safety architecture already designed. Any audio-specific schema should be designed
+only after the chosen audio/recognition-evidence source is experimentally understood — not now,
+and not speculatively.
+
+**Future recognition-evidence investigation (not yet performed).** Mature published
+ASR-error-correction approaches often benefit from N-best hypotheses rather than requiring a full
+audio-language model. **PratiLekh currently exposes only a single final transcription string
+through its `TranscriptionProvider` abstraction** — no word timestamps, token/word confidence,
+decoder scores, N-best hypotheses, or lattices are exposed today. Whether FluidAudio/Parakeet can
+expose any of these is an important, currently-unanswered future investigation; if it can, an
+intermediate architecture (`audio → Parakeet → transcript + decoder alternatives/recognition
+evidence → Intelligence → deterministic validation`) may be viable before or alongside full
+audio-aware Intelligence. **Do not claim this is currently supported — it is not; this is a
+future investigation only.** Also preserved as an open question, explicitly not investigated in
+this documentation milestone: whether the pinned `altic-dev/FluidAudio` dependency (see Tech
+stack above) has drifted from the actively-developed public FluidAudio repository.
+
+**Planning framework — Intelligence generations** (a roadmap concept, not a committed release
+schedule; version names are planning labels, not released product versions):
+- **Intelligence V1 — Safety Architecture.** Text-only proposal/validator experiment. Goal: prove
+  an untrusted local model can propose changes while deterministic PratiLekh code controls what
+  reaches output. This is the Text-Only Intelligence Baseline above.
+- **Intelligence V2 — Recognition Evidence.** Investigate/use Parakeet timestamps, confidence,
+  decoder alternatives, N-best hypotheses, or similar evidence where available. Goal: improve
+  recognition-repair evidence without immediately requiring a second audio model.
+- **Intelligence V3 — Audio-Aware Intelligence.** Introduce original-audio evidence where V2 is
+  insufficient. Target capabilities: recognition repair, Indian legal terminology, Indian proper
+  nouns, explicit mid-dictation correction resolution, improved disfluency handling. Recognition
+  repair and dictation correction remain separately validated proposal classes even here.
+- **Intelligence V4 — Domain Adaptation.** Only after sufficient validated data exists, determine
+  whether fine-tuning/adaptation materially improves the system. Possible outcomes: ASR
+  adaptation, second-pass model adapters, personal/local adaptation, or a decision that
+  fine-tuning is unnecessary.
+
+**Evaluation invariants for any future Intelligence** (extends the existing `Evaluation/` metrics
+below — never replaces the "never blend metrics" principle): track separately, where applicable,
+WER/CER, legal-term error rate, proper-noun error rate, statutory-reference exactness,
+explicit-correction resolution accuracy, filler-removal precision/recall, deletion of substantive
+dictated speech, hallucinated words, protected-fact mutation, punctuation/formatting, latency, and
+memory. **Hard safety principle: a system that improves prose while changing a dictated legal fact
+is a failure. Deletion of substantive speech and unsafe protected-fact mutation must be visible as
+raw violations, not hidden inside aggregate scores** — the same discipline Phase 3F's WER-vs-safety
+finding already established for deterministic normalization now applies to Intelligence too.
+
+**Next milestone (the only currently-authorized Intelligence work).** Implement the
+model-independent Text-Only Intelligence Safety Contract V1 foundation: proposal data types,
+protected-span representation, the deterministic validator, and comprehensive deterministic unit
+tests — with **zero LLM/model/network integration**. The purpose is to prove the safety boundary
+first. Tests should eventually include deliberately hostile/mislabelled proposals such as attempts
+to: change statute identity; change statutory numbers; change dates; change amounts; change names;
+disguise a lexical change as punctuation/capitalization/whitespace; overlap protected spans; use
+stale/mismatched source text; and submit overlapping/conflicting proposals. The required outcome
+is that unsafe proposals cannot reach final output. **Only after that foundation passes should a
+local text model be connected for the first real proposal-generation experiment** — not before,
+and not as part of the same milestone that builds the foundation.
 
 ## Evaluation framework (Phase 3E.1, `Evaluation/`)
 
@@ -680,11 +871,19 @@ from the real-audio run (private results, not committed):
    recognition-boosting experiment — bounded, not a committed code/config change), and 3G.C
    (CTC rescoring observability investigation, read-only — see "Phase 3G.C" above). **The
    recognition-tuning branch (3G.A/B/C) is now closed** — see "Architectural decision" under
-   "Phase 3G.C" above.
-2. **Exact current `HEAD`:** `25cfb327ea3a574f00050ec31364880890161a3e` ("Record Phase 3G.B
-   boosting experiment"), branch `main`, 17 ahead of `origin/main`/0 behind, nothing pushed.
-   Immediately preceded by `5930127` (Phase 3G.A real-audio-validation doc), `08a2f24` (Phase 3G.A
-   implementation), `89a2846` (Phase 3F.B), and `18313d7` (Phase 3F.A).
+   "Phase 3G.C" above. Also completed: the full **PratiLekh Intelligence architecture**
+   investigation/design track (read-only Intelligence-layer investigation, read-only
+   FluidVoice/Fluid-Intelligence runtime-access investigation, Text-Only Intelligence Baseline /
+   Safety Contract V1 design, and audio-aware architecture research) — see "PratiLekh Intelligence
+   architecture" above. **No Intelligence code has been implemented.**
+2. **Exact current `HEAD` at the time of writing this entry:** `f462ce11e2888752fd731d903b4f06d3e40d2a41`
+   ("Record Phase 3G.C recognition findings"), branch `main`, 18 ahead of `origin/main`/0 behind,
+   nothing pushed as of the commit that introduces this entry — that commit (documenting the
+   PratiLekh Intelligence architecture work above) will itself be one ahead of `f462ce1`. Per this
+   file's own opening instruction, trust `git log`/`git status` over this paragraph if time has
+   passed. Immediately preceded by `25cfb32` (Phase 3G.B), `5930127` (Phase 3G.A real-audio
+   validation doc), `08a2f24` (Phase 3G.A implementation), `89a2846` (Phase 3F.B), and `18313d7`
+   (Phase 3F.A).
 3. **No pending production/test change set.** Phase 3F.A, 3F.B and 3G.A are all fully committed; no
    Swift source, test, or fixture changes are outstanding. Phase 3G.B was a bounded runtime
    experiment (settings + a user-level vocabulary file, both outside the repository) and left no
@@ -743,22 +942,27 @@ from the real-audio run (private results, not committed):
     two rounds), provider-vs-app attribution still unresolved; (e) `five hundred six`-style
     `hundred` dictation remains deliberately unsupported (now fails safely, not corrupted) — whether
     to expand the grammar to cover it is an open product question, not yet decided.
-12. **Exact immediate next action:** a **read-only architecture investigation/design** (not
-    implementation) of a constrained, local PratiLekh Intelligence layer — see "Next planned
-    activity" under "Phase 3G.C" above for the starting principles (local/private processing;
-    deterministic normalization stays authoritative; AI output as reviewed/validated proposals, not
-    a silent wholesale replacement; strict handling for statutory numbers and other protected legal
-    tokens; text-first, with audio-aware intelligence as a later escalation path, not a default
-    assumption; informed by what Phase 3G's evidence says about available uncertainty/provenance
-    signal). Not yet performed; the Intelligence architecture is not finalized.
-13. **Must NOT be started yet:** the PratiLekh Intelligence investigation itself (item 12) has not
-    been performed; do not implement anything from it before it happens and is reviewed. The
+12. **The PratiLekh Intelligence investigation/design track is now complete** — see "PratiLekh
+    Intelligence architecture" above for the full record (Fluid Intelligence rejected as a
+    dependency; governing invariant "the model is replaceable, the safety contract is not";
+    three-task split; hybrid staged long-term architecture; Text-Only Intelligence Baseline /
+    Safety Contract V1 designed but not implemented; Intelligence V1–V4 planning framework).
+    **Exact immediate next action now:** implement the Text-Only Intelligence Safety Contract V1
+    foundation — proposal data types, protected-span representation, the deterministic validator,
+    and comprehensive deterministic unit tests (including deliberately hostile/mislabelled
+    proposals — see "Next milestone" under "PratiLekh Intelligence architecture" above for the
+    exact list) — with **zero LLM/model/network integration**. Only after that foundation's tests
+    pass should a local text model be connected for the first real proposal-generation experiment.
+13. **Must NOT be started yet:** the Intelligence validator/data-type implementation itself (item
+    12) has not been started — do not implement it merely because the design/investigation is
+    complete; this documentation update is itself the milestone that records the design, not an
+    authorization to build it in the same session. Connecting any model/provider, audio-aware
+    Intelligence, fine-tuning of any kind, and model selection (Ollama/LM Studio or otherwise) all
+    remain unauthorized until the V1 safety-contract foundation lands and is reviewed. The
     recognition-tuning branch is closed — do not resume it: no threshold tuning, alias additions,
     another vocabulary-boosting experiment, modifying the three-character compound-length rule,
     modifying FluidAudio, exposing rejected-candidate score structures, a production
     vocabulary-boosting default, or a Phase 3G.D recognition experiment. Also not started:
     date normalization, punctuation/sentence-boundary heuristics, custom-dictionary reconciliation
-    (Slice D), AI protection (Slice E), expanding the
-    `hundred`/number grammar, another normalization family, evaluation-framework redesign,
-    text-based or audio-aware PratiLekh Intelligence design/implementation, UI/history work, and
-    Phase 4 — none of these are authorized by any evidence gathered so far.
+    (Slice D), evaluation-framework redesign, UI/history work, and Phase 4 — none of these are
+    authorized by any evidence gathered so far.
