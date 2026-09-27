@@ -40,6 +40,20 @@ enum StatutoryProvisionNormalizerTests {
         testCrossStatuteNeverSlashMerged()
         testSpanProvenance()
 
+        testHundredContinuationDeclines()
+        testHundredAndContinuationDeclines()
+        testFiveHundredSixDeclines()
+        testHundredInPluralFirstMemberDeclinesViaExistingMinimumMembersGuard()
+        testFragmentedStatuteSuffixDeclines()
+        testFragmentedStatuteSuffixDeclinesSecondObservedCase()
+        testFragmentedStatuteSuffixDeclinesInPluralLastMember()
+        testBareLetterSuffixWithoutStatuteStillApplies()
+        testLetterSuffixWithAliasStatuteStillApplies()
+        testSuffixFollowedByInitialAndSurnameIsNotMistakenForFragment()
+        testSuffixFollowedByAndSingleLetterIsNotMistakenForFragment()
+        testSuffixFollowedByThreeLettersMatchingNoAliasIsNotMistakenForFragment()
+        testContiguousLettersWithNoGapAreOutOfScopeForNow()
+
         print("PASS: StatutoryProvisionNormalizer golden corpus (singular, bounded plural, multi-provision list)")
     }
 
@@ -345,5 +359,144 @@ enum StatutoryProvisionNormalizerTests {
         let r4 = normalize(two)
         let spans = r4.appliedChanges.compactMap { source(two, $0.range) }.sorted()
         precondition(spans.count == 2 && spans.contains("section three zero two of the I P C"), "\(spans)")
+    }
+
+    // MARK: - Phase 3F.A: fail-closed safety
+    //
+    // These do not fix Phase 3F.B's grouped-number grammar (e.g. "three
+    // twenty three" still corrupts to 3203 during 3F.A) -- they only close
+    // two specific unsafe commitments: an incomplete numeric continuation
+    // ("hundred") and a fragmented statute abbreviation donating a letter to
+    // the provision suffix. Both must decline and preserve the original text
+    // rather than partially transform.
+
+    private static func testHundredContinuationDeclines() {
+        let input = "section three hundred twenty three IPC"
+        let result = normalize(input)
+        precondition(result.text == input, "'hundred' must not partially transform to 'Section 3 ...': \(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+        precondition(result.declinedChanges[0].reason.hasPrefix("unclearValue"), result.declinedChanges[0].reason)
+    }
+
+    private static func testHundredAndContinuationDeclines() {
+        let input = "section three hundred and twenty three IPC"
+        let result = normalize(input)
+        precondition(result.text == input, "'hundred and ...' must decline, not partially transform: \(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+    }
+
+    private static func testFiveHundredSixDeclines() {
+        let input = "section five hundred six IPC"
+        let result = normalize(input)
+        precondition(result.text == input, "'hundred' must not partially transform to 'Section 5 ...': \(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+    }
+
+    private static func testHundredInPluralFirstMemberDeclinesViaExistingMinimumMembersGuard() {
+        // "hundred" is not a recognized enumeration connector ("and"/comma),
+        // so the plural loop's enumeration ends after the truncated first
+        // member and the existing "at least 2 members" guard already
+        // declines safely -- verified here as evidence, not assumed.
+        let input = "sections three hundred twenty three and three zero four of the IPC"
+        let result = normalize(input)
+        precondition(result.text == input, "\(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+    }
+
+    private static func testFragmentedStatuteSuffixDeclines() {
+        let input = "section one four four B and S S"
+        let result = normalize(input)
+        precondition(result.text == input, "Fragmented 'B and S S' must not produce 'Section 144B ...': \(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+        precondition(result.declinedChanges[0].reason.hasPrefix("unresolvedUncertainty"), result.declinedChanges[0].reason)
+    }
+
+    private static func testFragmentedStatuteSuffixDeclinesSecondObservedCase() {
+        let input = "section one two five B and S S"
+        let result = normalize(input)
+        precondition(result.text == input, "Fragmented 'B and S S' must not produce 'Section 125B ...': \(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+    }
+
+    private static func testFragmentedStatuteSuffixDeclinesInPluralLastMember() {
+        let input = "sections three zero four and one two five B and S S"
+        let result = normalize(input)
+        precondition(result.text == input, "The fragmented last member must decline the whole list, not apply a partial one: \(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+    }
+
+    // MARK: - Phase 3F.A: legitimate suffix preservation (must not regress)
+
+    private static func testBareLetterSuffixWithoutStatuteStillApplies() {
+        precondition(normalize("section three seven six A").text == "Section 376A")
+        precondition(normalize("section four nine eight A").text == "Section 498A")
+        precondition(normalize("section one twenty B").text == "Section 120B")
+    }
+
+    private static func testLetterSuffixWithAliasStatuteStillApplies() {
+        let result = normalize("section three seven six A of the IPC")
+        precondition(result.text == "Section 376A IPC", result.text)
+        precondition(result.appliedChanges.count == 1)
+    }
+
+    // MARK: - Phase 3F.A: false-decline counterexamples
+    //
+    // The fragmented-statute guard must require at least 3 known letters
+    // (the suffix itself plus 2 more) before it treats a candidate as
+    // ambiguous -- otherwise ordinary prose containing a stray initial right
+    // after a suffix (a name, an unrelated "and B") would be wrongly
+    // declined. These two are exactly the counterexamples that established
+    // that threshold.
+
+    private static func testSuffixFollowedByInitialAndSurnameIsNotMistakenForFragment() {
+        let input = "section one twenty B and S. Roy filed an appeal"
+        let result = normalize(input)
+        precondition(result.text == "Section 120B and S. Roy filed an appeal", result.text)
+        precondition(result.appliedChanges.count == 1)
+        precondition(result.declinedChanges.isEmpty, "Only 2 known letters (B, S) -- must not be mistaken for a 4-letter fragmented alias")
+    }
+
+    private static func testSuffixFollowedByAndSingleLetterIsNotMistakenForFragment() {
+        let input = "section three seven six A and B were examined"
+        let result = normalize(input)
+        precondition(result.text == "Section 376A and B were examined", result.text)
+        precondition(result.appliedChanges.count == 1)
+        precondition(result.declinedChanges.isEmpty)
+    }
+
+    /// Reaches the 3-known-letter floor (A, P, W) via a coincidental "and PW
+    /// 3" continuation, unlike the two tests above (which stay below the
+    /// floor) -- this exercises the *alias-matching* rejection path itself:
+    /// no known 4-letter alias has 'A' at position 0, so the guard must
+    /// still correctly return false even though enough letters were
+    /// collected to pass the floor.
+    private static func testSuffixFollowedByThreeLettersMatchingNoAliasIsNotMistakenForFragment() {
+        let input = "section three seven six A and P W 3 was examined"
+        let result = normalize(input)
+        precondition(result.text == "Section 376A and P W 3 was examined", result.text)
+        precondition(result.appliedChanges.count == 1)
+        precondition(result.declinedChanges.isEmpty)
+    }
+
+    /// Documents an intentional scope boundary, not a defect: contiguous
+    /// letters with no "and" gap are outside 3F.A's detector (it requires a
+    /// wildcard to have actually been used -- see `looksLikeFragmentedAlias`
+    /// docs). "B S S" alone doesn't exactly match any known alias via the
+    /// pre-existing contiguous `matchesSpelledOutLetters` check either
+    /// (`BNSS` needs a middle "N"), so this falls through to the bare-apply
+    /// path unchanged from pre-3F.A behavior. A future revision would need
+    /// its own evidence before widening the guard to this shape.
+    private static func testContiguousLettersWithNoGapAreOutOfScopeForNow() {
+        let input = "section one twenty B S S"
+        let result = normalize(input)
+        precondition(result.text == "Section 120B S S", result.text)
+        precondition(result.declinedChanges.isEmpty)
     }
 }

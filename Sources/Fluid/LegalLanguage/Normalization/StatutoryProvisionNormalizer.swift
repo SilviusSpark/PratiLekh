@@ -78,6 +78,24 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
         let numberStart = triggerIndex + 1
         guard let rawNumber = SpokenNumberParser.parse(tokens: words, startingAt: numberStart) else { return nil }
 
+        // Phase 3F.A fail-closed safety: a token immediately after the raw
+        // digit run that itself signals the number expression is not
+        // finished (currently just "hundred") must never be silently
+        // dropped. `SpokenNumberParser` has no cardinal-number grammar for
+        // this (deferred to a future phase) -- decline the whole candidate
+        // rather than commit to the shorter, wrong number already parsed.
+        // Checked against the raw digit run, before any suffix/statute
+        // disambiguation, since the number is already known-incomplete
+        // regardless of what (if anything) follows it.
+        if let continuationEnd = matchUnsupportedNumberContinuation(words: words, at: numberStart + rawNumber.digitsTokensConsumed) {
+            return Candidate(
+                startToken: triggerIndex,
+                endToken: continuationEnd,
+                range: span(tokens, triggerIndex, continuationEnd - 1),
+                outcome: .declined(.unclearValue, "unsupported numeric continuation")
+            )
+        }
+
         // A trailing single letter is structurally ambiguous on its own --
         // it might be a genuine section suffix ("376A") or the first letter
         // of a spelled-out statute abbreviation ("302 I P C"). Try the
@@ -99,7 +117,21 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
             )
         }
 
-        guard let statute = resolved.statute else {
+        let statute: StatuteRecognizer.Match
+        switch resolved.resolution {
+        case let .found(match):
+            statute = match
+        case .ambiguousFragment:
+            // Phase 3F.A: neither a genuine suffix nor a statute could be
+            // established -- what follows plausibly continues as a
+            // fragmented statute abbreviation. Decline rather than guess.
+            return Candidate(
+                startToken: triggerIndex,
+                endToken: afterNumber,
+                range: span(tokens, triggerIndex, afterNumber - 1),
+                outcome: .declined(.unresolvedUncertainty, "statute abbreviation appears fragmented")
+            )
+        case .none:
             // No statute mentioned at all. Before falling back to the bare
             // form, rule out an unsupported continuation (read with /
             // sub-section) right after the bare number.
@@ -257,7 +289,16 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
         }
         // A multi-provision reference requires a statute in Phase 3C -- no
         // approved bare-list canonical form exists for a statute-less list.
-        guard let statute = resolvedLast.statute else {
+        let statute: StatuteRecognizer.Match
+        switch resolvedLast.resolution {
+        case let .found(match):
+            statute = match
+        case .ambiguousFragment:
+            // Phase 3F.A: same fragmented-statute ambiguity as the singular
+            // path, on the list's last member -- decline the whole list
+            // rather than apply a partial one.
+            return declinedUnsupported(tokens: tokens, from: triggerIndex, to: cursor, reason: "statute abbreviation appears fragmented", kind: .unresolvedUncertainty)
+        case .none:
             return declinedUnsupported(tokens: tokens, from: triggerIndex, to: cursor, reason: "multi-provision list without a statute is not supported")
         }
         let afterStatute = cursor + statute.tokensConsumed
@@ -277,6 +318,19 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
         return Candidate(startToken: triggerIndex, endToken: afterStatute, range: span(tokens, triggerIndex, afterStatute - 1), outcome: .applied(reference))
     }
 
+    /// Phase 3F.A: the three genuinely different outcomes of suffix/statute
+    /// disambiguation. `.ambiguousFragment` is new -- previously, when
+    /// neither interpretation below found a statute, the function silently
+    /// defaulted to keeping the suffix. That default is unsafe when what
+    /// follows plausibly continues as a fragmented statute abbreviation
+    /// (see `StatuteRecognizer.looksLikeFragmentedAlias`); this case must
+    /// decline instead of guessing either interpretation.
+    private enum StatuteResolution {
+        case found(StatuteRecognizer.Match)
+        case none
+        case ambiguousFragment
+    }
+
     /// Disambiguates a number's trailing single-letter suffix against an
     /// immediately-following statute mention (see `matchSingular`'s doc
     /// comment). Tries the eager suffix interpretation first; falls back to
@@ -284,19 +338,27 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
     /// interpretation that actually finds one.
     private static func resolveNumberAndStatute(
         _ number: SpokenNumberParser.ParsedNumber, numberStart: Int, words: [String], vocabulary: ResolvedRecognitionVocabulary?
-    ) -> (number: SpokenNumberParser.ParsedNumber, statute: StatuteRecognizer.Match?) {
+    ) -> (number: SpokenNumberParser.ParsedNumber, resolution: StatuteResolution) {
         let cursorWithSuffix = numberStart + number.tokensConsumed
         if let statute = StatuteRecognizer.match(tokens: words, startingAt: cursorWithSuffix, vocabulary: vocabulary) {
-            return (number, statute)
+            return (number, .found(statute))
         }
-        if number.letterSuffix != nil {
+        if let suffix = number.letterSuffix {
             let stripped = number.withoutSuffix
             let cursorWithoutSuffix = numberStart + stripped.tokensConsumed
             if let statute = StatuteRecognizer.match(tokens: words, startingAt: cursorWithoutSuffix, vocabulary: vocabulary) {
-                return (stripped, statute)
+                return (stripped, .found(statute))
+            }
+            // Neither interpretation found a statute. Before defaulting to
+            // "keep the suffix," check whether what follows the letter
+            // plausibly continues as a fragmented statute abbreviation.
+            let lookaheadStart = numberStart + number.tokensConsumed
+            let lookahead = Array(words[min(lookaheadStart, words.count)...].prefix(6))
+            if StatuteRecognizer.looksLikeFragmentedAlias(leadingLetter: suffix, followingTokens: lookahead, vocabulary: vocabulary) {
+                return (number, .ambiguousFragment)
             }
         }
-        return (number, nil)
+        return (number, .none)
     }
 
     /// Parses a number starting at `cursor`, truncated at the first comma
@@ -318,9 +380,11 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
         return raw
     }
 
-    private static func declinedUnsupported(tokens: [WordToken], from start: Int, to end: Int, reason: String = "unsupported statutory structure") -> Candidate {
+    private static func declinedUnsupported(
+        tokens: [WordToken], from start: Int, to end: Int, reason: String = "unsupported statutory structure", kind: DeclineReason = .unsupportedStructure
+    ) -> Candidate {
         let clampedEnd = max(min(end, tokens.count), start + 1)
-        return Candidate(startToken: start, endToken: clampedEnd, range: span(tokens, start, clampedEnd - 1), outcome: .declined(.unsupportedStructure, reason))
+        return Candidate(startToken: start, endToken: clampedEnd, range: span(tokens, start, clampedEnd - 1), outcome: .declined(kind, reason))
     }
 
     // MARK: - Hedge / uncertainty detection (structurally local only)
@@ -362,6 +426,29 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
             end += statute.tokensConsumed
         }
         return end
+    }
+
+    /// Phase 3F.A: a token immediately after a parsed digit run that itself
+    /// signals the number expression continues in an unsupported cardinal
+    /// form. Currently only "hundred" (optionally followed by "and" and
+    /// more digit/tens words, e.g. "hundred and twenty three"). This is
+    /// deliberately not cardinal-number parsing -- it only identifies how
+    /// far the unsupported continuation extends, for the declined span; the
+    /// decline itself is what keeps the original text unchanged regardless
+    /// of exactly how much of the continuation this consumes.
+    private static func matchUnsupportedNumberContinuation(words: [String], at index: Int) -> Int? {
+        guard index < words.count, words[index].lowercased() == "hundred" else { return nil }
+        var cursor = index + 1
+        if let more = SpokenNumberParser.parse(tokens: words, startingAt: cursor) {
+            cursor += more.tokensConsumed
+        } else if cursor < words.count, words[cursor].lowercased() == "and" {
+            var afterAnd = cursor + 1
+            if let more = SpokenNumberParser.parse(tokens: words, startingAt: afterAnd) {
+                afterAnd += more.tokensConsumed
+            }
+            cursor = afterAnd
+        }
+        return cursor
     }
 
     /// "read with ..." or "sub section <number>" immediately following a
