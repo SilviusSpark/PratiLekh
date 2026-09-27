@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-selfcorrection-001",
+  "tier": "synthetic",
+  "category": "self-correction",
+  "tags": [
+    "witness",
+    "uncertainty"
+  ],
+  "reference": "P W one, or was it P W two, identified the accused",
+  "criticalTokens": [
+    {
+      "type": "witness",
+      "expected": "PW-1",
+      "spokenForms": [
+        "P W one"
+      ]
+    },
+    {
+      "type": "witness",
+      "expected": "PW-2",
+      "spokenForms": [
+        "P W two"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "decline",
+      "source": "P W one, or was it P W two"
+    }
+  ],
+  "notes": "Self-correction attached to the reference: preserve. The judge's intended witness is not inferred."
+}

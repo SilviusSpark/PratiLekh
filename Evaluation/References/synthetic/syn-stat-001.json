@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-stat-001",
+  "tier": "synthetic",
+  "category": "single-provision",
+  "tags": [
+    "statutory",
+    "legacy-code"
+  ],
+  "reference": "the accused is charged under section three zero two of the I P C",
+  "intendedFinal": "the accused is charged under Section 302 IPC",
+  "criticalTokens": [
+    {
+      "type": "statute",
+      "expected": "IPC",
+      "spokenForms": [
+        "I P C"
+      ]
+    },
+    {
+      "type": "provision",
+      "expected": "302",
+      "spokenForms": [
+        "three zero two"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "section three zero two of the I P C",
+      "replacement": "Section 302 IPC"
+    }
+  ]
+}

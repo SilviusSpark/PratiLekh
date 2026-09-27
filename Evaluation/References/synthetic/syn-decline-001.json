@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-decline-001",
+  "tier": "synthetic",
+  "category": "unsupported-structure",
+  "tags": [
+    "statutory",
+    "read-with"
+  ],
+  "reference": "the offence falls under section three zero two read with section thirty four of the I P C",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "302",
+      "spokenForms": [
+        "three zero two"
+      ]
+    },
+    {
+      "type": "provision",
+      "expected": "34",
+      "spokenForms": [
+        "thirty four"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC",
+      "spokenForms": [
+        "I P C"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "decline",
+      "source": "section three zero two read with section thirty four of the I P C"
+    }
+  ],
+  "notes": "Unsupported 'read with' structure: must be preserved. Spoken tokens staying spoken (unrecovered) is the intended result here."
+}

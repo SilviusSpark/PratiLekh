@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-prose-001",
+  "tier": "synthetic",
+  "category": "ordinary-prose",
+  "tags": [
+    "baseline"
+  ],
+  "reference": "the court adjourned the matter to the next date for further evidence",
+  "criticalTokens": [],
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Ordinary judicial prose; must be left untouched."
+}

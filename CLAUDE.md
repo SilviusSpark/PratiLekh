@@ -42,8 +42,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3C + 3C.1 — First normalization rule families (statutory provisions, PW/DW witness refs) | ✅ committed (working tree clean after commit) | `e76ed599ef978abd7d8e494db0ed6c9f6b4136ce` |
 | 3D — Live legal normalization, Slices A+B (`LegalDictationProcessor`, `ContentView` seam, leading-capitalization protection) | ✅ committed | `0abf627` (full: `0abf627551be21153f833fa41215d90b396912ae`) |
 
-Branch `main`, 5 commits ahead of `origin/main`, nothing pushed. Verify with `git log`/
-`git status` before stating commit state to the user.
+Local `main` contains unpushed PratiLekh commits. Verify current ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
 families only). **Phase 3D Slices A+B (committed, `0abf627`)** live-activate that normalization at one
@@ -271,6 +270,21 @@ applied change is deliberately not protected; general protected spans are Phase 
 GAAV/continuous call sites (prompt test, history undo) are unchanged.
 Known open items: history "undo AI" restores pre-legal raw text; custom dictionary runs *before*
 legal normalization by design.
+
+## Evaluation framework (Phase 3E.1, `Evaluation/`)
+
+Standalone tooling to measure where dictation fails, stage by stage. **Governing principle: the
+reference is what the judge dictated, not what an evaluator or model thinks was intended; never
+reward substituting a "better" provision/statute/fact/date/amount.** Synthetic references live in
+`Evaluation/References/synthetic/*.json`; **audio (even of synthetic scripts) and all run results
+stay outside Git** (the runner refuses in-repo `--out/--audio/--text-dir`). Stages are
+`postASRDeterministic` (`/v1/transcribe` output: after fillers, custom dictionary, spoken
+punctuation — NOT raw ASR; raw provider text is not observable) and `legalNormalized`. Metrics are
+never blended: WER/CER, exact critical tokens with preserved/recovered/unrecovered/corrupted
+transitions, normalization outcomes (false positives and incorrect transformations are severe),
+formatting. Run with `scripts/eval_run.sh`, test with `scripts/test_evaluation.sh`; the Local API
+must be enabled in the app first (off by default). Known limitation: spoken-number vs digit forms
+count as WER errors (not addressed yet). See `Evaluation/README.md`.
 
 ## Next action (as of this handoff)
 

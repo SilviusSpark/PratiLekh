@@ -214,6 +214,15 @@ assets/
 .swiftpm/
 scripts/*
 !scripts/test_legal_language.sh
+!scripts/test_evaluation.sh
+!scripts/eval_run.sh
+
+# Evaluation audio (even of synthetic scripts) must never be committed
+Evaluation/**/*.wav
+Evaluation/**/*.mp3
+Evaluation/**/*.flac
+Evaluation/**/*.caf
+Evaluation/**/*.aiff
 
 # Benchmark / eval reports (local-only)
 benchmark_reports/

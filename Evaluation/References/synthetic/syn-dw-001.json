@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-dw-001",
+  "tier": "synthetic",
+  "category": "witness-reference",
+  "tags": [
+    "witness"
+  ],
+  "reference": "defence witness number two denied the allegation",
+  "intendedFinal": "DW-2 denied the allegation",
+  "criticalTokens": [
+    {
+      "type": "witness",
+      "expected": "DW-2",
+      "spokenForms": [
+        "defence witness number two"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "defence witness number two",
+      "replacement": "DW-2"
+    }
+  ]
+}

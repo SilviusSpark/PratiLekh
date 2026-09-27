@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-mixed-001",
+  "tier": "synthetic",
+  "category": "mixed-legal-ordinary",
+  "tags": [
+    "negation",
+    "date",
+    "no-family"
+  ],
+  "reference": "the accused did not appear before the court on the twelfth of March",
+  "criticalTokens": [
+    {
+      "type": "negation",
+      "expected": "not"
+    },
+    {
+      "type": "date",
+      "expected": "twelfth of March"
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Negation and date are critical tokens even though no normalization family exists for dates."
+}

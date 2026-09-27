@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-multi-001",
+  "tier": "synthetic",
+  "category": "multiple-provisions",
+  "tags": [
+    "statutory",
+    "witness",
+    "mixed"
+  ],
+  "reference": "P W one stated that sections two nine four, three two three and five zero six of the I P C were attracted",
+  "intendedFinal": "PW-1 stated that Sections 294, 323 and 506 IPC were attracted",
+  "criticalTokens": [
+    {
+      "type": "witness",
+      "expected": "PW-1",
+      "spokenForms": [
+        "P W one"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC",
+      "spokenForms": [
+        "I P C"
+      ]
+    },
+    {
+      "type": "provision",
+      "expected": "294",
+      "spokenForms": [
+        "two nine four"
+      ]
+    },
+    {
+      "type": "provision",
+      "expected": "323",
+      "spokenForms": [
+        "three two three"
+      ]
+    },
+    {
+      "type": "provision",
+      "expected": "506",
+      "spokenForms": [
+        "five zero six"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "P W one",
+      "replacement": "PW-1"
+    },
+    {
+      "kind": "apply",
+      "source": "sections two nine four, three two three and five zero six of the I P C",
+      "replacement": "Sections 294, 323 and 506 IPC"
+    }
+  ]
+}

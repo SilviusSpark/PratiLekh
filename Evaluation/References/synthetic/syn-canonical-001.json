@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "syn-canonical-001",
+  "tier": "synthetic",
+  "category": "already-canonical",
+  "tags": [
+    "statutory",
+    "witness",
+    "idempotence"
+  ],
+  "reference": "PW-1 further stated that Section 302 IPC applies",
+  "intendedFinal": "PW-1 further stated that Section 302 IPC applies",
+  "criticalTokens": [
+    {
+      "type": "witness",
+      "expected": "PW-1"
+    },
+    {
+      "type": "provision",
+      "expected": "302"
+    },
+    {
+      "type": "statute",
+      "expected": "IPC"
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "ASR already emitted canonical forms; normalization must not touch them."
+}
