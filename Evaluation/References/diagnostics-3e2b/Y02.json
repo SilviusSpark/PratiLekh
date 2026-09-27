@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "Y02",
+  "tier": "synthetic",
+  "category": "date-phrasing",
+  "tags": [
+    "date",
+    "year-phrasing",
+    "twenty-twenty-form",
+    "repeatability"
+  ],
+  "reference": "The matter is posted to Twelve July Twenty Twenty Six.",
+  "criticalTokens": [
+    {
+      "type": "date",
+      "expected": "12 July 2026",
+      "spokenForms": [
+        "The matter is posted to Twelve July Twenty Twenty Six."
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Phase 3E.2B repeatability trial for the 'twenty-twenty-form' phrasing (alternating A/B across Y01-Y10 so recording order does not correlate with phrasing). Same intended date as every other Y case: 12 July 2026. No date-normalization family exists or is implied by this case; legalExpectations is noCandidate. The date critical token's canonical form ('12 July 2026') and this file's own spokenForm classify each real-audio result as: canonical (a correct digit representation was observably produced), spoken (this exact phrasing survived faithfully, still in words), or wrong (neither -- an incorrect or incomplete date). Because state() matching is presence-based against one exact string, an alternate but still-correct digit rendering (e.g. different date-part ordering) would also read as wrong -- read each result's stored postASRDeterministic text directly, not only the token state, before concluding a recording produced an incorrect date."
+}

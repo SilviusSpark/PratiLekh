@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "N09",
+  "tier": "synthetic",
+  "category": "statutory-number-pronunciation",
+  "tags": [
+    "statutory",
+    "number-grammar",
+    "number-grammar"
+  ],
+  "reference": "Section five zero six IPC.",
+  "intendedFinal": "Section 506 IPC.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "506",
+      "spokenForms": [
+        "five zero six"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC",
+      "spokenForms": [
+        "ipc"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section five zero six IPC",
+      "replacement": "Section 506 IPC"
+    }
+  ],
+  "notes": "Phase 3E.2B: N09 is the user's natural digit-by-digit pronunciation (this pair's framing is intentionally reversed from the others -- see Phase 3E.2B task notes); N10 is a hundreds-form control. Verified current behavior: N09 -> 'Section 506 IPC' (correct); N10 -> 'Section 5 hundred six IPC' ('hundred' outside the parser's vocabulary; only the 'five'->5 prefix is consumed and replaced, same class as the D03 finding). The statute token's lowercase spokenForm is a proactive fixture choice (Phase 3E.2A's D03 finding showed real-audio casing varies unpredictably) -- not evidence that this specific case produced lowercase text."
+}

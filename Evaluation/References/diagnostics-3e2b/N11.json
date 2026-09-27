@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "N11",
+  "tier": "synthetic",
+  "category": "statutory-number-pronunciation",
+  "tags": [
+    "statutory",
+    "number-grammar",
+    "number-grammar"
+  ],
+  "reference": "Section one twenty five BNSS.",
+  "intendedFinal": "Section 125 BNSS.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "125",
+      "spokenForms": [
+        "one twenty five"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "BNSS",
+      "spokenForms": [
+        "bnss"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section one twenty five BNSS",
+      "replacement": "Section 125 BNSS"
+    }
+  ],
+  "notes": "Phase 3E.2B: N11 is a natural mixed pronunciation; N12 is digit-by-digit. Verified current behavior: N11 -> 'Section 1205 BNSS' (digit 'one'=1 + tens 'twenty'=20 + digit 'five'=5 -> '1205'); N12 -> 'Section 125 BNSS' (correct). The statute token's lowercase spokenForm is a proactive fixture choice (Phase 3E.2A's D03 finding showed real-audio casing varies unpredictably) -- not evidence that this specific case produced lowercase text."
+}

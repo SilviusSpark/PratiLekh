@@ -29,6 +29,13 @@ xcrun swiftc -parse-as-library $task_legal_sources $task_eval_sources Tests/Eval
 xcrun swiftc -parse-as-library $task_legal_sources $task_eval_sources Tests/Diagnostics3E2ATests.swift -o "$task_test_dir/Diagnostics3E2ATests"
 "$task_test_dir/Diagnostics3E2ATests"
 
+# Phase 3E.2B diagnostic references (N01-N12, Y01-Y10, P01-P06): load/validate,
+# pairing structure, and recognition-soundness replay -- deliberately no
+# assertion on N01-N12's current normalization outcome kind (see file doc).
+# shellcheck disable=SC2086
+xcrun swiftc -parse-as-library $task_legal_sources $task_eval_sources Tests/Diagnostics3E2BTests.swift -o "$task_test_dir/Diagnostics3E2BTests"
+"$task_test_dir/Diagnostics3E2BTests"
+
 # Runner: build once, then exercise the privacy guard and the offline path.
 # shellcheck disable=SC2086
 xcrun swiftc -parse-as-library $task_legal_sources $task_eval_sources Evaluation/Runner/EvalRunner.swift -o "$task_test_dir/eval_runner"
@@ -118,3 +125,31 @@ f = d['score']['formatting']
 assert f['comparable'] and f['punctuationDifferences'] == 3, f
 " || { echo "FAIL: D06 offline formatting-harness invariant broke"; exit 1; }
 echo "PASS: Phase 3E.2A diagnostic corpus (D01-D10) runs offline and reports individually"
+
+# Phase 3E.2B diagnostic corpus (N01-N12, Y01-Y10, P01-P06) end-to-end through
+# the offline runner, under a perfect-ASR assumption. Structural/invariant
+# checks only -- NOT N01-N12's exact current normalization outcome, which
+# (per case) is an open finding (see Evaluation/DIAGNOSTICS_3E2B.md), not a
+# regression requirement in either direction.
+task_diag2_text_dir="$task_test_dir/diag2-text"
+mkdir -p "$task_diag2_text_dir"
+for task_ref in Evaluation/References/diagnostics-3e2b/*.json; do
+    task_id=$(basename "$task_ref" .json)
+    python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['reference'])" "$task_ref" > "$task_diag2_text_dir/$task_id.txt"
+done
+"$task_test_dir/eval_runner" --references Evaluation/References/diagnostics-3e2b --text-dir "$task_diag2_text_dir" --out "$task_test_dir/diag2-results" > "$task_test_dir/diag2.out"
+grep -q "samples: 28 (scored: 28)" "$task_test_dir/diag2.out" || { echo "FAIL: expected all 28 Phase 3E.2B samples to score"; exit 1; }
+task_diag2_result_dir=$(ls -d "$task_test_dir"/diag2-results/*/)
+for task_id in N01 N02 N03 N04 N05 N06 N07 N08 N09 N10 N11 N12 Y01 Y02 Y03 Y04 Y05 Y06 Y07 Y08 Y09 Y10 P01 P02 P03 P04 P05 P06; do
+    test -f "${task_diag2_result_dir}${task_id}.result.json" || { echo "FAIL: $task_id produced no result (must remain processable)"; exit 1; }
+done
+# P01's formatting score is a harness invariant (text input carries no
+# punctuation by construction; three sentences -> three boundaries differ),
+# independent of any production behavior.
+python3 -c "
+import json
+d = json.load(open('${task_diag2_result_dir}P01.result.json'))
+f = d['score']['formatting']
+assert f['comparable'] and f['punctuationDifferences'] == 3, f
+" || { echo "FAIL: P01 offline formatting-harness invariant broke"; exit 1; }
+echo "PASS: Phase 3E.2B diagnostic corpus (N/Y/P) runs offline and reports individually"

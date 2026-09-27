@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "N03",
+  "tier": "synthetic",
+  "category": "statutory-number-pronunciation",
+  "tags": [
+    "statutory",
+    "number-grammar",
+    "number-grammar"
+  ],
+  "reference": "Section one forty four BNSS.",
+  "intendedFinal": "Section 144 BNSS.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "144",
+      "spokenForms": [
+        "one forty four"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "BNSS",
+      "spokenForms": [
+        "bnss"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section one forty four BNSS",
+      "replacement": "Section 144 BNSS"
+    }
+  ],
+  "notes": "Phase 3E.2B: N03 is a natural mixed pronunciation; N04 is digit-by-digit. Verified current behavior: N03 -> 'Section 1404 BNSS' (digit 'one'=1 + tens 'forty'=40 + digit 'four'=4 -> '1404'); N04 -> 'Section 144 BNSS' (correct). The statute token's lowercase spokenForm is a proactive fixture choice (Phase 3E.2A's D03 finding showed real-audio casing varies unpredictably) -- not evidence that this specific case produced lowercase text."
+}

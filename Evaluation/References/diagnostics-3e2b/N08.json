@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "N08",
+  "tier": "synthetic",
+  "category": "statutory-number-pronunciation",
+  "tags": [
+    "statutory",
+    "number-grammar",
+    "number-grammar"
+  ],
+  "reference": "Section three seven six IPC.",
+  "intendedFinal": "Section 376 IPC.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "376",
+      "spokenForms": [
+        "three seven six"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC",
+      "spokenForms": [
+        "ipc"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section three seven six IPC",
+      "replacement": "Section 376 IPC"
+    }
+  ],
+  "notes": "Phase 3E.2B: N07 is a natural mixed pronunciation; N08 is digit-by-digit. Verified current behavior: N07 -> 'Section 3706 IPC' (digit 'three'=3 + tens 'seventy'=70 + digit 'six'=6 -> '3706'); N08 -> 'Section 376 IPC' (correct). The statute token's lowercase spokenForm is a proactive fixture choice (Phase 3E.2A's D03 finding showed real-audio casing varies unpredictably) -- not evidence that this specific case produced lowercase text."
+}

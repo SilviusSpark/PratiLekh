@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "P03",
+  "tier": "synthetic",
+  "category": "punctuation-repeatability",
+  "tags": [
+    "punctuation",
+    "sentence-boundary",
+    "repeatability",
+    "passage-P03"
+  ],
+  "reference": "The accused is present on bail Learned Counsel for the accused files a petition Put up the matter on the date fixed",
+  "intendedFinal": "The accused is present on bail. Learned Counsel for the accused files a petition. Put up the matter on the date fixed.",
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Phase 3E.2B repeatability trial 1 of 2 for this passage (two internal intended sentence boundaries: after 'The accused is present on bail' and after 'Learned Counsel for the accused files a petition'; one final boundary after 'Put up the matter on the date fixed'). Must be an independently recorded take, not a copy of the other trial's audio or output. Classify each boundary by reading this sample's stored postASRDeterministic text directly at the known boundary words (period / comma / missing / other) -- the existing formatting score's 'comparable' flag already reports the 'not comparable because recognition changed the surrounding words' case for the sample as a whole; it does not need extending for a boundary-level read since the boundary characters are directly legible in the stored raw text either way."
+}

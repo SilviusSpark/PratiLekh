@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "P06",
+  "tier": "synthetic",
+  "category": "punctuation-repeatability",
+  "tags": [
+    "punctuation",
+    "sentence-boundary",
+    "repeatability",
+    "passage-P05"
+  ],
+  "reference": "The witness is present Examination in chief is completed Cross examination is deferred on the prayer of the defence",
+  "intendedFinal": "The witness is present. Examination in chief is completed. Cross examination is deferred on the prayer of the defence.",
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Phase 3E.2B repeatability trial 2 of 2 for this passage (two internal intended sentence boundaries: after 'The witness is present' and after 'Examination in chief is completed'; one final boundary after 'Cross examination is deferred on the prayer of the defence'). Must be an independently recorded take, not a copy of the other trial's audio or output. Classify each boundary by reading this sample's stored postASRDeterministic text directly at the known boundary words (period / comma / missing / other) -- the existing formatting score's 'comparable' flag already reports the 'not comparable because recognition changed the surrounding words' case for the sample as a whole; it does not need extending for a boundary-level read since the boundary characters are directly legible in the stored raw text either way."
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "N06",
+  "tier": "synthetic",
+  "category": "statutory-number-pronunciation",
+  "tags": [
+    "statutory",
+    "number-grammar",
+    "N05-N06-family"
+  ],
+  "reference": "Section three two three IPC.",
+  "intendedFinal": "Section 323 IPC.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "323",
+      "spokenForms": [
+        "three two three"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC",
+      "spokenForms": [
+        "ipc"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section three two three IPC",
+      "replacement": "Section 323 IPC"
+    }
+  ],
+  "notes": "Phase 3E.2B: Equivalent to the pairing already established in Phase 3E.2A between D01 (digit-by-digit, \"three two three\") and D02 (mixed-form, \"three twenty three\") -- see the D02 finding. Verified current behavior: N05 -> 'Section 3203 IPC'; N06 -> 'Section 323 IPC' (correct). The statute token's lowercase spokenForm is a proactive fixture choice (Phase 3E.2A's D03 finding showed real-audio casing varies unpredictably) -- not evidence that this specific case produced lowercase text."
+}

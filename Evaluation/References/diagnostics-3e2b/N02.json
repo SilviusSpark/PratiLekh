@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "N02",
+  "tier": "synthetic",
+  "category": "statutory-number-pronunciation",
+  "tags": [
+    "statutory",
+    "number-grammar",
+    "number-grammar"
+  ],
+  "reference": "Section three four IPC.",
+  "intendedFinal": "Section 34 IPC.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "34",
+      "spokenForms": [
+        "three four"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC",
+      "spokenForms": [
+        "ipc"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section three four IPC",
+      "replacement": "Section 34 IPC"
+    }
+  ],
+  "notes": "Phase 3E.2B: N01 is the user's natural two-word pronunciation; N02 is the digit-by-digit control. Verified current behavior (text-based, perfect ASR): N01 -> 'Section 304 IPC' (tens 'thirty'=30 concatenated with digit 'four'=4 -> '304', not 34); N02 -> 'Section 34 IPC' (correct). This REVERSES the natural/control framing for this pair -- the natural form is the one currently mishandled. The statute token's lowercase spokenForm is a proactive fixture choice (Phase 3E.2A's D03 finding showed real-audio casing varies unpredictably) -- not evidence that this specific case produced lowercase text."
+}
