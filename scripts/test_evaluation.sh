@@ -59,6 +59,17 @@ test -f "$task_test_dir"/results/*/run.json || { echo "FAIL: run.json missing"; 
 test -f "$task_test_dir"/results/*/syn-stat-001.result.json || { echo "FAIL: per-sample result missing"; exit 1; }
 echo "PASS: eval runner offline path and repository privacy guard"
 
+# Phase 3G.A: --text-dir never invokes a provider, so providerTranscript must
+# be absent rather than synthesized from the supplied text.
+task_offline_result_dir=$(ls -d "$task_test_dir"/results/*/)
+python3 -c "
+import json
+d = json.load(open('${task_offline_result_dir}syn-stat-001.result.json'))
+assert d.get('providerTranscript') is None, d
+assert not any(s['stage'] == 'providerTranscript' for s in d['stages']), d['stages']
+" || { echo "FAIL: --text-dir must not synthesize a providerTranscript (no provider was invoked)"; exit 1; }
+echo "PASS: --text-dir evaluation reports no providerTranscript (no provider invocation)"
+
 # Local API path against a stub server (the real app is not required).
 task_audio_dir="$task_test_dir/audio"
 mkdir -p "$task_audio_dir"
@@ -89,6 +100,107 @@ task_port=$(cat "$task_test_dir/port")
 grep -q "stub-model" "$task_test_dir/api.out" || { echo "FAIL: provider identity not recorded from the API"; exit 1; }
 grep -q "source: localAPI" "$task_test_dir/api.out" || { echo "FAIL: API run source not recorded"; exit 1; }
 echo "PASS: eval runner Local API path (stub server)"
+
+# Phase 3G.A: a second stub server that also returns providerText, proving
+# the API-to-result plumbing preserves it correctly. This does not exercise
+# the real ASR pipeline (see ASRService.swift's transcribeSamplesForAPI /
+# transcribeFileForAPI for where providerText is actually captured,
+# immediately after provider.transcribeFinal/transcribeFile return and
+# before filler removal, custom dictionary and spoken-punctuation
+# formatting) -- it proves the transport does not lose, corrupt, invent or
+# leak that value between samples.
+task_audio_dir2="$task_test_dir/audio2"
+mkdir -p "$task_audio_dir2"
+for task_ref in Evaluation/References/synthetic/*.json; do
+    : > "$task_audio_dir2/$(basename "$task_ref" .json).wav"
+done
+python3 - "$task_test_dir" <<'PY' &
+import http.server, json, os, sys
+root = sys.argv[1]
+class H(http.server.BaseHTTPRequestHandler):
+    def do_POST(self):
+        body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+        stem = os.path.splitext(os.path.basename(body["path"]))[0]
+        text = open(os.path.join(root, "text", stem + ".txt")).read().strip()
+        if stem == "syn-dw-001":
+            # Simulates a transcription failure for this one sample only.
+            self.send_response(500)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": "simulated transcription failure"}).encode())
+            return
+        payload = {"text": text, "confidence": 0.9, "sampleCount": 16000, "provider": "stub-model-3ga"}
+        if stem == "syn-stat-001":
+            # Simulates the provider having said a filler word that
+            # PratiLekh's deterministic preprocessing later removed --
+            # providerText and the post-processed text legitimately differ.
+            payload["providerText"] = text.replace("charged under section", "charged under, um, section")
+        elif stem == "syn-prose-001":
+            # Simulates no deterministic transform having changed anything --
+            # providerText and the post-processed text legitimately match.
+            payload["providerText"] = text
+        # Every other sample (including syn-mixed-001) omits providerText
+        # entirely, simulating an API response shape that predates this field.
+        out = json.dumps(payload).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        self.wfile.write(out)
+    def log_message(self, *a): pass
+srv = http.server.HTTPServer(("127.0.0.1", 0), H)
+open(os.path.join(root, "port2"), "w").write(str(srv.server_port))
+srv.serve_forever()
+PY
+task_server2_pid=$!
+trap 'kill $task_server_pid 2>/dev/null || true; kill $task_server2_pid 2>/dev/null || true' EXIT
+task_wait=0
+while [ ! -s "$task_test_dir/port2" ] && [ "$task_wait" -lt 50 ]; do sleep 0.1; task_wait=$((task_wait + 1)); done
+task_port2=$(cat "$task_test_dir/port2")
+# One sample (syn-dw-001) deliberately fails; the run as a whole therefore
+# exits non-zero (see EvalRunner's exit(3) on any per-sample error) -- that
+# is expected here, not a test failure.
+"$task_test_dir/eval_runner" --audio "$task_audio_dir2" --out "$task_test_dir/results-api-3ga" --api-base "http://127.0.0.1:$task_port2" > "$task_test_dir/api-3ga.out" || true
+task_api3ga_result_dir=$(ls -d "$task_test_dir"/results-api-3ga/*/)
+
+python3 -c "
+import json
+d = json.load(open('${task_api3ga_result_dir}syn-stat-001.result.json'))
+post_asr = next(s['text'] for s in d['stages'] if s['stage'] == 'postASRDeterministic')
+assert d.get('providerTranscript') is not None, d
+assert d['providerTranscript'] != post_asr, 'providerTranscript must differ from postASRDeterministic when the API reports a difference'
+assert 'um' in d['providerTranscript'] and 'um' not in post_asr
+" || { echo "FAIL: providerTranscript did not carry a distinct pre-transform value (syn-stat-001)"; exit 1; }
+echo "PASS: providerTranscript differs from postASRDeterministic when the provider and post-processed text differ"
+
+python3 -c "
+import json
+d = json.load(open('${task_api3ga_result_dir}syn-prose-001.result.json'))
+post_asr = next(s['text'] for s in d['stages'] if s['stage'] == 'postASRDeterministic')
+assert d.get('providerTranscript') is not None, d
+assert d['providerTranscript'] == post_asr, 'providerTranscript may legitimately equal postASRDeterministic when nothing changed it'
+" || { echo "FAIL: providerTranscript equality case failed (syn-prose-001)"; exit 1; }
+echo "PASS: providerTranscript legitimately equals postASRDeterministic when no transform applied"
+
+python3 -c "
+import json
+d = json.load(open('${task_api3ga_result_dir}syn-mixed-001.result.json'))
+assert d.get('providerTranscript') is None, d
+assert d.get('error') is None, d
+" || { echo "FAIL: an API response omitting providerText must decode as an absent value, not an error (syn-mixed-001)"; exit 1; }
+echo "PASS: an API response shape that predates providerText still decodes (additive/backward-compatible)"
+
+python3 -c "
+import json
+d = json.load(open('${task_api3ga_result_dir}syn-dw-001.result.json'))
+assert d.get('providerTranscript') is None, d
+assert d.get('error') is not None, 'a failed transcription request must be reported as an error, not a stale result'
+" || { echo "FAIL: a failed transcription request leaked or fabricated a providerTranscript (syn-dw-001)"; exit 1; }
+echo "PASS: a failed transcription request reports no providerTranscript (no stale/leaked value)"
+
+# syn-stat-001 is evaluated after syn-dw-001's simulated failure (sorted
+# reference order); its correct, distinct providerText above already proves
+# the failure did not leak into or overwrite a later sample's value.
+echo "PASS: a sample evaluated after a failed request is unaffected (no cross-sample leakage)"
 
 # Phase 3E.2A diagnostic corpus (D01-D10) end-to-end through the offline
 # runner, under a perfect-ASR assumption. Checks structural/invariant

@@ -17,6 +17,12 @@ final class InferenceAPIController: LocalAPIRouteHandler {
         let confidence: Float
         let sampleCount: Int
         let provider: String
+        /// Diagnostic-only (Phase 3G.A): the transcription provider's own
+        /// returned text, before filler removal, custom dictionary or
+        /// spoken-punctuation formatting. `nil` when the provider was not
+        /// invoked (e.g. empty audio). Not raw ASR/acoustic output --
+        /// providers may already perform their own internal formatting.
+        let providerText: String?
     }
 
     struct PostprocessResponse: Encodable {
@@ -67,7 +73,8 @@ final class InferenceAPIController: LocalAPIRouteHandler {
                 text: apiResult.result.text,
                 confidence: apiResult.result.confidence,
                 sampleCount: apiResult.sampleCount,
-                provider: SettingsStore.shared.selectedSpeechModel.displayName
+                provider: SettingsStore.shared.selectedSpeechModel.displayName,
+                providerText: apiResult.providerText
             )
         )
     }

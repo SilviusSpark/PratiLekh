@@ -3234,10 +3234,19 @@ final class ASRService: ObservableObject {
         self.deferredStopUIInvalidationDidFlush.send()
     }
 
-    func transcribeSamplesForAPI(_ inputSamples: [Float]) async throws -> ASRTranscriptionResult {
+    /// `providerText` is diagnostic-only: the `TranscriptionProvider`'s own
+    /// returned text (`result.text`), captured immediately after
+    /// `transcribeFinal` returns and before filler removal, custom
+    /// dictionary or spoken-punctuation formatting run. It is not a "raw
+    /// ASR" value -- providers may already perform their own internal
+    /// formatting before returning this string. `nil` only when the
+    /// provider was never invoked (e.g. empty input). Exists solely for
+    /// Local API/evaluation observability (Phase 3G.A); it must not be
+    /// logged, persisted, or routed to history, clipboard, or AI.
+    func transcribeSamplesForAPI(_ inputSamples: [Float]) async throws -> (result: ASRTranscriptionResult, providerText: String?) {
         var samples = inputSamples
         guard !samples.isEmpty else {
-            return ASRTranscriptionResult(text: "", confidence: 0)
+            return (ASRTranscriptionResult(text: "", confidence: 0), providerText: nil)
         }
 
         let minSamples = 16_000
@@ -3268,10 +3277,12 @@ final class ASRService: ObservableObject {
             ASRService.applyCustomDictionary(ASRService.removeFillerWords(result.text))
         )
         self.recordWordBoostHitIfAny(transcribedText: cleanedText)
-        return ASRTranscriptionResult(text: cleanedText, confidence: result.confidence)
+        return (ASRTranscriptionResult(text: cleanedText, confidence: result.confidence), providerText: result.text)
     }
 
-    func transcribeFileForAPI(_ fileURL: URL) async throws -> (result: ASRTranscriptionResult, sampleCount: Int) {
+    /// `providerText` carries the same diagnostic-only meaning as in
+    /// `transcribeSamplesForAPI` above (Phase 3G.A observability only).
+    func transcribeFileForAPI(_ fileURL: URL) async throws -> (result: ASRTranscriptionResult, sampleCount: Int, providerText: String?) {
         guard FileManager.default.isReadableFile(atPath: fileURL.path) else {
             throw NSError(
                 domain: "ASRService",
@@ -3298,8 +3309,8 @@ final class ASRService: ObservableObject {
         {
             let reader = try LocalAPIAudioDecoder.ChunkReader(fileURL: fileURL)
             let samples = try await reader.nextSamples()
-            let result = try await self.transcribeSamplesForAPI(samples)
-            return (result, sampleCount: estimatedSamples)
+            let apiResult = try await self.transcribeSamplesForAPI(samples)
+            return (apiResult.result, sampleCount: estimatedSamples, providerText: apiResult.providerText)
         }
 
         guard provider.prefersNativeFileTranscription else {
@@ -3332,7 +3343,7 @@ final class ASRService: ObservableObject {
             }
 
             guard processedSampleCount > 0 else {
-                return (ASRTranscriptionResult(text: "", confidence: 0), sampleCount: 0)
+                return (ASRTranscriptionResult(text: "", confidence: 0), sampleCount: 0, providerText: nil)
             }
 
             if !self.hasCompletedFirstTranscription {
@@ -3347,7 +3358,8 @@ final class ASRService: ObservableObject {
             self.recordWordBoostHitIfAny(transcribedText: cleanedText)
             return (
                 ASRTranscriptionResult(text: cleanedText, confidence: confidence),
-                sampleCount: estimatedSamples
+                sampleCount: estimatedSamples,
+                providerText: combinedText
             )
         }
 
@@ -3365,7 +3377,7 @@ final class ASRService: ObservableObject {
             ASRService.applyCustomDictionary(ASRService.removeFillerWords(result.text))
         )
         self.recordWordBoostHitIfAny(transcribedText: cleanedText)
-        return (ASRTranscriptionResult(text: cleanedText, confidence: result.confidence), estimatedSamples)
+        return (ASRTranscriptionResult(text: cleanedText, confidence: result.confidence), estimatedSamples, providerText: result.text)
     }
 
     func stopWithoutTranscription() async {

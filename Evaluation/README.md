@@ -25,8 +25,18 @@ inside it. Never commit recordings (including recordings of synthetic scripts) o
 Generated stage outputs are never stored in references.
 
 ## Stages
+- `providerTranscript` (Phase 3G.A, observability only): the `TranscriptionProvider`'s own returned
+  text, captured immediately after `transcribeFinal`/`transcribeFile` return and before filler
+  removal, custom dictionary or spoken-punctuation formatting. Reported as its own field on
+  `SampleRunRecord` (`providerTranscript`), not as an entry in the scored `stages` list -- inserting
+  it there would shift what `postASRDeterministic` is scored against (see `SampleScoring.score`'s
+  positional reference/intendedFinal comparison). **Still not raw ASR**: `TranscriptionProvider`
+  implementations may already perform their own internal formatting before returning this string;
+  it means "before PratiLekh's own deterministic preprocessing," nothing more. Only present when
+  audio was transcribed via the Local API; absent (never synthesized or copied from another stage)
+  for `--text-dir` runs, since no provider is invoked in that mode.
 - `postASRDeterministic`: `/v1/transcribe` output - provider text after filler removal, custom
-  dictionary and spoken punctuation. **Not raw ASR**; raw provider text is not observable today.
+  dictionary and spoken punctuation. **Not raw ASR**; still the same value it always was.
 - `legalNormalized`: that text replayed through the real `LegalDictationProcessor`.
 Post-legal formatting, AI and final output are not evaluated yet.
 
@@ -48,7 +58,10 @@ The API exposes only the model display name; app settings (dictionary, boosting,
 captured and results say so.
 
 ## Known limitations
-- Raw provider text is not observable; `postASRDeterministic` blends filler removal, custom dictionary and spoken punctuation.
+- `postASRDeterministic` blends filler removal, custom dictionary and spoken punctuation into one
+  value; as of Phase 3G.A, `providerTranscript` (audio runs only) makes the boundary immediately
+  before those three transforms observable, but it is still not raw acoustic/model output -- see
+  "Stages" above. Provider-internal processing before that point remains unobservable.
 - Spoken-number vs digit forms (e.g. a provider writing `302` where the reference says "three zero two") count as WER errors.
   Not addressed in 3E.1; the real corpus will show whether metric normalization is warranted.
 - Critical tokens are presence-based per sample; keep samples short with distinct tokens.

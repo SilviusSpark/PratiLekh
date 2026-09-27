@@ -122,6 +122,7 @@ enum EvalRunner {
                 provider: nil,
                 confidence: nil,
                 sampleCount: nil,
+                providerTranscript: nil,
                 stages: [],
                 observedNormalization: nil,
                 provenance: [],
@@ -135,6 +136,10 @@ enum EvalRunner {
         var confidence: Float?
         var sampleCount: Int?
         var audioName: String?
+        // Phase 3G.A, observability only: absent for --text-dir (no provider
+        // invoked) and never synthesized/copied from postASR -- see
+        // EvaluationStage.providerTranscript.
+        var providerTranscript: String?
         if let audioDirectory = options.audio {
             guard let audioURL = findAudio(id: reference.id, in: audioDirectory) else { return failure("no audio file for this sample") }
             audioName = audioURL.lastPathComponent
@@ -144,6 +149,7 @@ enum EvalRunner {
                 provider = response.provider
                 confidence = response.confidence
                 sampleCount = response.sampleCount
+                providerTranscript = response.providerText
             } catch {
                 return failure("transcription failed: \(error)", audio: audioName)
             }
@@ -194,6 +200,7 @@ enum EvalRunner {
             provider: provider,
             confidence: confidence,
             sampleCount: sampleCount,
+            providerTranscript: providerTranscript,
             stages: stages,
             observedNormalization: observed,
             provenance: provenance,
@@ -255,6 +262,10 @@ enum EvalRunner {
         let confidence: Float
         let sampleCount: Int
         let provider: String
+        /// Phase 3G.A, observability only. Optional so this decode stays
+        /// additive/backward-compatible with an API response that predates
+        /// this field.
+        let providerText: String?
     }
 
     private static func transcribe(fileURL: URL, apiBase: String) throws -> TranscribeResponse {

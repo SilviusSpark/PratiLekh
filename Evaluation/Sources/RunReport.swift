@@ -35,6 +35,19 @@ struct SampleRunRecord: Codable, Equatable {
     let provider: String?
     let confidence: Float?
     let sampleCount: Int?
+    /// Phase 3G.A, observability only: the `EvaluationStage.providerTranscript`
+    /// value, i.e. the transcription provider's own returned text before
+    /// PratiLekh's deterministic preprocessing. `nil` for `--text-dir` runs
+    /// (no provider invoked) or when the provider itself was never called
+    /// (e.g. empty audio). Deliberately a sibling field, not an entry in
+    /// `stages`: `SampleScoring.score` treats `stages` positionally (the
+    /// first stage is measured against `reference`, later stages against
+    /// `intendedFinal`, and `CriticalTokenScoring` measures transitions
+    /// between adjacent stages) -- inserting an extra stage there would
+    /// silently change what `postASRDeterministic` is scored against.
+    /// Logically precedes `postASRDeterministic` in the pipeline; declared
+    /// here, before `stages`, to reflect that order.
+    let providerTranscript: String?
     let stages: [StageText]
     let observedNormalization: ObservedNormalization?
     let provenance: [ProvenanceRecord]

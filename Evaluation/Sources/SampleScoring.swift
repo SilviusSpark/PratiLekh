@@ -1,6 +1,18 @@
 import Foundation
 
 enum EvaluationStage {
+    /// Phase 3G.A, observability only: the transcription provider's own
+    /// returned text, captured before filler removal, custom dictionary and
+    /// spoken-punctuation formatting. Only available when audio was
+    /// transcribed via the Local API (absent for `--text-dir` runs, where no
+    /// provider was invoked). NOT raw acoustic/model output -- providers may
+    /// already perform their own internal formatting before returning this
+    /// string. Precedes `postASRDeterministic` in the pipeline, but is
+    /// reported as its own field on `SampleRunRecord` (see RunReport.swift),
+    /// not as an entry in the scored `stages` list, so it does not shift the
+    /// positional reference/intendedFinal comparison `SampleScoring.score`
+    /// performs over `stages`.
+    static let providerTranscript = "providerTranscript"
     /// `/v1/transcribe` output: provider text after filler removal, custom
     /// dictionary and spoken punctuation. NOT raw provider recognition.
     static let postASRDeterministic = "postASRDeterministic"
