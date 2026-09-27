@@ -12,11 +12,14 @@ Sources/Fluid/Intelligence/Safety/ProtectedSpan.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceEditClassifier.swift
 Sources/Fluid/Intelligence/Safety/ProposalDisposition.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceSafetyAuthority.swift
+Sources/Fluid/Intelligence/Transport/RawJSONObjectKeyScanner.swift
+Sources/Fluid/Intelligence/Transport/IntelligenceProposalTransportParser.swift
 "
 
 for task_test_file in \
     Tests/EditClassificationTests.swift \
     Tests/IntelligenceSafetyAuthorityTests.swift \
+    Tests/IntelligenceProposalTransportParserTests.swift \
 ; do
     task_binary_name=$(basename "$task_test_file" .swift)
     # shellcheck disable=SC2086
