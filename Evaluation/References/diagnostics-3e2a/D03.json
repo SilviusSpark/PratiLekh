@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "D03",
+  "tier": "synthetic",
+  "category": "section-number-phrasing",
+  "tags": [
+    "statutory",
+    "hundreds-form-phrasing"
+  ],
+  "reference": "Section three hundred twenty three IPC.",
+  "intendedFinal": "Section 323 IPC.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "323",
+      "spokenForms": [
+        "three hundred twenty three"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC"
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section three hundred twenty three IPC",
+      "replacement": "Section 323 IPC"
+    }
+  ],
+  "notes": "Phase 3E.2A: the hundreds-form expression for Section 323. As with D02, this is the DESIRED outcome -- do not expand production parsing merely to make this pass. 'hundred' is outside the approved SpokenNumberParser grammar (digit/tens words only), so this case is expected to surface a normalization gap, not a recognition gap."
+}

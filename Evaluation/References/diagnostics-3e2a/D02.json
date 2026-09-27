@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "D02",
+  "tier": "synthetic",
+  "category": "section-number-phrasing",
+  "tags": [
+    "statutory",
+    "mixed-number-phrasing"
+  ],
+  "reference": "Section three twenty three IPC.",
+  "intendedFinal": "Section 323 IPC.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "323",
+      "spokenForms": [
+        "three twenty three"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC"
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section three twenty three IPC",
+      "replacement": "Section 323 IPC"
+    }
+  ],
+  "notes": "Phase 3E.2A: the user's natural mixed-number expression for Section 323 (digit + tens-word). This records the DESIRED outcome, not current parser capability -- do not expand production parsing merely to make this pass. If the current normalizer does not reach 'Section 323 IPC', the run will show exactly what it produced instead and where (postASRDeterministic vs legalNormalized) any divergence first appears."
+}

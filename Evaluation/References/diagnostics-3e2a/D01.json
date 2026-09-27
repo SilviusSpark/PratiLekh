@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "D01",
+  "tier": "synthetic",
+  "category": "section-number-phrasing",
+  "tags": [
+    "statutory",
+    "digit-by-digit",
+    "baseline"
+  ],
+  "reference": "Section three two three IPC.",
+  "intendedFinal": "Section 323 IPC.",
+  "criticalTokens": [
+    {
+      "type": "provision",
+      "expected": "323",
+      "spokenForms": [
+        "three two three"
+      ]
+    },
+    {
+      "type": "statute",
+      "expected": "IPC"
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "apply",
+      "source": "Section three two three IPC",
+      "replacement": "Section 323 IPC"
+    }
+  ],
+  "notes": "Phase 3E.2A baseline: digit-by-digit statutory-number expression for Section 323. Manual trials report this form works reliably. The apply expectation records the desired outcome; the run shows whether the current normalizer actually reaches it."
+}

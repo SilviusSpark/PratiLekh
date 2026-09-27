@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "D04",
+  "tier": "synthetic",
+  "category": "date-phrasing",
+  "tags": [
+    "date",
+    "year-phrasing",
+    "reliable-baseline"
+  ],
+  "reference": "The matter is posted to Twelve July Two thousand twenty six.",
+  "criticalTokens": [
+    {
+      "type": "date",
+      "expected": "12 July 2026",
+      "spokenForms": [
+        "Twelve July Two thousand twenty six"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Phase 3E.2A: the year/date phrasing reported as reliable in manual trials. No date normalization family exists or is expected; legalExpectations is noCandidate. The 'date' critical token's spokenForms records this dictation's own phrasing so the run shows whether postASRDeterministic preserved it faithfully -- it does not assert a canonical written date is produced anywhere yet."
+}

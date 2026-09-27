@@ -22,6 +22,13 @@ done
 xcrun swiftc -parse-as-library $task_legal_sources $task_eval_sources Tests/EvaluationFixtureReplayTests.swift -o "$task_test_dir/EvaluationFixtureReplayTests"
 "$task_test_dir/EvaluationFixtureReplayTests"
 
+# Phase 3E.2A diagnostic references (D01-D10): load/validate, and replay
+# against the real LegalDictationProcessor under a perfect-ASR assumption to
+# anchor the current known behavior this milestone measured.
+# shellcheck disable=SC2086
+xcrun swiftc -parse-as-library $task_legal_sources $task_eval_sources Tests/Diagnostics3E2ATests.swift -o "$task_test_dir/Diagnostics3E2ATests"
+"$task_test_dir/Diagnostics3E2ATests"
+
 # Runner: build once, then exercise the privacy guard and the offline path.
 # shellcheck disable=SC2086
 xcrun swiftc -parse-as-library $task_legal_sources $task_eval_sources Evaluation/Runner/EvalRunner.swift -o "$task_test_dir/eval_runner"
@@ -75,3 +82,39 @@ task_port=$(cat "$task_test_dir/port")
 grep -q "stub-model" "$task_test_dir/api.out" || { echo "FAIL: provider identity not recorded from the API"; exit 1; }
 grep -q "source: localAPI" "$task_test_dir/api.out" || { echo "FAIL: API run source not recorded"; exit 1; }
 echo "PASS: eval runner Local API path (stub server)"
+
+# Phase 3E.2A diagnostic corpus (D01-D10) end-to-end through the offline
+# runner, under a perfect-ASR assumption. Checks structural/invariant
+# properties only -- NOT the exact current D02/D03 normalization outcome,
+# which is an open finding (see Evaluation/DIAGNOSTICS_3E2A.md), not a
+# regression requirement: a future fix to that normalization gap must not
+# require editing this script.
+task_diag_text_dir="$task_test_dir/diag-text"
+mkdir -p "$task_diag_text_dir"
+for task_ref in Evaluation/References/diagnostics-3e2a/*.json; do
+    task_id=$(basename "$task_ref" .json)
+    python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['reference'])" "$task_ref" > "$task_diag_text_dir/$task_id.txt"
+done
+"$task_test_dir/eval_runner" --references Evaluation/References/diagnostics-3e2a --text-dir "$task_diag_text_dir" --out "$task_test_dir/diag-results" > "$task_test_dir/diag.out"
+grep -q "samples: 10 (scored: 10)" "$task_test_dir/diag.out" || { echo "FAIL: expected all 10 diagnostic samples to score"; exit 1; }
+task_diag_result_dir=$(ls -d "$task_test_dir"/diag-results/*/)
+for task_id in D01 D02 D03 D04 D05 D06 D07 D08 D09 D10; do
+    test -f "${task_diag_result_dir}${task_id}.result.json" || { echo "FAIL: $task_id produced no result (must remain processable)"; exit 1; }
+done
+# D01 is the reliable baseline: this IS a regression invariant.
+python3 -c "
+import json
+d = json.load(open('${task_diag_result_dir}D01.result.json'))
+n = d['score']['normalization']
+assert len(n) == 1 and n[0]['kind'] == 'correctApplication', n
+assert n[0]['observedReplacement'] == 'Section 323 IPC', n
+" || { echo "FAIL: D01 (reliable digit-by-digit baseline) regressed"; exit 1; }
+# D06's formatting score is a harness invariant (text input carries no
+# punctuation by construction), independent of any production behavior.
+python3 -c "
+import json
+d = json.load(open('${task_diag_result_dir}D06.result.json'))
+f = d['score']['formatting']
+assert f['comparable'] and f['punctuationDifferences'] == 3, f
+" || { echo "FAIL: D06 offline formatting-harness invariant broke"; exit 1; }
+echo "PASS: Phase 3E.2A diagnostic corpus (D01-D10) runs offline and reports individually"

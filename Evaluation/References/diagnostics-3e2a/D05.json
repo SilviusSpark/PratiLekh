@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "D05",
+  "tier": "synthetic",
+  "category": "date-phrasing",
+  "tags": [
+    "date",
+    "year-phrasing",
+    "comparison"
+  ],
+  "reference": "The matter is posted to Twelve July Twenty Twenty Six.",
+  "criticalTokens": [
+    {
+      "type": "date",
+      "expected": "12 July 2026",
+      "spokenForms": [
+        "Twelve July Twenty Twenty Six"
+      ]
+    }
+  ],
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Phase 3E.2A: an alternative year phrasing for the same date as D04, reported as less reliable in manual trials. Differs from D04 only in how the year is spoken. Compare this sample's stage outputs directly against D04's to see where (if anywhere) the two diverge; no date normalization is implemented or expected in this milestone."
+}

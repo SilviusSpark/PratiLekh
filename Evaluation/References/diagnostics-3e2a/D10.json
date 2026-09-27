@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "D10",
+  "tier": "synthetic",
+  "category": "punctuation-repeatability",
+  "tags": [
+    "punctuation",
+    "sentence-boundary",
+    "repeatability"
+  ],
+  "reference": "Heard both sides Perused the case record Put up the matter on the date fixed",
+  "intendedFinal": "Heard both sides. Perused the case record. Put up the matter on the date fixed.",
+  "legalExpectations": [
+    {
+      "kind": "noCandidate"
+    }
+  ],
+  "notes": "Phase 3E.2A repeatability run 5 of 5 for the same intended passage. Must be an independently recorded/run audio clip, not a copy of another run's audio or output -- only that gives evidence about whether sentence-ending punctuation is stable or intermittent. Inspect this sample's own postASRDeterministic text and 'formatting' (punctuationDifferences) individually; do not read only the run's aggregate."
+}
