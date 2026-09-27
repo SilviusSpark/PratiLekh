@@ -205,7 +205,7 @@ no per-entry source metadata was added to the Phase 1 schema):
   valid vocabulary, and section-correspondence tables are explicitly out of scope, not just
   unimplemented.
 
-## Phase 3 — Legal Normalization Engine — 🚧 In progress (3C/3C.1 and 3D committed; broader Phase 3 open)
+## Phase 3 — Legal Normalization Engine — 🚧 In progress (3C/3C.1, 3D, 3F.A, 3F.B committed; broader Phase 3 open)
 
 **Purpose:** build out deterministic normalization beyond statutory citations, using the
 boundary defined in Phase 1.
@@ -262,6 +262,35 @@ merely looks canonical is not protected; this is not a general protected-span sy
 Known gap: history "undo AI" restores pre-legal raw text. Recognition-hint delivery to the one
 capable provider (Slice C), custom-dictionary reconciliation (D) and AI protected-span
 validation (E) remain deferred.
+
+**Phase 3F — Statutory Number Safety.** Driven directly by real-audio evidence (Phase 3E.2A's
+D02/D03, confirmed and extended by 3E.2B's N-series) that `SpokenNumberParser`'s naive digit/tens
+string concatenation silently corrupts mixed-form provision numbers (`three twenty three` →
+`3203`, not `323`), and that `"hundred"` silently partially-applies (`three hundred twenty three`
+→ `Section 3 ...`).
+
+- **3F.A (✅ committed, `18313d7`) — fail-closed safety, no grammar expansion:** an unsupported
+  numeric continuation (`"hundred"`, optionally `"hundred and ..."`) now declines the whole
+  candidate instead of partially applying; `hundred` itself remains unimplemented. A fragmented
+  statute abbreviation recognized as broken-apart letters (e.g. `B and S S` for `BNSS`) no longer
+  donates its first letter to the provision as a spurious suffix (`144B`) — a narrow,
+  detection-only guard (`StatuteRecognizer.looksLikeFragmentedAlias`, ≥3 known letters, at most
+  one literal `"and"` as a positional wildcard, never rewritten/asserted to mean any letter)
+  declines instead. Legitimate suffixes (`376A`, `498A`, `120B`) remain fully supported.
+  Acknowledged, evidence-scoped gap: `B S S` with no `"and"` gap is not yet handled — no real-audio
+  evidence of that exact shape exists.
+- **3F.B (✅ committed, `89a2846`) — the bounded grouped-number
+  grammar:** `[leading digit] + tens-word + [trailing digit]`, combined arithmetically, supporting
+  the demonstrated natural forms (`thirty four`→`34`, `one forty four`→`144`, `three twenty
+  three`→`323`, `three seventy six`→`376`, `one twenty five`→`125`) while preserving all
+  pure digit-by-digit forms and the pre-existing `one twenty`→`120`/`one twenty B`→`120B` idiom.
+  `hundred` remains unsupported, protected by 3F.A. Because the grammar is bounded (never
+  greedily re-enters), the unsupported-continuation guard was generalized to also decline when a
+  digit/tens word is left immediately adjacent to an already-complete grouped result. Shared with
+  `WitnessReferenceNormalizer` (same parser) — confirmed semantically appropriate and covered by
+  a regression test. **Deterministic offline probe** (real code, no audio) against the committed
+  N01–N12 corpus: 11/12 correct, N10 (`five hundred six`) correctly declines — this is a
+  text-level result, not yet measured against real audio.
 
 **Deferred (each needs its own design/domain review before implementation):** exhibit
 references (needs research into Indian exhibit conventions), case numbers, dates, amounts,
@@ -406,9 +435,41 @@ Phase 4 was earlier noted to draw on Phase 3 — see "Note on deviation" below):
     flakiness — but five takes of one passage in one session does not establish this generalizes.
     Attribution between the ASR model's own punctuation and the app's spoken-punctuation
     formatting stage is not resolvable from `postASRDeterministic` alone.
-- **Not yet done:** no production fix to any of the above; recognition-hint boosting (Slice C),
-  raw-provider instrumentation, date normalization, and punctuation/sentence-boundary heuristics
-  remain out of scope until a deliberate decision is made from this evidence.
+- **D03 fixture correction (closeout, `2cbccf1`):** real audio produced lowercase `ipc`; the
+  fixture's `spokenForms` was corrected (existing case-insensitive mechanism) so this casing
+  difference no longer misreads as a lost statute identity.
+
+**Second real-audio round (Phase 3E.2B, `Evaluation/References/diagnostics-3e2b/`, N01–N12
+statutory-number / Y01–Y10 date / P01–P06 punctuation — tooling/corpus committed at `cefc209`;
+real-audio results private, not in Git):**
+- **N01–N12:** natural (mixed-form) phrasings correct 1/6, digit-by-digit controls correct 3/6 —
+  mostly reproducing 3E.2A, plus a new failure mode: a `BNSS` abbreviation recognized as
+  broken-apart letters (`B and S S`) fed the letter-suffix logic and produced a spurious
+  compound (`144B`/`125B`) — exactly the shape Phase 3F.A's fragmented-statute guard now
+  declines. No upstream digit-canonicalization occurred this round (0/12), unlike 3E.2A's D01.
+- **Y01–Y10:** a `"twelve"`→`"twelfth"` substitution occurred at the *same* rate (4/5) in both
+  phrasing families — symmetric, not favoring either; the D04/D05 single-pair difference did not
+  reproduce as a phrasing effect. Day/month/year were semantically correct in all 10 trials; no
+  canonical digit conversion occurred in any of them (0/10). No repeated phrasing advantage
+  established.
+- **P01–P06:** all 12/12 internal boundaries rendered as commas (never periods) — the D06–D10
+  pattern reproduced across three entirely new passages; 6/6 final boundaries got a period.
+  Provider-vs-app attribution remains unresolved (same limitation as 3E.2A).
+- **Not yet done:** these 3E.2B findings, together with the earlier D02/D03 evidence, motivated
+  and were used to design/implement Phase 3F (above, both 3F.A and 3F.B now committed) — but
+  Phase 3F.B was implemented and validated against 3E.2A evidence and a deterministic offline
+  probe only; it is **not yet re-measured against real audio**. Recognition-hint boosting
+  (Slice C), raw-provider instrumentation, date normalization, and punctuation/sentence-boundary
+  heuristics remain out of scope until a deliberate decision is made from further evidence.
+
+**Next validation step (do not schedule a new recording corpus — reuse the existing N01–N12
+real-audio recordings from the 3E.2B session):** now that Phase 3F.B is committed (`89a2846`),
+re-run those existing recordings through the app to measure Phase 3F.B's real-audio (not just
+deterministic offline) impact, and compare against the original 3E.2B real-audio baseline. This
+is validation, not another implementation phase — the deterministic 11/12 N01–N12 offline result
+does not by itself establish real-audio success. Let that real-audio result, not an assumption,
+decide whether date phrasing, punctuation, or a residual statutory-number issue becomes the next
+priority — do not prematurely authorize implementation of any of them.
 
 ## Note on deviation from the requested phase list
 
