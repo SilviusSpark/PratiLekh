@@ -14,6 +14,7 @@ enum WitnessReferenceNormalizerTests {
         testNearMissWitnessAsVerb()
         testMultipleWitnessesInOneDictation()
         testSpanProvenance()
+        testGroupedNumberSharedWithStatutoryParser()
         print("PASS: WitnessReferenceNormalizer PW/DW forms, self-correction, and near-misses")
     }
 
@@ -97,5 +98,20 @@ enum WitnessReferenceNormalizerTests {
         guard let range = r2.declinedChanges[0].range else { preconditionFailure("declined witness candidate must carry its span") }
         precondition((declined as NSString).substring(with: range) == r2.declinedChanges[0].trigger)
         precondition(range.location == 0)
+    }
+
+    /// `SpokenNumberParser` is shared with `StatutoryProvisionNormalizer`;
+    /// Phase 3F.B's bounded grouped-number grammar therefore also applies to
+    /// witness numbers, intentionally. This is not a new witness-specific
+    /// family -- just making explicit that a witness index dictated the
+    /// same way as a section number is read the same way (and, as a
+    /// consequence, is no longer vulnerable to the pre-3F.B concatenation
+    /// bug: "PW twenty three" previously produced "PW-203").
+    private static func testGroupedNumberSharedWithStatutoryParser() {
+        precondition(normalize("PW twenty three").text == "PW-23")
+        precondition(normalize("PW one twenty five").text == "PW-125")
+        // Existing digit-by-digit and idiom forms remain unaffected.
+        precondition(normalize("PW three two three").text == "PW-323")
+        precondition(normalize("PW one twenty").text == "PW-120")
     }
 }

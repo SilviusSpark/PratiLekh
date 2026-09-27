@@ -10,6 +10,15 @@ enum SpokenNumberParserTests {
         testNoNumberAtStart()
         testUnrecognizedWordStopsParsing()
         testConsumesOnlyOneTrailingLetter()
+
+        // Phase 3F.B: bounded grouped-number grammar.
+        testTensOnlyLeadingDigit()
+        testGroupedDigitTensDigit()
+        testExistingDigitByDigitFormsUnaffectedByGrouping()
+        testExistingDigitPlusTensNoTrailingDigitUnaffected()
+        testTeenDoesNotComposeWithTrailingDigit()
+        testGroupedShapeWithLetterSuffix()
+
         print("PASS: SpokenNumberParser strict digit/tens parsing and letter-suffix handling")
     }
 
@@ -68,5 +77,75 @@ enum SpokenNumberParserTests {
         let result = SpokenNumberParser.parse(tokens: ["three", "zero", "two", "of"], startingAt: 0)
         precondition(result?.letterSuffix == nil)
         precondition(result?.tokensConsumed == 3)
+    }
+
+    // MARK: - Phase 3F.B: bounded grouped-number grammar
+    //
+    // Distinct from pure concatenation: a tens-word combines arithmetically
+    // with an optional leading (hundreds) digit and/or an optional trailing
+    // (units) digit, rather than each token contributing its own
+    // independent string segment.
+
+    private static func testTensOnlyLeadingDigit() {
+        // "thirty four" -> 34, not "30"+"4"="304".
+        let result = SpokenNumberParser.parse(tokens: ["thirty", "four"], startingAt: 0)
+        precondition(result?.digits == "34", "\(String(describing: result?.digits))")
+        precondition(result?.tokensConsumed == 2)
+    }
+
+    private static func testGroupedDigitTensDigit() {
+        // digit + tens + digit -> hundreds*100 + tens + units, not textual concatenation.
+        let cases: [([String], String)] = [
+            (["one", "forty", "four"], "144"),
+            (["three", "twenty", "three"], "323"),
+            (["three", "seventy", "six"], "376"),
+            (["one", "twenty", "five"], "125"),
+        ]
+        for (tokens, expected) in cases {
+            let result = SpokenNumberParser.parse(tokens: tokens, startingAt: 0)
+            precondition(result?.digits == expected, "Expected \(expected) from \(tokens), got \(String(describing: result?.digits))")
+            precondition(result?.tokensConsumed == 3, "\(tokens)")
+        }
+    }
+
+    private static func testExistingDigitByDigitFormsUnaffectedByGrouping() {
+        // None of these contain a tens-word, so grouping must never engage.
+        let cases: [([String], String)] = [
+            (["three", "four"], "34"),
+            (["one", "four", "four"], "144"),
+            (["three", "two", "three"], "323"),
+            (["three", "seven", "six"], "376"),
+            (["five", "zero", "six"], "506"),
+            (["one", "two", "five"], "125"),
+        ]
+        for (tokens, expected) in cases {
+            let result = SpokenNumberParser.parse(tokens: tokens, startingAt: 0)
+            precondition(result?.digits == expected, "Expected \(expected) from \(tokens), got \(String(describing: result?.digits))")
+            precondition(result?.tokensConsumed == tokens.count, "\(tokens)")
+        }
+    }
+
+    private static func testExistingDigitPlusTensNoTrailingDigitUnaffected() {
+        // The pre-existing, already-approved "digit + tens" idiom (no
+        // trailing digit) must still produce the same value the same way.
+        let result = SpokenNumberParser.parse(tokens: ["one", "twenty"], startingAt: 0)
+        precondition(result?.digits == "120", "\(String(describing: result?.digits))")
+        precondition(result?.tokensConsumed == 2)
+    }
+
+    private static func testTeenDoesNotComposeWithTrailingDigit() {
+        // A teen ("ten".."nineteen") already encodes both digits and must
+        // not absorb a further trailing digit-word the way twenty..ninety do.
+        let result = SpokenNumberParser.parse(tokens: ["one", "thirteen", "four"], startingAt: 0)
+        precondition(result?.digits == "113", "\(String(describing: result?.digits))")
+        precondition(result?.tokensConsumed == 2, "must stop after the teen, leaving 'four' unconsumed")
+    }
+
+    private static func testGroupedShapeWithLetterSuffix() {
+        // The existing trailing-letter-suffix mechanic must still apply on
+        // top of a newly-grouped result.
+        let result = SpokenNumberParser.parse(tokens: ["one", "twenty", "five", "B"], startingAt: 0)
+        precondition(result?.formatted == "125B", "\(String(describing: result?.formatted))")
+        precondition(result?.tokensConsumed == 4)
     }
 }

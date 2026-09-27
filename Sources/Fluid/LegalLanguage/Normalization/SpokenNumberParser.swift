@@ -1,19 +1,29 @@
 import Foundation
 
 /// A strict, minimal spoken-number parser -- not a general natural-language
-/// number interpreter. It recognizes exactly two token shapes, concatenated
-/// positionally:
-///   - a single digit word ("zero".."nine") contributing one digit
-///   - a teens/tens word ("ten".."nineteen", "twenty".."ninety") contributing
-///     two digits
+/// number interpreter. It recognizes two families of shape:
+///   - a run of pure single digit words ("zero".."nine"), concatenated
+///     positionally, of any length ("three zero two" -> "302")
+///   - Phase 3F.B's bounded grouped shape: exactly one tens/teens word
+///     ("ten".."nineteen", "twenty".."ninety"), optionally preceded by one
+///     leading (hundreds) digit-word and/or followed by one trailing
+///     (units) digit-word, combined *arithmetically* -- "thirty four" -> 34,
+///     "one forty four" -> 144, "one twenty" -> 120 (the trailing-digit slot
+///     empty). A teen never combines with a trailing digit (it already
+///     encodes both digits; "one thirteen four" is not a recognized shape).
 /// optionally followed by exactly one trailing single-letter token (a
 /// statutory letter suffix, e.g. "A" in "376A").
 ///
-/// This directly covers every number form the approved Phase 3C grammar
-/// needs ("three zero two" -> "302", "one twenty" -> "120", "three seven six
-/// A" -> "376A") without attempting "hundred"-style multipliers, ordinals,
-/// or any other natural-language number construction. Anything outside this
-/// strict shape returns nil -- the caller must decline, never guess.
+/// This directly covers every number form the approved Phase 3C/3F grammar
+/// needs without attempting "hundred"-style multipliers, ordinals, or any
+/// other natural-language number construction. Anything outside this strict
+/// shape returns nil -- the caller must decline, never guess. In
+/// particular, the grouped shape is deliberately bounded: it does not
+/// re-enter its own loop, so a digit/tens word immediately following an
+/// already-complete grouped result is left unconsumed for the caller to
+/// treat as an unsupported continuation (see
+/// `StatutoryProvisionNormalizer.matchUnsupportedNumberContinuation`) rather
+/// than silently guessed at here.
 enum SpokenNumberParser {
     private static let digitWords: [String: String] = [
         "zero": "0", "one": "1", "two": "2", "three": "3", "four": "4",
@@ -61,33 +71,71 @@ enum SpokenNumberParser {
     static func parse(tokens: [String], startingAt startIndex: Int) -> ParsedNumber? {
         guard startIndex >= 0, startIndex < tokens.count else { return nil }
 
-        var index = startIndex
-        var digits = ""
-        while index < tokens.count {
-            let word = tokens[index].lowercased()
-            if let digit = digitWords[word] {
+        let core: (digits: String, tokensConsumed: Int)
+        if let grouped = parseGroupedCompound(tokens: tokens, startingAt: startIndex) {
+            core = grouped
+        } else {
+            var index = startIndex
+            var digits = ""
+            while index < tokens.count, let digit = digitWords[tokens[index].lowercased()] {
                 digits += digit
                 index += 1
-            } else if let tens = tensWords[word] {
-                digits += tens
-                index += 1
-            } else {
-                break
             }
+            guard !digits.isEmpty else { return nil }
+            core = (digits: digits, tokensConsumed: index - startIndex)
         }
-        guard !digits.isEmpty else { return nil }
 
-        let digitsTokensConsumed = index - startIndex
-        var consumed = digitsTokensConsumed
+        var consumed = core.tokensConsumed
         var letterSuffix: String?
-        if index < tokens.count {
-            let candidate = tokens[index]
+        let suffixIndex = startIndex + core.tokensConsumed
+        if suffixIndex < tokens.count {
+            let candidate = tokens[suffixIndex]
             if candidate.count == 1, candidate.rangeOfCharacter(from: .letters) != nil {
                 letterSuffix = candidate.uppercased()
                 consumed += 1
             }
         }
 
-        return ParsedNumber(digits: digits, digitsTokensConsumed: digitsTokensConsumed, letterSuffix: letterSuffix, tokensConsumed: consumed)
+        return ParsedNumber(digits: core.digits, digitsTokensConsumed: core.tokensConsumed, letterSuffix: letterSuffix, tokensConsumed: consumed)
+    }
+
+    /// Phase 3F.B's bounded grouped shape (see the type-level doc comment).
+    /// Tried before the pure digit-by-digit loop; returns nil (not this
+    /// shape) unless the token at `startIndex` is a digit-word immediately
+    /// followed by a tens-word, or is itself a tens-word -- so it never
+    /// intercepts a plain digit-by-digit run (which never has a tens-word
+    /// as its second token).
+    private static func parseGroupedCompound(tokens: [String], startingAt startIndex: Int) -> (digits: String, tokensConsumed: Int)? {
+        func digitValue(_ word: String) -> Int? { digitWords[word.lowercased()].flatMap { Int($0) } }
+        func tensValue(_ word: String) -> Int? { tensWords[word.lowercased()].flatMap { Int($0) } }
+        // A teen ("ten".."nineteen") already encodes both digits and does
+        // not compose with a further trailing digit-word; only a genuine
+        // tens value (twenty..ninety) does.
+        func combinesWithTrailingDigit(_ tens: Int) -> Bool { tens >= 20 }
+
+        var hundredsDigit: Int?
+        var tensValueFound: Int?
+        var cursor = startIndex
+
+        if let leadingDigit = digitValue(tokens[cursor]), cursor + 1 < tokens.count, let tens = tensValue(tokens[cursor + 1]) {
+            hundredsDigit = leadingDigit
+            tensValueFound = tens
+            cursor += 2
+        } else if let tens = tensValue(tokens[cursor]) {
+            tensValueFound = tens
+            cursor += 1
+        } else {
+            return nil
+        }
+
+        guard let tens = tensValueFound else { return nil }
+        var combined = tens
+        if combinesWithTrailingDigit(tens), cursor < tokens.count, let units = digitValue(tokens[cursor]) {
+            combined += units
+            cursor += 1
+        }
+
+        let digits = hundredsDigit.map { "\($0)" + String(format: "%02d", combined) } ?? "\(combined)"
+        return (digits: digits, tokensConsumed: cursor - startIndex)
     }
 }

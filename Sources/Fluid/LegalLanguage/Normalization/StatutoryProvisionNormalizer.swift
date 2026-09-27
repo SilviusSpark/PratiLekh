@@ -428,27 +428,47 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
         return end
     }
 
-    /// Phase 3F.A: a token immediately after a parsed digit run that itself
-    /// signals the number expression continues in an unsupported cardinal
-    /// form. Currently only "hundred" (optionally followed by "and" and
-    /// more digit/tens words, e.g. "hundred and twenty three"). This is
-    /// deliberately not cardinal-number parsing -- it only identifies how
-    /// far the unsupported continuation extends, for the declined span; the
-    /// decline itself is what keeps the original text unchanged regardless
-    /// of exactly how much of the continuation this consumes.
+    /// A token immediately after a parsed number that itself signals the
+    /// number expression continues in a form this candidate should not
+    /// commit to. Two cases:
+    ///   - "hundred" (Phase 3F.A), optionally followed by "and" and more
+    ///     digit/tens words, e.g. "hundred and twenty three" -- unsupported
+    ///     cardinal-number continuation, deliberately not implemented.
+    ///   - Phase 3F.B: the token is itself another recognizable digit/tens
+    ///     word. `SpokenNumberParser`'s grouped shape is deliberately
+    ///     bounded (at most one tens-word plus one digit on each side) and
+    ///     never re-enters itself, so it can stop short of real adjacent
+    ///     numeric content rather than the number having naturally ended.
+    ///     A pure digit-by-digit parse can never leave such a token
+    ///     immediately adjacent (it already consumes every consecutive
+    ///     digit/tens word), so this branch only ever fires for the bounded
+    ///     grouped shape -- exactly where the grammar intentionally stopped
+    ///     short rather than guessing further.
+    /// Neither branch implements the continuation -- both only identify how
+    /// far it extends, for the declined span; the decline itself is what
+    /// keeps the original text unchanged regardless of exactly how much of
+    /// the continuation this consumes.
     private static func matchUnsupportedNumberContinuation(words: [String], at index: Int) -> Int? {
-        guard index < words.count, words[index].lowercased() == "hundred" else { return nil }
-        var cursor = index + 1
-        if let more = SpokenNumberParser.parse(tokens: words, startingAt: cursor) {
-            cursor += more.tokensConsumed
-        } else if cursor < words.count, words[cursor].lowercased() == "and" {
-            var afterAnd = cursor + 1
-            if let more = SpokenNumberParser.parse(tokens: words, startingAt: afterAnd) {
-                afterAnd += more.tokensConsumed
+        guard index < words.count else { return nil }
+
+        if words[index].lowercased() == "hundred" {
+            var cursor = index + 1
+            if let more = SpokenNumberParser.parse(tokens: words, startingAt: cursor) {
+                cursor += more.tokensConsumed
+            } else if cursor < words.count, words[cursor].lowercased() == "and" {
+                var afterAnd = cursor + 1
+                if let more = SpokenNumberParser.parse(tokens: words, startingAt: afterAnd) {
+                    afterAnd += more.tokensConsumed
+                }
+                cursor = afterAnd
             }
-            cursor = afterAnd
+            return cursor
         }
-        return cursor
+
+        if let more = SpokenNumberParser.parse(tokens: words, startingAt: index) {
+            return index + more.tokensConsumed
+        }
+        return nil
     }
 
     /// "read with ..." or "sub section <number>" immediately following a

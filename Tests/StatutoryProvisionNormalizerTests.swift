@@ -54,6 +54,13 @@ enum StatutoryProvisionNormalizerTests {
         testSuffixFollowedByThreeLettersMatchingNoAliasIsNotMistakenForFragment()
         testContiguousLettersWithNoGapAreOutOfScopeForNow()
 
+        testGroupedNumberFormsNormalizeCorrectly()
+        testExistingDigitByDigitFormsStillNormalizeCorrectly()
+        testExistingCompoundIdiomStillNormalizesCorrectly()
+        testHundredStillDeclinesAfterGroupedGrammar()
+        testStrayDigitAfterGroupedShapeDeclines()
+        testStrayDigitAfterGroupedShapeDeclinesInPluralViaExistingGuard()
+
         print("PASS: StatutoryProvisionNormalizer golden corpus (singular, bounded plural, multi-provision list)")
     }
 
@@ -498,5 +505,74 @@ enum StatutoryProvisionNormalizerTests {
         let result = normalize(input)
         precondition(result.text == "Section 120B S S", result.text)
         precondition(result.declinedChanges.isEmpty)
+    }
+
+    // MARK: - Phase 3F.B: bounded grouped-number grammar
+    //
+    // Public behavior only (dictated citation -> final text) -- these do not
+    // reach into SpokenNumberParser's internals; see SpokenNumberParserTests
+    // for the grammar-level cases.
+
+    private static func testGroupedNumberFormsNormalizeCorrectly() {
+        precondition(normalize("section thirty four IPC").text == "Section 34 IPC")
+        precondition(normalize("section one forty four BNSS").text == "Section 144 BNSS")
+        precondition(normalize("section three twenty three IPC").text == "Section 323 IPC")
+        precondition(normalize("section three seventy six IPC").text == "Section 376 IPC")
+        precondition(normalize("section one twenty five BNSS").text == "Section 125 BNSS")
+    }
+
+    private static func testExistingDigitByDigitFormsStillNormalizeCorrectly() {
+        precondition(normalize("section three four IPC").text == "Section 34 IPC")
+        precondition(normalize("section one four four BNSS").text == "Section 144 BNSS")
+        precondition(normalize("section three two three IPC").text == "Section 323 IPC")
+        precondition(normalize("section three seven six IPC").text == "Section 376 IPC")
+        precondition(normalize("section five zero six IPC").text == "Section 506 IPC")
+        precondition(normalize("section one two five BNSS").text == "Section 125 BNSS")
+    }
+
+    private static func testExistingCompoundIdiomStillNormalizesCorrectly() {
+        precondition(normalize("section one twenty IPC").text == "Section 120 IPC")
+        precondition(normalize("section one twenty B").text == "Section 120B")
+    }
+
+    private static func testHundredStillDeclinesAfterGroupedGrammar() {
+        // Re-run of the 3F.A safety cases -- the grouped grammar must not
+        // weaken or bypass the "hundred" fail-closed guard.
+        for input in [
+            "section three hundred twenty three IPC",
+            "section three hundred and twenty three IPC",
+            "section five hundred six IPC",
+        ] {
+            let result = normalize(input)
+            precondition(result.text == input, "\(input) -> \(result.text)")
+            precondition(result.appliedChanges.isEmpty)
+            precondition(result.declinedChanges.count == 1)
+        }
+    }
+
+    /// Phase 3F.B introduces a *bounded* grammar that can stop short of more
+    /// adjacent numeric content (unlike the old unbounded greedy
+    /// concatenation, which structurally never left a stray digit/tens word
+    /// immediately behind). A digit/tens word immediately following an
+    /// already-complete grouped shape must decline rather than silently
+    /// truncate to the grouped shape's own value.
+    private static func testStrayDigitAfterGroupedShapeDeclines() {
+        let input = "section one forty four five IPC"
+        let result = normalize(input)
+        precondition(result.text == input, "\(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
+    }
+
+    private static func testStrayDigitAfterGroupedShapeDeclinesInPluralViaExistingGuard() {
+        // As with the 3F.A "hundred" plural case, no new plural-specific
+        // code was needed: the stray digit breaks the enumeration's
+        // connector requirement, and the existing "at least 2 members" /
+        // "must find a statute" guards already decline safely.
+        let input = "sections one forty four five and three zero four of the IPC"
+        let result = normalize(input)
+        precondition(result.text == input, "\(result.text)")
+        precondition(result.appliedChanges.isEmpty)
+        precondition(result.declinedChanges.count == 1)
     }
 }
