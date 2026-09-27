@@ -96,6 +96,15 @@ final nonisolated class LLMClient: @unchecked Sendable {
         let id: String
         let name: String
         let arguments: [String: Any]
+        /// The exact raw argument JSON text as returned by the provider,
+        /// captured before `JSONSerialization` decodes it into `arguments`.
+        /// `JSONSerialization`/`JSONDecoder` silently resolve duplicate JSON
+        /// keys and coerce integer-valued floats before any Swift code can
+        /// observe the original text, so a caller that needs to detect
+        /// either of those (or otherwise re-validate the exact bytes the
+        /// provider sent) cannot recover that information from `arguments`
+        /// alone -- this field exists so it doesn't have to.
+        let rawArguments: String
 
         /// Get a string argument by key
         func getString(_ key: String) -> String? {
@@ -624,7 +633,8 @@ final nonisolated class LLMClient: @unchecked Sendable {
             return ToolCall(
                 id: call.callID ?? call.id ?? "call_\(UUID().uuidString.prefix(8))",
                 name: name,
-                arguments: args
+                arguments: args,
+                rawArguments: call.arguments
             )
         }
 
@@ -828,7 +838,8 @@ final nonisolated class LLMClient: @unchecked Sendable {
                 ToolCall(
                     id: toolCallId ?? "call_\(UUID().uuidString.prefix(8))",
                     name: name,
-                    arguments: args
+                    arguments: args,
+                    rawArguments: toolCallArguments
                 ),
             ]
             DebugLogger.shared.debug("LLMClient: Parsed tool call: \(name)", source: "LLMClient")
@@ -877,7 +888,8 @@ final nonisolated class LLMClient: @unchecked Sendable {
                     ToolCall(
                         id: item["call_id"] as? String ?? item["id"] as? String ?? "call_\(UUID().uuidString.prefix(8))",
                         name: name,
-                        arguments: args
+                        arguments: args,
+                        rawArguments: argsString
                     )
                 )
             default:
@@ -912,7 +924,7 @@ final nonisolated class LLMClient: @unchecked Sendable {
                     return nil
                 }
                 let id = tc["id"] as? String ?? "call_\(UUID().uuidString.prefix(8))"
-                return ToolCall(id: id, name: name, arguments: args)
+                return ToolCall(id: id, name: name, arguments: args, rawArguments: argsString)
             }
             // Empty tool calls are fine, no action needed
         }

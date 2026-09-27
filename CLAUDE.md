@@ -50,9 +50,10 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3G.B — Legal-vocabulary recognition-boosting experiment (bounded runtime test, no committed code/config change — findings only) | ✅ documented | `25cfb32` (full: `25cfb327ea3a574f00050ec31364880890161a3e`) |
 | 3G.C — CTC rescoring observability investigation (read-only; recognition-tuning branch closed) | ✅ documented | `f462ce1` (full: `f462ce11e2888752fd731d903b4f06d3e40d2a41`) |
 | Intelligence V1 foundation — deterministic proposal/protected-span/validator types + adversarial unit tests (`Sources/Fluid/Intelligence/Safety/`); zero LLM/model/network integration | ✅ committed | `5d83c11` (full: `5d83c110bf374ea1c94a2511038d627669dfc34a`) |
-| Intelligence V1.1 — Proposal transport/parsing boundary (`Sources/Fluid/Intelligence/Transport/`: strict JSON→native-proposal parser, provider-independent, structural-all-or-nothing); zero LLM/model/network integration | ✅ implemented, tests green; staged, pending architectural review | staged, not yet committed |
+| Intelligence V1.1 — Proposal transport/parsing boundary (`Sources/Fluid/Intelligence/Transport/`: strict JSON→native-proposal parser, provider-independent, structural-all-or-nothing); zero LLM/model/network integration | ✅ committed | `ca63584` (full: `ca635849e65ee9b583dfabf9e3b5189fc91d52c5`) |
+| Intelligence V1.2 — Proposal generation contract & provider-envelope adapter (`Sources/Fluid/Intelligence/Generation/`: tool schema, instructions, minimal provider-independent response envelope, adapter enforcing expected-tool-call policy); entirely synthetic, zero LLM/network/provider-specific integration | ✅ implemented, tests green; staged, pending architectural review | staged, not yet committed |
 
-Local `main` is 20 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
+Local `main` is 21 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
 ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
@@ -944,41 +945,69 @@ from the real-audio run (private results, not committed):
     two rounds), provider-vs-app attribution still unresolved; (e) `five hundred six`-style
     `hundred` dictation remains deliberately unsupported (now fails safely, not corrupted) — whether
     to expand the grammar to cover it is an open product question, not yet decided.
-12. **The PratiLekh Intelligence investigation/design track is complete. The V1 safety-contract
-    foundation is committed** (`5d83c11`) with its architectural decisions confirmed: no numeric
-    proposal/span/aggregate bounds required yet (deferred to empirical/configuration evidence, not
-    invented); overlapping proposals rejected outright, never merged/composed, never resolved by
-    ordering — an explicit V1 safety invariant ("PratiLekh Intelligence V1 never composes
-    overlapping model proposals"); the dedicated protected-span intersection predicate is approved
-    (not replaced by `NSIntersectionRange`); confidence/rationale remain omitted (no consumer yet);
-    the observed UTF-16/Foundation surrogate-boundary rounding behavior is accepted, with exact
-    `expectedSourceText` matching as the actual safety defense. **Intelligence V1.1 — the proposal
-    transport/parsing boundary — is now implemented** (staged, pending architectural review — not
-    yet committed as of this entry): `Sources/Fluid/Intelligence/Transport/`
-    (`RawJSONObjectKeyScanner`, a narrow duplicate-key/unknown-key raw-text scanner that
-    `JSONDecoder` cannot substitute for — verified empirically that Foundation silently resolves
-    duplicate JSON keys before a decoding container ever sees them; `IntelligenceProposalTransportParser`,
-    a strict, provider-independent `schemaVersion`+`proposals` JSON→native-`IntelligenceProposal`
-    parser with conservative transport-only resource limits, distinct from and never substituting
-    for `IntelligenceSafetyAuthority`'s separately-deferred semantic bounds) plus an adversarial
-    parser suite and parser→Safety-Authority integration tests
-    (`Tests/IntelligenceProposalTransportParserTests.swift`, run via
-    `scripts/test_intelligence_safety.sh`) — **zero LLM/model/network/prompt/provider integration**,
-    exactly as scoped. Structural parsing is all-or-nothing (one malformed proposal invalidates the
-    whole payload); this is intentionally different from `IntelligenceSafetyAuthority`, where a
-    structurally valid proposal's semantic disposition is decided independently of its siblings.
-    See "PratiLekh Intelligence architecture" above for the full design record. **This is still not
-    Intelligence V1 "generally complete"** — no model/provider adapter maps any real model's output
-    onto this parser yet. **Exact immediate next action now:** architectural review of the staged
-    V1.1 transport boundary; only after that review and a commit should provider-specific
-    extraction/model integration be considered.
-13. **Must NOT be started yet:** connecting any model/provider, OpenAI tool-call/prompt
-    implementation, audio-aware Intelligence, fine-tuning of any kind, and model selection
-    (Ollama/LM Studio or otherwise) all remain unauthorized until the V1.1 transport boundary above
-    is reviewed and committed. The recognition-tuning branch is closed — do not resume it: no
-    threshold tuning, alias additions, another vocabulary-boosting experiment, modifying the
-    three-character compound-length rule, modifying FluidAudio, exposing rejected-candidate score
-    structures, a production
+12. **The PratiLekh Intelligence investigation/design track is complete. Both V1.0 (safety
+    contract) and V1.1 (transport/parsing) are committed** (`5d83c11`, `ca63584`) with V1.1's
+    architectural decisions confirmed alongside V1.0's: overlapping proposals rejected outright
+    (never merged/composed, never resolved by ordering); the dedicated protected-span intersection
+    predicate approved over `NSIntersectionRange`; confidence/rationale remain omitted; strict
+    unknown-field and duplicate-key rejection approved (Foundation's silent
+    first-value/last-value collapsing and unknown-field leniency verified empirically, not
+    assumed); the named transport/resource limits (payload ≤1MB, ≤500 proposals, ID ≤200 chars,
+    text fields ≤10,000 chars, aggregate ≤200,000 chars) are explicitly transport bounds only, not
+    semantic-safety permissions; duplicate proposal IDs rejected structurally. **Intelligence
+    V1.2 — the model-facing generation contract and provider-response adapter — is now
+    implemented** (staged, pending architectural review — not yet committed as of this entry):
+    `Sources/Fluid/Intelligence/Generation/` (`IntelligenceGenerationContract`: the
+    `propose_transcript_edits` tool schema, matching V1.1's wire contract exactly, plus concise
+    V1-scope instructions; `IntelligenceProviderResponse`/`IntelligenceProviderToolCall`: a minimal,
+    provider-independent synthetic envelope carrying **raw, undecoded** tool-call argument text;
+    `IntelligenceProviderResponseAdapter`: enforces an expected-exactly-one-correctly-named-tool-call
+    policy and hands the raw arguments straight to the unmodified V1.1 parser, never repairing or
+    reinterpreting malformed output) plus adversarial adapter tests and full
+    adapter→parser→authority end-to-end synthetic tests
+    (`Tests/IntelligenceGenerationContractTests.swift`,
+    `Tests/IntelligenceProviderResponseAdapterTests.swift`, run via
+    `scripts/test_intelligence_safety.sh`) — **entirely synthetic, zero LLM/network/provider-specific
+    integration**. **The `LLMClient.ToolCall` raw-argument gap flagged when this was first written
+    is now resolved, minimally and additively:** `LLMClient.ToolCall` gained a `rawArguments: String`
+    field, populated at all four of its response-construction sites (Responses-API streaming and
+    non-streaming, Chat-Completions streaming and non-streaming) from the exact string already in
+    scope there, before `JSONSerialization` ever decodes it — verified by tracing every construction
+    site, not assumed; no existing consumer (`CommandModeService.swift`, the pre-existing
+    `LLMClientRequestBodyTests.swift` suite) reads a fixed field count, so this is purely additive.
+    `IntelligenceProviderResponse` remains a distinct type (kept for provider-independence, not
+    because of this gap anymore); a small, isolated bridge
+    (`IntelligenceProviderResponse+LLMClientBridge.swift`, deliberately its own file so the rest of
+    `Generation/` keeps zero dependency on `LLMClient` and stays testable via the lightweight
+    standalone convention) reshapes an already-obtained `LLMClient.Response` into it, carrying
+    `rawArguments` through unchanged — no reserialization, no live `LLMClient` call anywhere in this
+    milestone. Three new tests were added to the *existing* `LLMClientRequestBodyTests.swift`
+    XCTest file (no new XCTest file, no `.pbxproj` edit) proving raw-argument preservation
+    (including a duplicate-key and a whole-number-float case) through the real streaming
+    accumulation path and into V1.1 rejection — **written and reviewed, but not executed in this
+    environment**: running the `FluidDictationIntegrationTests` target via command-line `xcodebuild
+    test` fails with an unrelated, pre-existing "Unable to resolve module dependency:
+    'AudioRecoveryTestSupport'" error (that module isn't declared anywhere in `project.pbxproj`),
+    confirmed independent of this change since it blocks the whole target regardless of what's
+    touched. Correctness was instead verified by full `./build.sh unsigned` success (proves the new
+    field, all four call sites, and the bridge all compile and type-check against the real
+    `LLMClient` types) plus manual line-by-line tracing of the accumulation math. **Also unresolved
+    and prominently flagged, not solved:** whether a local model can reliably compute UTF-16 offsets
+    directly (the committed V1.1 wire contract's `rangeStart`/`rangeLength` representation) is architecturally
+    doubtful and untested — no model was invoked to check. If offsets are wrong, the existing exact
+    `expectedSourceText` match still fails closed (safety is unaffected), but proposal *usefulness*
+    under this representation is an open question for the live-model milestone to actually measure,
+    not something this synthetic milestone could resolve. See "PratiLekh Intelligence architecture"
+    above for the full design record. **This is still not Intelligence V1 "generally complete"** —
+    no live model or provider has been wired to any of this yet. **Exact immediate next action
+    now:** architectural review of the staged V1.2 boundary; only after that review and a commit
+    should live-model wiring be considered, and only after that gap above is explicitly resolved.
+13. **Must NOT be started yet:** connecting any model/provider, live inference, Ollama/LM Studio
+    integration, audio-aware Intelligence, fine-tuning of any kind, and Intelligence V2 all remain
+    unauthorized until the V1.2 generation/adapter boundary above is reviewed and committed. The
+    recognition-tuning branch is closed — do not resume it: no threshold tuning, alias additions,
+    another vocabulary-boosting experiment, modifying the three-character compound-length rule,
+    modifying FluidAudio, exposing rejected-candidate score structures, a production
     vocabulary-boosting default, or a Phase 3G.D recognition experiment. Also not started:
     date normalization, punctuation/sentence-boundary heuristics, custom-dictionary reconciliation
     (Slice D), evaluation-framework redesign, UI/history work, and Phase 4 — none of these are

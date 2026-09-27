@@ -299,6 +299,88 @@ final class LLMClientStreamingTests: XCTestCase {
         XCTAssertEqual(response.toolCalls.first?.getString("command"), "pwd")
     }
 
+    // Raw-argument preservation, added for the Intelligence V1.2 integration
+    // gap: `LLMClient.ToolCall.rawArguments` must carry the exact original
+    // argument text through the streaming path, never a reconstruction from
+    // the decoded `arguments` dictionary.
+    func testRawArgumentsPreserveExactTextIncludingUnusualSpacing() async throws {
+        let client = makeClient()
+        var config = LLMClient.Config(
+            messages: [["role": "user", "content": "propose edits"]],
+            model: "qwen3.5:9b",
+            baseURL: "https://issue-445.test/raw-preservation/v1",
+            apiKey: "",
+            streaming: true
+        )
+        config.maxRetries = 1
+        config.timeoutSeconds = 5
+
+        let response = try await client.call(config)
+
+        XCTAssertEqual(response.toolCalls.count, 1)
+        // Unusual (but valid) spacing that a decode-then-reserialize round
+        // trip would normalize away -- surviving exactly proves this is the
+        // original text, not a reconstruction.
+        XCTAssertEqual(response.toolCalls.first?.rawArguments, "{\"schemaVersion\" : 1, \"proposals\" : []}")
+    }
+
+    func testRawArgumentsPreserveDuplicateKeyForV11Rejection() async throws {
+        let client = makeClient()
+        var config = LLMClient.Config(
+            messages: [["role": "user", "content": "propose edits"]],
+            model: "qwen3.5:9b",
+            baseURL: "https://issue-445.test/raw-duplicate-key/v1",
+            apiKey: "",
+            streaming: true
+        )
+        config.maxRetries = 1
+        config.timeoutSeconds = 5
+
+        let response = try await client.call(config)
+        XCTAssertEqual(response.toolCalls.count, 1)
+        // The decoded dictionary can never show this -- Foundation silently
+        // resolves the duplicate before Codable/JSONSerialization callers
+        // ever see it (verified in the V1.1 milestone). Only rawArguments
+        // still contains the literal duplicate substring.
+        XCTAssertEqual(
+            response.toolCalls.first?.rawArguments,
+            "{\"schemaVersion\":1,\"schemaVersion\":999,\"proposals\":[]}"
+        )
+
+        let intelligenceResponse = IntelligenceProviderResponse(bridgingFrom: response)
+        switch IntelligenceProviderResponseAdapter.extractProposalBatch(from: intelligenceResponse) {
+        case .success:
+            XCTFail("a duplicate-key payload must be rejected, not silently resolved")
+        case let .failure(failure):
+            XCTAssertEqual(failure, .transportParseFailure(.duplicateKey("schemaVersion")))
+        }
+    }
+
+    func testRawArgumentsPreserveWholeNumberFloatForV11Rejection() async throws {
+        let client = makeClient()
+        var config = LLMClient.Config(
+            messages: [["role": "user", "content": "propose edits"]],
+            model: "qwen3.5:9b",
+            baseURL: "https://issue-445.test/raw-float-schema-version/v1",
+            apiKey: "",
+            streaming: true
+        )
+        config.maxRetries = 1
+        config.timeoutSeconds = 5
+
+        let response = try await client.call(config)
+        XCTAssertEqual(response.toolCalls.count, 1)
+        XCTAssertEqual(response.toolCalls.first?.rawArguments, "{\"schemaVersion\":1.0,\"proposals\":[]}")
+
+        let intelligenceResponse = IntelligenceProviderResponse(bridgingFrom: response)
+        switch IntelligenceProviderResponseAdapter.extractProposalBatch(from: intelligenceResponse) {
+        case .success:
+            XCTFail("a whole-number float in an integer contract field must be rejected, not silently coerced")
+        case let .failure(failure):
+            XCTAssertEqual(failure, .transportParseFailure(.invalidFieldType("schemaVersion")))
+        }
+    }
+
     func testStreamingDecodeAndCallbacksStayOffMainThread() async throws {
         let client = self.makeClient()
         let probe = LLMCallbackThreadProbe()
@@ -369,6 +451,39 @@ private class Issue445StreamURLProtocol: URLProtocol {
 
     """#
 
+    // The three fixtures below back the Intelligence V1.2 raw-argument
+    // integration-gap tests: they prove `LLMClient.ToolCall.rawArguments`
+    // preserves the provider's exact original argument text (unusual
+    // spacing, a duplicate JSON key, a whole-number float) all the way
+    // through the real streaming decode path, not merely in a synthetic
+    // Swift value constructed by a test.
+    private static let rawPreservationFixture = #"""
+    data: {"choices":[{"index":0,"delta":{"content":"","tool_calls":[{"index":0,"id":"call_raw","type":"function","function":{"name":"propose_transcript_edits","arguments":"{\"schemaVersion\" : 1, "}}]}}]}
+
+    data: {"choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\"proposals\" : []}"}}]},"finish_reason":"tool_calls"}]}
+
+    data: [DONE]
+
+    """#
+
+    private static let duplicateKeyRawArgumentsFixture = #"""
+    data: {"choices":[{"index":0,"delta":{"content":"","tool_calls":[{"index":0,"id":"call_dup","type":"function","function":{"name":"propose_transcript_edits","arguments":"{\"schemaVersion\":1,\"schemaVersion\":999,"}}]}}]}
+
+    data: {"choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\"proposals\":[]}"}}]},"finish_reason":"tool_calls"}]}
+
+    data: [DONE]
+
+    """#
+
+    private static let floatSchemaVersionRawArgumentsFixture = #"""
+    data: {"choices":[{"index":0,"delta":{"content":"","tool_calls":[{"index":0,"id":"call_float","type":"function","function":{"name":"propose_transcript_edits","arguments":"{\"schemaVersion\":1.0,"}}]}}]}
+
+    data: {"choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\"proposals\":[]}"}}]},"finish_reason":"tool_calls"}]}
+
+    data: [DONE]
+
+    """#
+
     override class func canInit(with request: URLRequest) -> Bool {
         request.url?.host == "issue-445.test"
     }
@@ -392,7 +507,18 @@ private class Issue445StreamURLProtocol: URLProtocol {
             return
         }
 
-        let fixture = url.path.contains("tag-parser") ? Self.tagParserFixture : Self.separateReasoningFixture
+        let fixture: String
+        if url.path.contains("tag-parser") {
+            fixture = Self.tagParserFixture
+        } else if url.path.contains("raw-duplicate-key") {
+            fixture = Self.duplicateKeyRawArgumentsFixture
+        } else if url.path.contains("raw-float-schema-version") {
+            fixture = Self.floatSchemaVersionRawArgumentsFixture
+        } else if url.path.contains("raw-preservation") {
+            fixture = Self.rawPreservationFixture
+        } else {
+            fixture = Self.separateReasoningFixture
+        }
 
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         client?.urlProtocol(self, didLoad: Data(fixture.utf8))
