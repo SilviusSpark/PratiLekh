@@ -47,7 +47,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3F.A — Fail-closed statutory-normalization safety (`hundred` continuation guard, fragmented-statute/suffix guard) | ✅ committed | `18313d7` (full: `18313d7a52d344c6ccd09fd02eb2ed776681290a`) |
 | 3F.B — Bounded grouped-number grammar (`thirty four`→34, etc.) | ✅ committed | `89a2846` (full: `89a2846f3ee3c773adef7f68d67e72629958f915`) |
 
-Local `main` is 12 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
+Local `main` is 13 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
 ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
@@ -324,6 +324,74 @@ N01–N12, no audio involved): 11/12 correct; N10 (`five hundred six`) correctly
 declined. **This is a deterministic-code result, not real-audio end-to-end proof** — see "Three
 layers of evidence" below.
 
+**Real-audio validation of Phase 3F (both 3F.A and 3F.B) — the existing N01–N12 recordings
+rerun unchanged after 3F, compared directly against the original pre-3F baseline.** Both
+runs used the identical 3E.2B N01–N12 audio and the same provider (Parakeet TDT v2, English
+Only); only the code changed. Result locations are private, local diagnostic-result
+directories, not repository artifacts:
+- Baseline: commit `cefc209` (pre-3F.A, pre-3F.B),
+  `/Users/kumarspandan/pratilekh-eval-results/2026-09-27T090531Z/`.
+- Post-3F: `HEAD` `785921c`, `/Users/kumarspandan/pratilekh-eval-results-post-3fb/2026-09-27T104836Z/`.
+  28/28 samples processed without error in both runs.
+
+*Evidence boundary check first:* `postASRDeterministic` WER/CER was **identical** between the
+two runs (12.9% / 3.5%) — the same recordings produced the same observable upstream text both
+times, so any change in `legalNormalized` is attributable to the code change, not a different
+audio sample or a different recognition outcome. `postASRDeterministic` is still not raw ASR
+(see "Three layers of evidence" below); it still cannot isolate provider decoding from custom
+dictionary, filler removal, or spoken-punctuation processing.
+
+*3F.B grouped-number result — confirmed on real audio, not just offline text:* all five
+grouped-number corruptions present in the baseline were corrected on the same audio: N01 `304
+→ 34`, N03 `1404 → 144`, N05 `3203 → 323`, N07 `3706 → 376`, N11 `1205 → 125`. Stated
+carefully: **Phase 3F.B corrected 5/5 previously-corrupted grouped-number cases in this fixed
+N-series real-audio sample** — this is not a claim that generalizes beyond this corpus. Of
+those five, N03 and N11 reached the fully correct end-to-end statutory citation (e.g. `Section
+144 BNSS`); N01/N05/N07 obtained the correct number but the overall citation remained
+incomplete because the statute word (`IPC`) had already been lost/misrecognized as `it c`
+before legal normalization ever saw it — a limitation upstream of the boundary this evaluation
+can observe, not a 3F.B defect.
+
+*3F.A safety result — confirmed on real audio:* N10 (`five hundred six`) went from a partial
+corruption (`Section 5 hundred six...`) to an unchanged, safe decline. N04 and N12 (`BNSS`
+recognized as fragmented letters `B and S S`) went from false-positive suffix-like
+transformations (`Section 144B`, `Section 125B`) to safe declines.
+
+*Critical-token result (the clearest single signal of this validation):* corrupted critical
+tokens went from 7 (baseline) to **0** (post-3F); incorrect-transformation outcomes went from 3
+to **0**; regressions found: **0** — nothing that previously worked or previously declined
+safely became worse.
+
+*The apparently worse normalized WER/CER is not a regression:* baseline `legalNormalized`
+WER/CER was 13.6% / 4.6%; post-3F is 14.0% / 6.3%. A safe decline retains the longer original
+spoken text, which can score worse by edit distance than a shorter-but-legally-corrupted
+transformation would have. The metrics that actually track legal safety moved in the intended
+direction (corrupted tokens 7→0, incorrect transformations 3→0). This is another concrete
+instance of the "diagnostic lessons" note below: don't read WER alone as a legal-dictation
+quality signal.
+
+*What remains unresolved (evidence recorded, no solution selected):*
+1. `"IPC"` was observed as `"it c"` in several N-series recordings.
+2. `BNSS` was sometimes observed as fragmented letters (`"B and S S"`).
+3. `five hundred six` remains deliberately unsupported, but now fails safely rather than
+   corrupting.
+4. Date/year phrasing reliability remains unresolved from Phase 3E diagnostics (see below).
+5. Internal sentence-boundary punctuation remains unresolved from Phase 3E diagnostics (see
+   below).
+
+For (1) and (2): both are upstream of the legal-normalization boundary this evaluation can
+currently observe. Do not attribute either specifically to the ASR provider, the custom
+dictionary, or spoken-punctuation processing — that attribution is not observable from
+`postASRDeterministic` alone.
+
+**Phase 3F status:** 3F.A — implemented, committed, **and real-audio validated**. 3F.B —
+implemented, committed, **and real-audio validated** against the fixed N01–N12 corpus. Phase
+3F eliminated the known deterministic statutory-number corruptions targeted by the phase and
+converted the tested unsupported/ambiguous forms to fail-closed behavior. Remaining failures in
+the fixed real-audio sample are either upstream of legal normalization or deliberately
+unsupported. **Phase 3F does not universally solve statutory dictation** — it does not touch
+statute-word recognition, `hundred`, dates, or punctuation.
+
 ## Evaluation framework (Phase 3E.1, `Evaluation/`)
 
 Standalone tooling to measure where dictation fails, stage by stage. **Governing principle: the
@@ -417,41 +485,45 @@ from the real-audio run (private results, not committed):
 ## Current Handoff (read this first in a new session)
 
 1. **Completed:** Phases 0–2, 3C+3C.1, 3D (live activation), 3E.1 (evaluation framework), 3E.2A and
-   3E.2B (diagnostic corpora + real-audio runs, findings above), 3F.A (fail-closed statutory safety),
-   3F.B (bounded grouped-number grammar).
-2. **Exact current `HEAD`:** `89a2846f3ee3c773adef7f68d67e72629958f915` ("Add bounded grouped-number
-   normalization (Phase 3F.B)"), branch `main`, 12 ahead of `origin/main`/0 behind, nothing pushed.
-   Immediately preceded by `18313d7a52d344c6ccd09fd02eb2ed776681290a` (Phase 3F.A).
-3. **No pending production/test change set.** Phase 3F.B's five files (`SpokenNumberParser.swift`,
-   `StatutoryProvisionNormalizer.swift`, `Tests/SpokenNumberParserTests.swift`,
-   `Tests/StatutoryProvisionNormalizerTests.swift`, `Tests/WitnessReferenceNormalizerTests.swift`)
-   are committed at `89a2846`, not staged. Verify with `git status`/`git log` before trusting this
-   if time has passed.
-4. **What 3F.A changed (committed, `18313d7`):** see "Phase 3F" above — `hundred`-continuation
-   fail-closed decline; fragmented-statute/suffix-ambiguity fail-closed decline. No grammar
-   expansion.
-5. **What 3F.B changed (committed, `89a2846`):** the bounded grouped-number grammar itself (see
-   "Phase 3F" above) — `[leading digit] + tens-word + [trailing digit]`, combined arithmetically.
-   No further grammar expansion beyond what's documented there.
-6. **Current deterministic N-series result (offline, not real-audio):** 11/12 of N01–N12 correct;
-   N10 (`five hundred six`) correctly remains declined/unchanged by design (`hundred` stays
-   unsupported). This is the Phase 3F.B production code's committed behavior, but it has **not yet
-   been measured against the real 3E.2B audio recordings** — see next action below.
-7. **Most important open evidence questions:** (a) whether Phase 3F.B measurably improves the
-   *real-audio* N01–N12 result now that it's committed — only the deterministic/offline result is
-   known so far; (b) date/year phrasing reliability — no repeated advantage for either phrasing
-   established across 15 real-audio trials total; (c) punctuation — strongly reproduced
-   comma-for-internal-boundary pattern (22/22 across two rounds), but provider-vs-app attribution
-   still unresolved; (d) any upstream ASR recognition failures the N-series real-audio run surfaced
-   (e.g. the `BNSS`-as-broken-letters mode) that a normalizer-level fix cannot address.
-8. **Exact immediate next action:** re-run the **existing** N01–N12 real-audio recordings (already
-   on disk from the 3E.2B session — do not record a new corpus) through the app, now that Phase
-   3F.B is committed, and compare against the original 3E.2B real-audio baseline. This is
-   validation, not a new implementation phase — the deterministic 11/12 offline result above does
-   not by itself establish real-audio success. Let that real-audio result (not an assumption)
-   determine whether punctuation, date phrasing, a residual statutory-number issue, or something
-   else becomes the next engineering priority; do not preselect one now.
+   3E.2B (diagnostic corpora + real-audio runs, findings above), 3F.A (fail-closed statutory safety,
+   real-audio validated), 3F.B (bounded grouped-number grammar, real-audio validated), and the
+   post-3F N01–N12 real-audio validation itself (see "Phase 3F" above for the full findings).
+2. **Exact current `HEAD`:** `785921c7a64f1e1769684891ff02e9d85dd32586` ("Update project handoff
+   after Phase 3F"), branch `main`, 13 ahead of `origin/main`/0 behind, nothing pushed. Immediately
+   preceded by `89a2846f3ee3c773adef7f68d67e72629958f915` (Phase 3F.B), which is immediately
+   preceded by `18313d7a52d344c6ccd09fd02eb2ed776681290a` (Phase 3F.A).
+3. **No pending production/test change set.** Phase 3F.A and 3F.B are both fully committed; no
+   Swift source, test, or fixture changes are outstanding. Verify with `git status`/`git log`
+   before trusting this if time has passed.
+4. **What 3F.A changed:** see "Phase 3F" above — `hundred`-continuation fail-closed decline;
+   fragmented-statute/suffix-ambiguity fail-closed decline. No grammar expansion. Now confirmed on
+   real audio (N10, N04/N12), not just unit tests.
+5. **What 3F.B changed:** the bounded grouped-number grammar itself (see "Phase 3F" above) —
+   `[leading digit] + tens-word + [trailing digit]`, combined arithmetically. Now confirmed on real
+   audio: 5/5 previously-corrupted grouped-number cases in the fixed N01–N12 corpus fixed, 0
+   regressions.
+6. **Real-audio validation result (complete, not just deterministic offline):** corrupted critical
+   tokens 7→0, incorrect transformations 3→0, 0 regressions, comparing the identical N01–N12
+   recordings before (`cefc209`) and after (`785921c`) Phase 3F — see "Phase 3F" above for the full
+   case-by-case breakdown and the private result-directory paths.
+7. **Most important open evidence areas (none yet investigated, no solution selected):** (a)
+   statute-word recognition — `IPC` observed as `it c` in several N-series takes, upstream of the
+   observable legal-normalization boundary; (b) `BNSS` observed as fragmented letters (`B and S
+   S`) in some takes, same observability limit; (c) date/year phrasing reliability — no repeated
+   advantage for either phrasing established across 15 real-audio trials total; (d) punctuation —
+   strongly reproduced comma-for-internal-boundary pattern (22/22 across two rounds), provider-
+   vs-app attribution still unresolved; (e) `five hundred six`-style `hundred` dictation remains
+   deliberately unsupported (now fails safely, not corrupted) — whether to expand the grammar to
+   cover it is an open product question, not yet decided.
+8. **Exact immediate next action:** none of the above is pre-selected. The next architectural
+   decision is to choose, from the accumulated Phase 3E/3F evidence (this file's "Phase 3F",
+   "Evaluation framework", "Three layers of evidence" and "Diagnostic lessons" sections), among:
+   improving observability into upstream statute recognition, date/year handling, sentence-boundary
+   punctuation, or deliberately expanding the unsupported number grammar (e.g. `hundred`) if
+   product requirements justify it. That choice needs explicit review and approval before any
+   implementation starts — do not begin any of these now.
 9. **Must NOT be started yet:** date normalization, punctuation/sentence-boundary heuristics,
    recognition boosting (Slice C), custom-dictionary reconciliation (Slice D), AI protection
-   (Slice E), raw-ASR instrumentation, another normalization family, evaluation-framework redesign,
-   UI/history work, Phase 4 — none of these are authorized by any evidence gathered so far.
+   (Slice E), raw-ASR instrumentation, expanding the `hundred`/number grammar, another
+   normalization family, evaluation-framework redesign, UI/history work, Phase 4 — none of these
+   are authorized by any evidence gathered so far.
