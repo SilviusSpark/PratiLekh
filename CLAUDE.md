@@ -48,7 +48,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3F.B — Bounded grouped-number grammar (`thirty four`→34, etc.) | ✅ committed | `89a2846` (full: `89a2846f3ee3c773adef7f68d67e72629958f915`) |
 | 3G.A — Provider-transcript observability (`providerTranscript` stage, Local-API/evaluation seam only) | ✅ committed, real-audio validated | `08a2f24` (full: `08a2f24ac88ab44e6961f989ceceaefa9caf73c8`) |
 
-Local `main` is 15 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
+Local `main` is 16 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
 ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
@@ -439,11 +439,66 @@ deterministic preprocessing interval (filler removal, custom dictionary, spoken-
 formatting) as the source of these six statute degradations. **It does not yet select the next
 intervention.** Remaining, unranked candidate directions include: recognition-side improvements, if
 the existing local ASR stack supports them; a constrained text-based PratiLekh Intelligence layer;
-or, eventually, audio-aware intelligence if later evidence justifies it. The next planned activity
-is a **read-only investigation** of recognition-side capabilities — specifically whether the
-current Parakeet/FluidAudio stack exposes safe contextual vocabulary biasing, hotwords, boosting,
-prompting, decoding controls, or an equivalent mechanism suitable for legal/statutory terminology.
-That investigation has not been performed yet and no Phase 3G.B is declared.
+or, eventually, audio-aware intelligence if later evidence justifies it. A **read-only
+investigation** of recognition-side capabilities followed this question directly — see "Phase
+3G.B" immediately below for what it found and what was subsequently tested.
+
+**Phase 3G.B — Legal-vocabulary recognition-boosting experiment (bounded A/B experiment, not a
+production change; no source, test, or configuration file was committed for it).** The read-only
+recognition-stack investigation found that the exact installed FluidAudio revision already
+contains a CTC-based vocabulary-rescoring mechanism, and PratiLekh's `FluidAudioProvider` already
+wires it into the same manager used for final Parakeet TDT v2 transcription — inactive only
+because `SettingsStore.vocabularyBoostingEnabled` defaults to `false`. Phase 3G.B tested this
+mechanism directly: vocabulary boosting was enabled via the existing (non-source) runtime
+configuration surface — the user-level `parakeet_custom_vocabulary.json` file and the
+`VocabularyBoostingEnabled` user default, both entirely outside the Git repository — with a
+**canonical-terms-only vocabulary** (`IPC`, `BNSS`, `BNS`, `CrPC`, `CPC`; no aliases, no observed
+error forms such as `it c`/`B and S S`), and the pre-existing threshold configuration left
+completely unchanged (`alpha: 2.8`, `minCtcScore: -2.2`, `minSimilarity: 0.72`,
+`minCombinedConfidence: 0.64`, `minTermLength: 3`). Enabling boosting caused the already-shipped
+CTC model (`parakeet-ctc-110m`) to be downloaded/loaded for the first time on this machine — this
+is the model the already-integrated feature needs to run, not a new project dependency or a newly
+implemented capability. The full 28-sample N/P/Y real-audio corpus was re-run under this
+condition and compared against the Phase 3G.A baseline; the experimental settings/vocabulary were
+restored to their exact prior state afterward (verified byte-for-byte), and no tracked source file
+was changed to run this experiment.
+
+*Result:* across all 28 samples, **`providerTranscript`, `postASRDeterministic`, and
+`legalNormalized` were all identical to the baseline — 0 differences in any of the three fields,
+for any sample.** For the six known degraded cases (N01, N04, N05, N06, N07, N12 — the `IPC`→`it c`
+and `BNSS`→`B and S S` cases): 0/6 fully corrected, 0/6 partially improved, 6/6 unchanged, 0/6
+worsened. The five already-correct statute cases (N02, N03, N08, N09, N11) all remained unchanged:
+5/5 preserved. Across the full corpus, no new legal-term substitution was observed, no previously
+correct transcript regressed, and no P/Y sample acquired a registered legal term. **No harmful
+effect was observed in this fixed corpus** — this is deliberately not generalized to "vocabulary
+boosting is safe": it is a statement about this one run, this one vocabulary, and these unchanged
+thresholds only.
+
+**Correct interpretation (do not overreach):** this experiment establishes only that, under the
+existing untuned thresholds, this five-term canonical-only vocabulary, and this fixed corpus,
+enabling the mechanism produced no measurable transcript benefit or harm. It does **not**
+establish that vocabulary boosting can never help, that lower thresholds or aliases would help,
+that the CTC spotter failed to detect the terms, that it detected but rejected them, or that
+vocabulary boosting is production-safe more broadly. No threshold tuning or alias addition is
+recommended from this evidence alone.
+
+**Observability limitation:** `ASRResult.ctcDetectedTerms`/`ctcAppliedTerms` exist inside the
+installed FluidAudio dependency but are discarded by PratiLekh's `FluidAudioProvider` wrapper
+before returning `ASRTranscriptionResult` (not modified in this experiment). The existing
+`BOOST_HIT` log line is **not** evidence of CTC detection or application — it is a plain
+case-insensitive substring check against the already-produced transcript text, unrelated to
+whether the rescoring pass itself found or attempted anything. **Phase 3G.B therefore cannot
+currently distinguish** "candidate not detected," "candidate detected but not applied," "candidate
+applied," or any other internal rescoring behavior for the six target cases. A reliable A/B
+latency comparison was also not available from existing surfaces and was not obtained.
+
+**Next planned activity:** a **read-only Phase 3G.C architecture investigation** into the smallest
+safe diagnostic seam for exposing already-computed CTC rescoring metadata during evaluation —
+specifically whether `ctcDetectedTerms`/`ctcAppliedTerms` (and any already-available
+score/similarity/rejection metadata) are sufficient to explain Phase 3G.B's zero-effect result,
+without modifying the FluidAudio dependency itself. Not yet performed. No implementation
+(threshold tuning, aliases, or a production vocabulary-boosting default) is authorized from Phase
+3G.B's evidence.
 
 ## Evaluation framework (Phase 3E.1, `Evaluation/`)
 
@@ -547,15 +602,19 @@ from the real-audio run (private results, not committed):
 1. **Completed:** Phases 0–2, 3C+3C.1, 3D (live activation), 3E.1 (evaluation framework), 3E.2A and
    3E.2B (diagnostic corpora + real-audio runs, findings above), 3F.A (fail-closed statutory safety,
    real-audio validated), 3F.B (bounded grouped-number grammar, real-audio validated), the post-3F
-   N01–N12 real-audio validation, and 3G.A (provider-transcript observability, real-audio validated
-   — see "Phase 3G.A" above for the full findings).
-2. **Exact current `HEAD`:** `08a2f24ac88ab44e6961f989ceceaefa9caf73c8` ("Add provider transcript
-   observability"), branch `main`, 15 ahead of `origin/main`/0 behind, nothing pushed. Immediately
-   preceded by the Phase 3F real-audio-validation and doc-handoff commits, `89a2846` (Phase 3F.B),
-   and `18313d7` (Phase 3F.A).
+   N01–N12 real-audio validation, 3G.A (provider-transcript observability, real-audio validated),
+   the recognition-side capability read-only investigation, and 3G.B (legal-vocabulary
+   recognition-boosting experiment — see "Phase 3G.B" above for the full findings; this was a
+   bounded experiment, not a committed code/config change).
+2. **Exact current `HEAD`:** `5930127880bdc8be2488e3616d271da9ec3f32a2` ("Record Phase 3G.A
+   real-audio validation"), branch `main`, 16 ahead of `origin/main`/0 behind, nothing pushed.
+   Immediately preceded by `08a2f24` (Phase 3G.A implementation), `89a2846` (Phase 3F.B), and
+   `18313d7` (Phase 3F.A).
 3. **No pending production/test change set.** Phase 3F.A, 3F.B and 3G.A are all fully committed; no
-   Swift source, test, or fixture changes are outstanding. Verify with `git status`/`git log`
-   before trusting this if time has passed.
+   Swift source, test, or fixture changes are outstanding. Phase 3G.B was a bounded runtime
+   experiment (settings + a user-level vocabulary file, both outside the repository) and left no
+   tracked-file changes — restored to its exact prior state afterward. Verify with `git status`/
+   `git log` before trusting this if time has passed.
 4. **What 3F.A changed:** see "Phase 3F" above — `hundred`-continuation fail-closed decline;
    fragmented-statute/suffix-ambiguity fail-closed decline. No grammar expansion. Confirmed on real
    audio (N10, N04/N12), not just unit tests.
@@ -575,32 +634,44 @@ from the real-audio run (private results, not committed):
    an acoustic-decoding finding — provider-internal processing before the returned string remains
    opaque. N02, N03, N08, N09, N11 remain correctly recognized; N10 remains an intentional
    grammar-scope safe-decline, not a recognition failure.
-8. **Instrumentation limitation to remember:** all 28 real-audio samples happened to have
-   `providerTranscript == postASRDeterministic`, because none of these specific recordings exercised
-   filler removal, custom-dictionary substitution, or a literal spoken-punctuation word. The
-   committed synthetic tests separately prove the instrumentation can represent a genuine
-   divergence; this real-audio run does not comprehensively validate every transformation.
-9. **Most important open evidence areas (none yet investigated, no solution selected):** (a) *now
-   ruled out*: PratiLekh's own deterministic preprocessing interval as the source of the six
-   statute degradations (3G.A's finding above) — this narrows, but does not yet select, the next
-   intervention; (b) date/year phrasing reliability — no repeated advantage for either phrasing
-   established across 15 real-audio trials total; (c) punctuation — strongly reproduced
-   comma-for-internal-boundary pattern (22/22 across two rounds), provider-vs-app attribution still
-   unresolved; (d) `five hundred six`-style `hundred` dictation remains deliberately unsupported
-   (now fails safely, not corrupted) — whether to expand the grammar to cover it is an open product
-   question, not yet decided.
-10. **Exact immediate next action:** a **read-only investigation** (not yet performed, not yet
-    authorized to implement anything from it) of recognition-side capabilities — specifically
-    whether the current Parakeet/FluidAudio ASR stack exposes safe contextual vocabulary biasing,
-    hotwords, boosting, prompting, decoding controls, or an equivalent mechanism suitable for
-    legal/statutory terminology. This is one candidate among several unranked intervention classes
-    (recognition-side improvements if supported; a constrained text-based PratiLekh Intelligence;
-    eventually audio-aware intelligence if later evidence justifies it) — the investigation itself
-    does not select or authorize any of them. No Phase 3G.B is declared.
-11. **Must NOT be started yet:** the recognition-side capability investigation itself (item 10) has
-    not been performed; do not implement anything from it before it happens and is reviewed. Also
-    not started: date normalization, punctuation/sentence-boundary heuristics, recognition boosting
-    (Slice C), custom-dictionary reconciliation (Slice D), AI protection (Slice E), expanding the
+8. **What the 3G.B experiment found (bounded, canonical-terms-only, thresholds untouched):**
+   enabling the already-integrated FluidAudio CTC vocabulary-rescoring mechanism produced **zero
+   measured effect** on any of the 28 samples — 0/6 degraded cases corrected, 5/5 already-correct
+   cases preserved, 0 false positives, 0 regressions. This does **not** establish that boosting can
+   never help, that different thresholds/aliases would or would not help, or that the CTC spotter
+   failed vs. rejected the candidates — `ctcDetectedTerms`/`ctcAppliedTerms` remain unexposed by
+   PratiLekh's wrapper, so this distinction is currently unobservable. See "Phase 3G.B" above.
+9. **Instrumentation limitation to remember:** all 28 real-audio samples (in both the 3G.A baseline
+   and the 3G.B experiment) happened to have `providerTranscript == postASRDeterministic`, because
+   none of these specific recordings exercised filler removal, custom-dictionary substitution, or a
+   literal spoken-punctuation word. The committed synthetic tests separately prove the
+   instrumentation can represent a genuine divergence; this real-audio run does not comprehensively
+   validate every preprocessing transformation.
+10. **Most important open evidence areas (none yet investigated further, no solution selected):**
+    (a) *now ruled out*: PratiLekh's own deterministic preprocessing interval as the source of the
+    six statute degradations (3G.A); (b) *now measured, not yet explained*: canonical-vocabulary CTC
+    boosting produced no effect on this corpus under unchanged thresholds (3G.B) — whether that's
+    because the terms were never detected, detected but rejected, or something else remains
+    unobservable without the diagnostic seam described in item 11; (c) date/year phrasing
+    reliability — no repeated advantage for either phrasing established across 15 real-audio trials
+    total; (d) punctuation — strongly reproduced comma-for-internal-boundary pattern (22/22 across
+    two rounds), provider-vs-app attribution still unresolved; (e) `five hundred six`-style
+    `hundred` dictation remains deliberately unsupported (now fails safely, not corrupted) — whether
+    to expand the grammar to cover it is an open product question, not yet decided.
+11. **Exact immediate next action:** a **read-only Phase 3G.C architecture investigation** (not yet
+    performed, not yet authorized to implement anything from it) into the smallest safe diagnostic
+    seam for exposing already-computed CTC rescoring metadata (`ctcDetectedTerms`/`ctcAppliedTerms`,
+    and any already-available score/similarity/rejection metadata) during evaluation, without
+    modifying the FluidAudio dependency itself — specifically to determine whether that metadata is
+    sufficient to explain Phase 3G.B's zero-effect result. This is one step within the broader,
+    still-unranked set of candidate directions (recognition-side improvements if supported; a
+    constrained text-based PratiLekh Intelligence; eventually audio-aware intelligence) — it does
+    not select or authorize any of them.
+12. **Must NOT be started yet:** the Phase 3G.C investigation itself (item 11) has not been
+    performed; do not implement anything from it before it happens and is reviewed. Also not
+    started: threshold tuning or alias additions to vocabulary boosting, a production
+    vocabulary-boosting default, date normalization, punctuation/sentence-boundary heuristics,
+    custom-dictionary reconciliation (Slice D), AI protection (Slice E), expanding the
     `hundred`/number grammar, another normalization family, evaluation-framework redesign,
-    text-based or audio-aware PratiLekh Intelligence design/implementation, UI/history work, Phase 4,
-    and Phase 3G.B (not declared) — none of these are authorized by any evidence gathered so far.
+    text-based or audio-aware PratiLekh Intelligence design/implementation, UI/history work, and
+    Phase 4 — none of these are authorized by any evidence gathered so far.
