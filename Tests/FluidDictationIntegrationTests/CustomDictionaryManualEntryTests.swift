@@ -1,5 +1,5 @@
-@testable import FluidVoice_Debug
 import Foundation
+@testable import PratiLekh_Debug
 import XCTest
 
 @MainActor

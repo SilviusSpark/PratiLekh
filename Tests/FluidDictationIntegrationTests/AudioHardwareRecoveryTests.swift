@@ -1,10 +1,6 @@
 import CoreAudio
-#if canImport(FluidVoice_Debug)
-@testable import FluidVoice_Debug
-#else
-@testable import AudioRecoveryTestSupport
-#endif
 import Foundation
+@testable import PratiLekh_Debug
 import XCTest
 
 final class AudioHardwareRecoveryTests: XCTestCase {
@@ -853,7 +849,7 @@ private final nonisolated class RecoveryInput: DirectCoreAudioInputControlling, 
     }
 }
 
-#if canImport(FluidVoice_Debug)
+#if canImport(PratiLekh_Debug)
 final class AudioRouteRecoveryIntegrationTests: XCTestCase {
     @MainActor
     func testStartupTriesNewMicrophoneMissingFromDeviceCache() async throws {

@@ -51,10 +51,12 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | 3G.C — CTC rescoring observability investigation (read-only; recognition-tuning branch closed) | ✅ documented | `f462ce1` (full: `f462ce11e2888752fd731d903b4f06d3e40d2a41`) |
 | Intelligence V1 foundation — deterministic proposal/protected-span/validator types + adversarial unit tests (`Sources/Fluid/Intelligence/Safety/`); zero LLM/model/network integration | ✅ committed | `5d83c11` (full: `5d83c110bf374ea1c94a2511038d627669dfc34a`) |
 | Intelligence V1.1 — Proposal transport/parsing boundary (`Sources/Fluid/Intelligence/Transport/`: strict JSON→native-proposal parser, provider-independent, structural-all-or-nothing); zero LLM/model/network integration | ✅ committed | `ca63584` (full: `ca635849e65ee9b583dfabf9e3b5189fc91d52c5`) |
-| Intelligence V1.2 — Proposal generation contract & provider-envelope adapter (`Sources/Fluid/Intelligence/Generation/`: tool schema, instructions, minimal provider-independent response envelope, adapter enforcing expected-tool-call policy); entirely synthetic, zero LLM/network/provider-specific integration | ✅ implemented, tests green; staged, pending architectural review | staged, not yet committed |
+| Intelligence V1.2 — Proposal generation contract & provider-envelope adapter (`Sources/Fluid/Intelligence/Generation/`: tool schema, instructions, minimal provider-independent response envelope, adapter enforcing expected-tool-call policy); entirely synthetic, zero LLM/network/provider-specific integration | ✅ committed | `7ff7a13` (full: `7ff7a1327ecb4cb0742c016dd306a5d56d361bb1`) |
+| Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ implemented, tests green; staged, pending architectural review | staged, not yet committed |
 
-Local `main` is 21 commits ahead of `origin/main`, 0 behind, nothing pushed. Verify current
-ahead/behind state with Git rather than relying on this document.
+Local `main` is 22 commits ahead of `origin/main`, 0 behind, nothing pushed (before this
+milestone's staged-but-uncommitted test-file changes). Verify current ahead/behind state with
+Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
 families only). **Phase 3D Slices A+B (committed, `0abf627`)** live-activate that normalization at one
@@ -879,20 +881,18 @@ from the real-audio run (private results, not committed):
    FluidVoice/Fluid-Intelligence runtime-access investigation, Text-Only Intelligence Baseline /
    Safety Contract V1 design, and audio-aware architecture research) — see "PratiLekh Intelligence
    architecture" above. **No Intelligence code has been implemented.**
-2. **Exact current `HEAD` at the time of writing this entry:** `f462ce11e2888752fd731d903b4f06d3e40d2a41`
-   ("Record Phase 3G.C recognition findings"), branch `main`, 18 ahead of `origin/main`/0 behind,
-   nothing pushed as of the commit that introduces this entry — that commit (documenting the
-   PratiLekh Intelligence architecture work above) will itself be one ahead of `f462ce1`. Per this
-   file's own opening instruction, trust `git log`/`git status` over this paragraph if time has
-   passed. Immediately preceded by `25cfb32` (Phase 3G.B), `5930127` (Phase 3G.A real-audio
-   validation doc), `08a2f24` (Phase 3G.A implementation), `89a2846` (Phase 3F.B), and `18313d7`
-   (Phase 3F.A).
-3. **No pending production/test change set.** Phase 3F.A, 3F.B and 3G.A are all fully committed; no
-   Swift source, test, or fixture changes are outstanding. Phase 3G.B was a bounded runtime
-   experiment (settings + a user-level vocabulary file, both outside the repository) and left no
-   tracked-file changes — restored to its exact prior state afterward. Phase 3G.C was read-only
-   (source tracing plus hand-computation on already-known strings; no code run). Verify with
-   `git status`/`git log` before trusting this if time has passed.
+2. **Exact current `HEAD` at the time of writing this entry:** `7ff7a1327ecb4cb0742c016dd306a5d56d361bb1`
+   ("Add Intelligence proposal generation boundary"), branch `main`, 22 ahead of `origin/main`/0
+   behind, nothing pushed. Per this file's own opening instruction, trust `git log`/`git status`
+   over this paragraph if time has passed. Immediately preceded by `ca63584` (Intelligence V1.1),
+   `5d83c11` (Intelligence V1.0), `18dc992` (Intelligence architecture doc), `f462ce1` (Phase
+   3G.C), `25cfb32` (Phase 3G.B).
+3. **One pending, staged (not committed) test-only change set: the test-infrastructure
+   verification milestone below (item 14).** All Intelligence V1.0/V1.1/V1.2 source is fully
+   committed at the `HEAD` above; no `Sources/` changes are outstanding. Phase 3F.A, 3F.B and 3G.A
+   remain fully committed. Phase 3G.B was a bounded runtime experiment (settings + a user-level
+   vocabulary file, both outside the repository) and left no tracked-file changes. Phase 3G.C was
+   read-only. Verify with `git status`/`git log` before trusting this if time has passed.
 4. **What 3F.A changed:** see "Phase 3F" above — `hundred`-continuation fail-closed decline;
    fragmented-statute/suffix-ambiguity fail-closed decline. No grammar expansion. Confirmed on real
    audio (N10, N04/N12), not just unit tests.
@@ -964,7 +964,7 @@ from the real-audio run (private results, not committed):
     `IntelligenceProviderResponseAdapter`: enforces an expected-exactly-one-correctly-named-tool-call
     policy and hands the raw arguments straight to the unmodified V1.1 parser, never repairing or
     reinterpreting malformed output) plus adversarial adapter tests and full
-    adapter→parser→authority end-to-end synthetic tests
+    adapter→parser→authority end-to-end synthetic tests -- **now committed at `7ff7a13`**
     (`Tests/IntelligenceGenerationContractTests.swift`,
     `Tests/IntelligenceProviderResponseAdapterTests.swift`, run via
     `scripts/test_intelligence_safety.sh`) — **entirely synthetic, zero LLM/network/provider-specific
@@ -984,24 +984,81 @@ from the real-audio run (private results, not committed):
     milestone. Three new tests were added to the *existing* `LLMClientRequestBodyTests.swift`
     XCTest file (no new XCTest file, no `.pbxproj` edit) proving raw-argument preservation
     (including a duplicate-key and a whole-number-float case) through the real streaming
-    accumulation path and into V1.1 rejection — **written and reviewed, but not executed in this
-    environment**: running the `FluidDictationIntegrationTests` target via command-line `xcodebuild
-    test` fails with an unrelated, pre-existing "Unable to resolve module dependency:
-    'AudioRecoveryTestSupport'" error (that module isn't declared anywhere in `project.pbxproj`),
-    confirmed independent of this change since it blocks the whole target regardless of what's
-    touched. Correctness was instead verified by full `./build.sh unsigned` success (proves the new
-    field, all four call sites, and the bridge all compile and type-check against the real
-    `LLMClient` types) plus manual line-by-line tracing of the accumulation math. **Also unresolved
-    and prominently flagged, not solved:** whether a local model can reliably compute UTF-16 offsets
-    directly (the committed V1.1 wire contract's `rangeStart`/`rangeLength` representation) is architecturally
-    doubtful and untested — no model was invoked to check. If offsets are wrong, the existing exact
+    accumulation path and into V1.1 rejection. **As of item 14 below, these 3 tests (plus a 4th,
+    non-streaming one) have now actually been executed and pass — see item 14 for the fix that
+    unblocked this and the real runtime evidence.** **Also unresolved and prominently flagged, not
+    solved:** whether a local model can reliably compute UTF-16 offsets directly (the committed
+    V1.1 wire contract's `rangeStart`/`rangeLength` representation) is architecturally doubtful and
+    untested — no model was invoked to check. If offsets are wrong, the existing exact
     `expectedSourceText` match still fails closed (safety is unaffected), but proposal *usefulness*
     under this representation is an open question for the live-model milestone to actually measure,
     not something this synthetic milestone could resolve. See "PratiLekh Intelligence architecture"
     above for the full design record. **This is still not Intelligence V1 "generally complete"** —
     no live model or provider has been wired to any of this yet. **Exact immediate next action
-    now:** architectural review of the staged V1.2 boundary; only after that review and a commit
-    should live-model wiring be considered, and only after that gap above is explicitly resolved.
+    now:** architectural review of the staged test-infrastructure fix in item 14; only after that
+    review and a commit should live-model wiring be considered, and only after the UTF-16 gap above
+    is explicitly resolved.
+14. **Test-infrastructure verification milestone (staged, not committed as of this entry) —
+    the `FluidDictationIntegrationTests` build failure blocking the 3 V1.2 raw-argument tests is
+    now root-caused and fixed.** Two distinct, unrelated stale-reference bugs were found in the
+    test target, both inherited/pre-existing and unrelated to any Intelligence code:
+    - **Root cause A (the real blocker for the whole target, discovered after fixing the
+      previously-diagnosed issue below):** every one of the 21 files in
+      `Tests/FluidDictationIntegrationTests/` still wrote `@testable import FluidVoice_Debug` —
+      the app's **pre-rebrand** product name. Phase 0 (`7b782da`) renamed `PRODUCT_NAME` to
+      `"PratiLekh Debug"` for the `fluid` target's Debug configuration, which (with no
+      `PRODUCT_MODULE_NAME` override in `project.pbxproj`) changed the *derived* Swift module name
+      to `PratiLekh_Debug` — confirmed directly from the actual built artifact
+      (`DerivedData/Build/Products/Debug/PratiLekh_Debug.swiftmodule`), not inferred. The test
+      target's imports were never updated to match, so `xcodebuild build-for-testing` failed on
+      every single file with "Unable to resolve module dependency: 'FluidVoice_Debug'." Fix:
+      mechanical `FluidVoice_Debug` → `PratiLekh_Debug` rename across all 22 occurrences (21 files;
+      `AudioHardwareRecoveryTests.swift` had two — see below), including one large
+      `#if canImport(FluidVoice_Debug)`-gated test class (`AudioRouteRecoveryIntegrationTests`,
+      lines 852–1530) that would otherwise have started silently compiling itself out entirely
+      once the module was renamed. No `project.pbxproj` change was needed or made.
+    - **Root cause B (previously diagnosed, smaller in scope than first assumed):**
+      `AudioHardwareRecoveryTests.swift` alone additionally had a dead
+      `#if canImport(FluidVoice_Debug) ... #else @testable import AudioRecoveryTestSupport #endif`
+      guard, inherited from upstream commit `0039d64` — `AudioRecoveryTestSupport` is not declared
+      anywhere in this repo (`project.pbxproj`, `Package.swift`, or as a source target); Xcode's
+      explicit-module dependency scanner appears to require resolving both branches of a
+      `#if canImport` guard even though the condition should gracefully evaluate false under
+      classic module resolution. Fix: removed the dead conditional, leaving the same unconditional
+      `@testable import` all 21 sibling files already use.
+    - **Regression discipline:** the mechanical rename shifted alphabetical import order in 9
+      files, causing 9 new SwiftLint `sorted_imports` violations (`PratiLekh_Debug` sorts after
+      `Foundation`, unlike `FluidVoice_Debug`); all 9 were corrected by hand, re-verified with
+      `swiftlint lint --strict` (0 violations across all 21 touched files).
+    - **Real runtime evidence obtained (not just compilation):** `xcodebuild build-for-testing`
+      now succeeds; the 3 previously-blocked tests
+      (`testRawArgumentsPreserveExactTextIncludingUnusualSpacing`,
+      `testRawArgumentsPreserveDuplicateKeyForV11Rejection`,
+      `testRawArgumentsPreserveWholeNumberFloatForV11Rejection`) all **passed** when actually
+      executed, proving: exact raw-argument text (including unusual spacing) survives the real
+      `LLMClient` streaming path unchanged; a duplicate `schemaVersion` key survives into
+      `rawArguments` and is then correctly rejected by the real
+      adapter→parser chain with `.transportParseFailure(.duplicateKey("schemaVersion"))`; a
+      whole-number float (`1.0`) survives and is correctly rejected with
+      `.transportParseFailure(.invalidFieldType("schemaVersion"))`. A 4th test,
+      `testRawArgumentsPreserveExactTextNonStreamingChatCompletions`, was added (not requested by
+      name, but within the milestone's explicit allowance to add "one additional focused test" if
+      warranted) because all 3 original tests only exercised the streaming Chat-Completions
+      delta-accumulation construction site; the new test covers the architecturally distinct
+      non-streaming (single-shot, already-complete-JSON) construction site instead of expanding
+      into a full 4-site matrix. All 4 pass.
+    - **Full-target regression run:** the entire `FluidDictationIntegrationTests` target was run
+      (534 tests). 533 passed; the 1 failure
+      (`DictationE2ETests.testDictationEndToEnd_whisperTiny_transcribesFixture`, "Insufficient
+      memory for Whisper Tiny") is an environmental/sandbox memory constraint loading a real
+      Whisper GGUF model, unrelated to this fix or to any Intelligence code, and was left
+      untouched. `scripts/test_intelligence_safety.sh`, `scripts/test_legal_language.sh`, all
+      other `scripts/test_*.sh`, and `Tests/run_paste_key_cache_tests.sh` all still pass;
+      `./build.sh unsigned` still succeeds; `git diff --check` is clean.
+    - **Scope discipline:** only `Tests/FluidDictationIntegrationTests/*.swift` files were touched
+      (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
+      code or architecture was modified. This is test-infrastructure repair only, per this
+      milestone's explicit scope. **Staged, not committed** — awaiting architectural review.
 13. **Must NOT be started yet:** connecting any model/provider, live inference, Ollama/LM Studio
     integration, audio-aware Intelligence, fine-tuning of any kind, and Intelligence V2 all remain
     unauthorized until the V1.2 generation/adapter boundary above is reviewed and committed. The

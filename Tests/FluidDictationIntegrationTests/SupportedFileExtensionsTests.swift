@@ -1,4 +1,4 @@
-@testable import FluidVoice_Debug
+@testable import PratiLekh_Debug
 import XCTest
 
 // Regression tests for file-type acceptance in meeting/file transcription.

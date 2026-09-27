@@ -1,8 +1,8 @@
 import AppKit
 import Combine
 import CoreAudio
-@testable import FluidVoice_Debug
 import Foundation
+@testable import PratiLekh_Debug
 import XCTest
 
 final class HotkeyShortcutTests: XCTestCase {

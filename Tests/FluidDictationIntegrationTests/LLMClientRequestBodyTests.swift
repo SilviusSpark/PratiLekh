@@ -1,5 +1,5 @@
-@testable import FluidVoice_Debug
 import Foundation
+@testable import PratiLekh_Debug
 import XCTest
 
 // Regression tests for https://github.com/altic-dev/FluidVoice/issues/295
@@ -381,6 +381,30 @@ final class LLMClientStreamingTests: XCTestCase {
         }
     }
 
+    // The 3 tests above all exercise the streaming Chat Completions path,
+    // where `rawArguments` is assembled by accumulating SSE deltas. The
+    // non-streaming path is architecturally distinct -- a single already-
+    // complete JSON response body, no delta accumulation -- so this test
+    // covers that second family directly, without expanding into a full
+    // matrix across all 4 construction sites.
+    func testRawArgumentsPreserveExactTextNonStreamingChatCompletions() async throws {
+        let client = makeClient()
+        var config = LLMClient.Config(
+            messages: [["role": "user", "content": "propose edits"]],
+            model: "qwen3.5:9b",
+            baseURL: "https://issue-445.test/raw-preservation-nonstreaming/v1",
+            apiKey: "",
+            streaming: false
+        )
+        config.maxRetries = 1
+        config.timeoutSeconds = 5
+
+        let response = try await client.call(config)
+
+        XCTAssertEqual(response.toolCalls.count, 1)
+        XCTAssertEqual(response.toolCalls.first?.rawArguments, "{\"schemaVersion\" : 1, \"proposals\" : []}")
+    }
+
     func testStreamingDecodeAndCallbacksStayOffMainThread() async throws {
         let client = self.makeClient()
         let probe = LLMCallbackThreadProbe()
@@ -484,6 +508,13 @@ private class Issue445StreamURLProtocol: URLProtocol {
 
     """#
 
+    // Plain (non-SSE) Chat Completions body for the non-streaming
+    // raw-argument-preservation test: a single already-complete JSON
+    // response, not an accumulated stream of deltas.
+    private static let nonStreamingRawPreservationFixture = #"""
+    {"choices":[{"message":{"content":"","tool_calls":[{"id":"call_raw_ns","type":"function","function":{"name":"propose_transcript_edits","arguments":"{\"schemaVersion\" : 1, \"proposals\" : []}"}}]}}]}
+    """#
+
     override class func canInit(with request: URLRequest) -> Bool {
         request.url?.host == "issue-445.test"
     }
@@ -514,6 +545,8 @@ private class Issue445StreamURLProtocol: URLProtocol {
             fixture = Self.duplicateKeyRawArgumentsFixture
         } else if url.path.contains("raw-float-schema-version") {
             fixture = Self.floatSchemaVersionRawArgumentsFixture
+        } else if url.path.contains("raw-preservation-nonstreaming") {
+            fixture = Self.nonStreamingRawPreservationFixture
         } else if url.path.contains("raw-preservation") {
             fixture = Self.rawPreservationFixture
         } else {
