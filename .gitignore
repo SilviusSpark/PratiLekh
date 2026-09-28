@@ -218,6 +218,7 @@ scripts/*
 !scripts/eval_run.sh
 !scripts/test_intelligence_safety.sh
 !scripts/test_protected_span_derivation.sh
+!scripts/test_independent_protection_investigation.sh
 !scripts/test_v1_3a_experimental_resolver.sh
 !scripts/test_v1_4_experimental_resolver.sh
 !scripts/test_v1_4b_experimental_policies.sh

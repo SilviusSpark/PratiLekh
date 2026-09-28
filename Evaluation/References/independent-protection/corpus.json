@@ -1,0 +1,3976 @@
+{
+ "schemaVersion": 1,
+ "description": "V1.12 independent-protection investigation corpus. `text` is dictation input to the legal normalization pipeline; `expressions` are exact substrings of the NORMALIZED text that a category-specific protection would have to cover. Synthetic, authored for boundary-case coverage; NOT a sample of real judicial dictation and not a source of prevalence estimates.",
+ "entries": [
+  {
+   "id": "DT-01",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The matter is posted to 12th July 2026 for hearing.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12th July 2026"
+    }
+   ],
+   "note": "ordinal + month + 4-digit year"
+  },
+  {
+   "id": "DT-02",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The occurrence took place on 12.07.2026 at about night.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12.07.2026"
+    }
+   ],
+   "note": "dotted numeric d.m.yyyy"
+  },
+  {
+   "id": "DT-03",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The occurrence took place on 12/07/2026 at about night.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12/07/2026"
+    }
+   ],
+   "note": "slashed numeric"
+  },
+  {
+   "id": "DT-04",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The occurrence took place on 12-07-2026 at about night.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12-07-2026"
+    }
+   ],
+   "note": "hyphenated numeric"
+  },
+  {
+   "id": "DT-05",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The seizure was made on 12.7.26 in presence of witnesses.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12.7.26"
+    }
+   ],
+   "note": "two-digit year, unpadded"
+  },
+  {
+   "id": "DT-06",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The order dated July 12, 2026 is hereby set aside.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "July 12, 2026"
+    }
+   ],
+   "note": "US-order month-day-year"
+  },
+  {
+   "id": "DT-07",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "It happened on the 12th day of July, 2026 in the evening.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12th day of July, 2026"
+    }
+   ],
+   "note": "formal 'day of' form"
+  },
+  {
+   "id": "DT-08",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The matter is posted to Twelve July Two thousand twenty six.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "Twelve July Two thousand twenty six"
+    }
+   ],
+   "note": "REAL ASR form (Y01): capitalized number words"
+  },
+  {
+   "id": "DT-09",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The matter is posted to Twelve July Twenty Twenty Six.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "Twelve July Twenty Twenty Six"
+    }
+   ],
+   "note": "REAL ASR form (Y06): twenty-twenty year"
+  },
+  {
+   "id": "DT-10",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The matter is posted to Twelfth July Two thousand twenty six.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "Twelfth July Two thousand twenty six"
+    }
+   ],
+   "note": "REAL ASR form: twelve->twelfth substitution (4/5 in Y-series)"
+  },
+  {
+   "id": "DT-11",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The witness left on the twelfth of July twenty twenty six.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "twelfth of July twenty twenty six"
+    }
+   ],
+   "note": "lowercase spoken form"
+  },
+  {
+   "id": "DT-12",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The matter is posted to 12 July 2026 for orders.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12 July 2026"
+    }
+   ],
+   "note": "no ordinal suffix"
+  },
+  {
+   "id": "DT-13",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The matter is posted to 12 July, 2026 for orders.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12 July, 2026"
+    }
+   ],
+   "note": "comma before year"
+  },
+  {
+   "id": "DT-14",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The appointment was made on 1st April 2023 by the department.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "1st April 2023"
+    }
+   ],
+   "note": "ordinal st"
+  },
+  {
+   "id": "DT-15",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The petition was filed on 22nd March 2021 before this Court.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "22nd March 2021"
+    }
+   ],
+   "note": "ordinal nd"
+  },
+  {
+   "id": "DT-16",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The FIR was lodged on 3rd January 2020 at the police station.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "3rd January 2020"
+    }
+   ],
+   "note": "ordinal rd"
+  },
+  {
+   "id": "DT-17",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The last hearing was on 31st December 2019 before the learned Judge.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "31st December 2019"
+    }
+   ],
+   "note": "ordinal st, December"
+  },
+  {
+   "id": "DT-18",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The rule is effective w.e.f. 01.04.2023 as per the notification.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "01.04.2023"
+    }
+   ],
+   "note": "zero-padded, after w.e.f."
+  },
+  {
+   "id": "DT-19",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The sale deed dated 05.09.2018 was exhibited.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "05.09.2018"
+    }
+   ],
+   "note": "after 'dated'"
+  },
+  {
+   "id": "DT-20",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The report was received in July 2026 by the office.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "July 2026"
+    }
+   ],
+   "note": "month-year only"
+  },
+  {
+   "id": "DT-21",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The festival is observed on 15th August every year.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "15th August"
+    }
+   ],
+   "note": "day-month without year (no year given)"
+  },
+  {
+   "id": "DT-22",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The accused was arrested in the year 2019 from his village.",
+   "expressions": [
+    {
+     "category": "year",
+     "text": "2019"
+    }
+   ],
+   "note": "bare year after 'the year'"
+  },
+  {
+   "id": "DT-23",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The accused was arrested in 2019 from his village.",
+   "expressions": [
+    {
+     "category": "year",
+     "text": "2019"
+    }
+   ],
+   "note": "bare year after 'in'"
+  },
+  {
+   "id": "DT-24",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The dispute continued between 2015 and 2019 without resolution.",
+   "expressions": [
+    {
+     "category": "year",
+     "text": "2015"
+    },
+    {
+     "category": "year",
+     "text": "2019"
+    }
+   ],
+   "note": "two bare years, range"
+  },
+  {
+   "id": "DT-25",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The audit covers the financial year 2019-20 in full.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "2019-20"
+    }
+   ],
+   "note": "financial-year range"
+  },
+  {
+   "id": "DT-26",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The offence is under the Indian Penal Code, 1860 as alleged.",
+   "expressions": [
+    {
+     "category": "year",
+     "text": "1860"
+    }
+   ],
+   "note": "year inside a statute title"
+  },
+  {
+   "id": "DT-27",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The seizure was under the Arms Act, 1959 as stated.",
+   "expressions": [
+    {
+     "category": "year",
+     "text": "1959"
+    }
+   ],
+   "note": "year inside an Act title"
+  },
+  {
+   "id": "DT-28",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The hearing was on 12th and 13th July 2026 as directed.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12th and 13th July 2026"
+    }
+   ],
+   "note": "compound day list"
+  },
+  {
+   "id": "DT-29",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The lease ran from 01.01.2020 to 31.12.2020 as stated.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "01.01.2020"
+    },
+    {
+     "category": "date",
+     "text": "31.12.2020"
+    }
+   ],
+   "note": "two dates, range"
+  },
+  {
+   "id": "DT-30",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "On Monday the 12th July 2026 the accused surrendered.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "Monday the 12th July 2026"
+    }
+   ],
+   "note": "weekday + date"
+  },
+  {
+   "id": "DT-31",
+   "category": "time",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He reached the spot at 10.30 PM on 12.07.2026.",
+   "expressions": [
+    {
+     "category": "time",
+     "text": "10.30 PM"
+    },
+    {
+     "category": "date",
+     "text": "12.07.2026"
+    }
+   ],
+   "note": "time + date"
+  },
+  {
+   "id": "DT-32",
+   "category": "time",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The incident occurred at about 10:30 am near the market.",
+   "expressions": [
+    {
+     "category": "time",
+     "text": "10:30 am"
+    }
+   ],
+   "note": "colon time"
+  },
+  {
+   "id": "DT-33",
+   "category": "time",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The incident occurred at about 9 PM near the market.",
+   "expressions": [
+    {
+     "category": "time",
+     "text": "9 PM"
+    }
+   ],
+   "note": "hour + meridiem"
+  },
+  {
+   "id": "DT-34",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The bail application was moved on 18.06.2025 and rejected on 25.06.2025.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "18.06.2025"
+    },
+    {
+     "category": "date",
+     "text": "25.06.2025"
+    }
+   ],
+   "note": "two dates in one sentence"
+  },
+  {
+   "id": "DT-35",
+   "category": "date",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The judgment dated 30th September, 2024 was challenged.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "30th September, 2024"
+    }
+   ],
+   "note": "ordinal with comma"
+  },
+  {
+   "id": "DT-N01",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "May I proceed with the cross-examination of the witness?",
+   "expressions": [],
+   "note": "'May' as a modal verb"
+  },
+  {
+   "id": "DT-N02",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The accused may be released on bail if the sureties are furnished.",
+   "expressions": [],
+   "note": "'may' modal"
+  },
+  {
+   "id": "DT-N03",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The procession was to march to the police station in the morning.",
+   "expressions": [],
+   "note": "'march' verb"
+  },
+  {
+   "id": "DT-N04",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The learned counsel submitted that the 12th accused is not named.",
+   "expressions": [],
+   "note": "ordinal without a month"
+  },
+  {
+   "id": "DT-N05",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "He passed the 12th class examination from the local school.",
+   "expressions": [],
+   "note": "ordinal without a month"
+  },
+  {
+   "id": "DT-N06",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The witness said the incident took place yesterday near the market.",
+   "expressions": [],
+   "note": "relative day"
+  },
+  {
+   "id": "DT-N07",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The matter was adjourned to the next day for arguments.",
+   "expressions": [],
+   "note": "relative day"
+  },
+  {
+   "id": "DT-N08",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The mother of the deceased was examined on the same day.",
+   "expressions": [],
+   "note": "relative day"
+  },
+  {
+   "id": "DT-N09",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The date of the incident was not mentioned in the complaint.",
+   "expressions": [],
+   "note": "the word 'date' without a date"
+  },
+  {
+   "id": "DT-N10",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The accused reached the spot in the month of August according to him.",
+   "expressions": [],
+   "note": "month name alone, no day/year"
+  },
+  {
+   "id": "DT-N11",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The old order 12 rule 7 of the Civil Procedure Code was invoked.",
+   "expressions": [],
+   "note": "numbers that look like d.m"
+  },
+  {
+   "id": "DT-N12",
+   "category": "date",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The instrument is a two thousand rupee note.",
+   "expressions": [],
+   "note": "'two thousand' number words, not a year"
+  },
+  {
+   "id": "AM-01",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused shall pay a fine of Rs. 5,000 to the State.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 5,000"
+    }
+   ],
+   "note": "Rs. + Western grouping"
+  },
+  {
+   "id": "AM-02",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused shall pay a fine of Rs.5,000/- to the State.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs.5,000/-"
+    }
+   ],
+   "note": "no space, '/-' suffix"
+  },
+  {
+   "id": "AM-03",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused shall pay a fine of Rs. 5000/- to the State.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 5000/-"
+    }
+   ],
+   "note": "ungrouped, '/-'"
+  },
+  {
+   "id": "AM-04",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused shall pay a fine of ₹ 5,000 to the State.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "₹ 5,000"
+    }
+   ],
+   "note": "rupee sign with space"
+  },
+  {
+   "id": "AM-05",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused shall pay a fine of ₹5,000 to the State.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "₹5,000"
+    }
+   ],
+   "note": "rupee sign no space"
+  },
+  {
+   "id": "AM-06",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused shall pay a fine of INR 5,000 to the State.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "INR 5,000"
+    }
+   ],
+   "note": "INR prefix"
+  },
+  {
+   "id": "AM-07",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The complainant lost Rs. 1,50,000 in the transaction.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 1,50,000"
+    }
+   ],
+   "note": "Indian lakh grouping"
+  },
+  {
+   "id": "AM-08",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The complainant lost Rs. 10,00,000/- in the transaction.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 10,00,000/-"
+    }
+   ],
+   "note": "Indian grouping + '/-'"
+  },
+  {
+   "id": "AM-09",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The scam involved Rs. 1.5 crore of public money.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 1.5 crore"
+    }
+   ],
+   "note": "decimal crore"
+  },
+  {
+   "id": "AM-10",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The scam involved Rs. 5 lakh of public money.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 5 lakh"
+    }
+   ],
+   "note": "lakh word"
+  },
+  {
+   "id": "AM-11",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused demanded 5 lakh rupees from the complainant.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "5 lakh rupees"
+    }
+   ],
+   "note": "number + lakh + rupees, no prefix"
+  },
+  {
+   "id": "AM-12",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He was directed to pay Rupees five thousand only.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rupees five thousand only"
+    }
+   ],
+   "note": "words + 'only' (ASR word form)"
+  },
+  {
+   "id": "AM-13",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He was directed to pay rupees five thousand towards costs.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "rupees five thousand"
+    }
+   ],
+   "note": "lowercase words"
+  },
+  {
+   "id": "AM-14",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He was directed to pay Rs. Five Thousand Only towards costs.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. Five Thousand Only"
+    }
+   ],
+   "note": "Rs. + capitalized words"
+  },
+  {
+   "id": "AM-15",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The bribe amount was Rs. 500 as per the trap witness.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 500"
+    }
+   ],
+   "note": "small amount"
+  },
+  {
+   "id": "AM-16",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The fee was Rs. 50/- as per the receipt.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 50/-"
+    }
+   ],
+   "note": "small '/-'"
+  },
+  {
+   "id": "AM-17",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The decree is for Rs. 2,00,000 (Rupees two lakh only) with interest.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 2,00,000"
+    },
+    {
+     "category": "amount",
+     "text": "Rupees two lakh only"
+    }
+   ],
+   "note": "figure and words both"
+  },
+  {
+   "id": "AM-18",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The sum of Rupees Two Lakhs was paid in cash.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rupees Two Lakhs"
+    }
+   ],
+   "note": "plural lakhs"
+  },
+  {
+   "id": "AM-19",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The sum of rupees ten thousand five hundred was paid in cash.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "rupees ten thousand five hundred"
+    }
+   ],
+   "note": "compound number words"
+  },
+  {
+   "id": "AM-20",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The bank account had Rs.1,00,00,000 deposited.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs.1,00,00,000"
+    }
+   ],
+   "note": "crore-scale Indian grouping"
+  },
+  {
+   "id": "AM-21",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The witness said he paid rs. 500 to the constable.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "rs. 500"
+    }
+   ],
+   "note": "lowercase abbreviation"
+  },
+  {
+   "id": "AM-22",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The bond is for a sum of ₹75,000 as per the order.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "₹75,000"
+    }
+   ],
+   "note": "rupee sign"
+  },
+  {
+   "id": "AM-23",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Compensation of Rs. 25,000 shall be paid to the victim.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 25,000"
+    }
+   ],
+   "note": "compensation"
+  },
+  {
+   "id": "AM-24",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The contract was valued at USD 1,000 as stated.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "USD 1,000"
+    }
+   ],
+   "note": "foreign currency"
+  },
+  {
+   "id": "AM-25",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The stamp of Re. 1/- was affixed on the document.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Re. 1/-"
+    }
+   ],
+   "note": "one rupee"
+  },
+  {
+   "id": "AM-26",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The amount was Rs. 5,000.50 as per the ledger.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 5,000.50"
+    }
+   ],
+   "note": "decimal paise"
+  },
+  {
+   "id": "AM-27",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The change was 50 paise only.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "50 paise"
+    }
+   ],
+   "note": "paise"
+  },
+  {
+   "id": "AM-28",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He was paid Rs. 1,000 per month as wages.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 1,000"
+    }
+   ],
+   "note": "rate"
+  },
+  {
+   "id": "AM-29",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The claim ranged from Rs. 2000 to Rs. 3000 in the notice.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 2000"
+    },
+    {
+     "category": "amount",
+     "text": "Rs. 3000"
+    }
+   ],
+   "note": "range of two amounts"
+  },
+  {
+   "id": "AM-30",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Interest at 15% per annum was awarded from the date of filing.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "15%"
+    }
+   ],
+   "note": "percentage rate"
+  },
+  {
+   "id": "AM-31",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Interest at fifteen per cent per annum was awarded.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "fifteen per cent"
+    }
+   ],
+   "note": "spelled percentage"
+  },
+  {
+   "id": "AM-N01",
+   "category": "amount",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The 1500 hearing schedule was published by the registry.",
+   "expressions": [],
+   "note": "bare number, no currency"
+  },
+  {
+   "id": "AM-N02",
+   "category": "amount",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Room No. 15 on the first floor was allotted.",
+   "expressions": [],
+   "note": "'No. 15' not an amount"
+  },
+  {
+   "id": "AM-N03",
+   "category": "amount",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The witness saw a rupee note lying on the road.",
+   "expressions": [],
+   "note": "'rupee' without a number"
+  },
+  {
+   "id": "AM-N04",
+   "category": "amount",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Rs. is the abbreviation used in the schedule column.",
+   "expressions": [],
+   "note": "abbreviation with no number"
+  },
+  {
+   "id": "AM-N05",
+   "category": "amount",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The bench comprised two Judges of the High Court.",
+   "expressions": [],
+   "note": "number word, no currency"
+  },
+  {
+   "id": "AM-N06",
+   "category": "amount",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Learned counsel cited the ruling reported in 2019 CriLJ 1500.",
+   "expressions": [],
+   "note": "citation numbers"
+  },
+  {
+   "id": "QT-01",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He is sentenced to rigorous imprisonment for 7 years and a fine.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "7 years"
+    }
+   ],
+   "note": "sentence term (digits)"
+  },
+  {
+   "id": "QT-02",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He is sentenced to rigorous imprisonment for seven years and a fine.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "seven years"
+    }
+   ],
+   "note": "sentence term (words)"
+  },
+  {
+   "id": "QT-03",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He is sentenced to imprisonment for two years and six months.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "two years and six months"
+    }
+   ],
+   "note": "compound term"
+  },
+  {
+   "id": "QT-04",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The sentence shall run for a period of three months in default.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "three months"
+    }
+   ],
+   "note": "default term"
+  },
+  {
+   "id": "QT-05",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The victim is aged about 45 years as per the record.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "45 years"
+    }
+   ],
+   "note": "age"
+  },
+  {
+   "id": "QT-06",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The victim is aged 16 years as per the school register.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "16 years"
+    }
+   ],
+   "note": "age relevant to POCSO"
+  },
+  {
+   "id": "QT-07",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The police seized 2.5 kg of ganja from the bag.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "2.5 kg"
+    }
+   ],
+   "note": "contraband weight"
+  },
+  {
+   "id": "QT-08",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The police seized 250 grams of brown sugar from him.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "250 grams"
+    }
+   ],
+   "note": "contraband weight"
+  },
+  {
+   "id": "QT-09",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The quantity of 25 kg is a commercial quantity under the Act.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "25 kg"
+    }
+   ],
+   "note": "commercial quantity"
+  },
+  {
+   "id": "QT-10",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The spot was 20 metres from the road as per the sketch.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "20 metres"
+    }
+   ],
+   "note": "distance"
+  },
+  {
+   "id": "QT-11",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "development",
+   "text": "He filed the appeal after a delay of 30 days.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "30 days"
+    }
+   ],
+   "note": "delay period"
+  },
+  {
+   "id": "QT-12",
+   "category": "quantity",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "About five persons were present at the spot.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "five persons"
+    }
+   ],
+   "note": "head-count"
+  },
+  {
+   "id": "CS-01",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Crl. Appeal No. 123 of 2019 is listed today.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Crl. Appeal No. 123 of 2019"
+    }
+   ],
+   "note": "appeal, 'of' year"
+  },
+  {
+   "id": "CS-02",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "CRLA No. 45/2020 is listed today.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "CRLA No. 45/2020"
+    }
+   ],
+   "note": "abbreviation + slash year"
+  },
+  {
+   "id": "CS-03",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Sessions Case No. 12/2021 is listed today.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Sessions Case No. 12/2021"
+    }
+   ],
+   "note": "sessions case"
+  },
+  {
+   "id": "CS-04",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "G.R. Case No. 456/2019 is listed today.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "G.R. Case No. 456/2019"
+    }
+   ],
+   "note": "Odisha GR case"
+  },
+  {
+   "id": "CS-05",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "P.S. Case No. 78 dated 12.03.2019 is referred to.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "P.S. Case No. 78"
+    },
+    {
+     "category": "date",
+     "text": "12.03.2019"
+    }
+   ],
+   "note": "police-station case + date"
+  },
+  {
+   "id": "CS-06",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "FIR No. 123/2019 was registered at the police station.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "FIR No. 123/2019"
+    }
+   ],
+   "note": "FIR"
+  },
+  {
+   "id": "CS-07",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Cr. No. 45/2018 was registered under the Act.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Cr. No. 45/2018"
+    }
+   ],
+   "note": "Cr. No."
+  },
+  {
+   "id": "CS-08",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "C.C. No. 234 of 2017 is pending in this Court.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "C.C. No. 234 of 2017"
+    }
+   ],
+   "note": "C.C."
+  },
+  {
+   "id": "CS-09",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "W.P.(C) No. 1234 of 2020 was filed by the petitioner.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "W.P.(C) No. 1234 of 2020"
+    }
+   ],
+   "note": "writ petition"
+  },
+  {
+   "id": "CS-10",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "BLAPL No. 4567 of 2022 is listed for hearing.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "BLAPL No. 4567 of 2022"
+    }
+   ],
+   "note": "Orissa HC bail application"
+  },
+  {
+   "id": "CS-11",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Bail Application No. 98/2021 was rejected.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Bail Application No. 98/2021"
+    }
+   ],
+   "note": "bail application"
+  },
+  {
+   "id": "CS-12",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Misc. Case No. 45 of 2020 arises out of the same.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Misc. Case No. 45 of 2020"
+    }
+   ],
+   "note": "misc case"
+  },
+  {
+   "id": "CS-13",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Criminal Revision No. 12 of 2018 was dismissed.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Criminal Revision No. 12 of 2018"
+    }
+   ],
+   "note": "revision"
+  },
+  {
+   "id": "CS-14",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "S.T. Case No. 5/2019 is pending trial.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "S.T. Case No. 5/2019"
+    }
+   ],
+   "note": "sessions trial"
+  },
+  {
+   "id": "CS-15",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "T.R. No. 34 of 2016 was decided long ago.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "T.R. No. 34 of 2016"
+    }
+   ],
+   "note": "trial register"
+  },
+  {
+   "id": "CS-16",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The CNR No. OROR010012342019 was quoted on the file.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "OROR010012342019"
+    }
+   ],
+   "note": "16-character CNR"
+  },
+  {
+   "id": "CS-17",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Case No. 123 was called out by the bench clerk.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Case No. 123"
+    }
+   ],
+   "note": "bare case no."
+  },
+  {
+   "id": "CS-18",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "ICC Case No. 4 of 2021 is pending.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "ICC Case No. 4 of 2021"
+    }
+   ],
+   "note": "ICC case"
+  },
+  {
+   "id": "CS-19",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Crl. M.C. No. 789 of 2020 was disposed of.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Crl. M.C. No. 789 of 2020"
+    }
+   ],
+   "note": "misc criminal"
+  },
+  {
+   "id": "CS-20",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Special (Vigilance) Case No. 3/2018 is pending.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Special (Vigilance) Case No. 3/2018"
+    }
+   ],
+   "note": "vigilance"
+  },
+  {
+   "id": "CS-21",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Title Suit No. 45 of 2015 was decreed.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Title Suit No. 45 of 2015"
+    }
+   ],
+   "note": "civil suit"
+  },
+  {
+   "id": "CS-22",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Civil Appeal No. 100 of 2019 was allowed.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Civil Appeal No. 100 of 2019"
+    }
+   ],
+   "note": "civil appeal"
+  },
+  {
+   "id": "CS-23",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "RSA No. 12/2020 was admitted.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "RSA No. 12/2020"
+    }
+   ],
+   "note": "second appeal"
+  },
+  {
+   "id": "CS-24",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Criminal Appeal Number one two three of twenty nineteen is listed.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Criminal Appeal Number one two three of twenty nineteen"
+    }
+   ],
+   "note": "spoken form"
+  },
+  {
+   "id": "CS-25",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Crl. Appeal No.123/2019 is listed today.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Crl. Appeal No.123/2019"
+    }
+   ],
+   "note": "no space after 'No.'"
+  },
+  {
+   "id": "CS-26",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Sessions Trial No. 12 of 2021 is listed today.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Sessions Trial No. 12 of 2021"
+    }
+   ],
+   "note": "sessions trial"
+  },
+  {
+   "id": "CS-27",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Police Station Case Number 78 of 2019 was referred to.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Police Station Case Number 78 of 2019"
+    }
+   ],
+   "note": "spelled 'Number'"
+  },
+  {
+   "id": "CS-28",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "GR Case No. 456 of 2019 is listed today.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "GR Case No. 456 of 2019"
+    }
+   ],
+   "note": "GR without dots"
+  },
+  {
+   "id": "CS-29",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Vigilance Case No 5/2018 is pending.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Vigilance Case No 5/2018"
+    }
+   ],
+   "note": "'No' without a dot"
+  },
+  {
+   "id": "CS-30",
+   "category": "case",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The matter arises out of Crl. Appeal No. 123 of 2019 and CRLA No. 45/2020.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Crl. Appeal No. 123 of 2019"
+    },
+    {
+     "category": "case",
+     "text": "CRLA No. 45/2020"
+    }
+   ],
+   "note": "two case numbers"
+  },
+  {
+   "id": "CS-N01",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The number of witnesses examined is five in total.",
+   "expressions": [],
+   "note": "'number of' phrase"
+  },
+  {
+   "id": "CS-N02",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Room No. 12 was locked when the police arrived.",
+   "expressions": [],
+   "note": "'No.' + digits, not a case"
+  },
+  {
+   "id": "CS-N03",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The mobile No. 9437012345 was used to call the informant.",
+   "expressions": [],
+   "note": "phone number (an identifier, but not a case number)"
+  },
+  {
+   "id": "CS-N04",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The accused was arrested by the police of No. 3 Beat.",
+   "expressions": [],
+   "note": "'No. 3' beat"
+  },
+  {
+   "id": "CS-N05",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The case number was not mentioned in the application.",
+   "expressions": [],
+   "note": "'case number' without digits"
+  },
+  {
+   "id": "CS-N06",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The learned Judge dealt with the case in detail.",
+   "expressions": [],
+   "note": "'case' word"
+  },
+  {
+   "id": "CS-N07",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Accused No. 1 and Accused No. 2 were present.",
+   "expressions": [],
+   "note": "'Accused No. N' designation"
+  },
+  {
+   "id": "CS-N08",
+   "category": "case",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Ground No. 3 of the appeal was argued.",
+   "expressions": [],
+   "note": "'Ground No.'"
+  },
+  {
+   "id": "EX-01",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The letter was marked Ext. P-1 in evidence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. P-1"
+    }
+   ],
+   "note": "'Ext. P-n'"
+  },
+  {
+   "id": "EX-02",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The letter was marked Ext.P/1 in evidence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext.P/1"
+    }
+   ],
+   "note": "slash form"
+  },
+  {
+   "id": "EX-03",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The letter was marked Exhibit P1 in evidence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exhibit P1"
+    }
+   ],
+   "note": "'Exhibit P1'"
+  },
+  {
+   "id": "EX-04",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The receipt was marked Ext. D-4 by the defence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. D-4"
+    }
+   ],
+   "note": "defence exhibit"
+  },
+  {
+   "id": "EX-05",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The document was marked Ext. A by consent.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. A"
+    }
+   ],
+   "note": "letter-only exhibit"
+  },
+  {
+   "id": "EX-06",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The report was proved as Ex.P.3 by the doctor.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ex.P.3"
+    }
+   ],
+   "note": "'Ex.P.n'"
+  },
+  {
+   "id": "EX-07",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The knife was identified as M.O.I by the witness.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "M.O.I"
+    }
+   ],
+   "note": "material object, roman"
+  },
+  {
+   "id": "EX-08",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The knife was identified as MO-II by the witness.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "MO-II"
+    }
+   ],
+   "note": "material object hyphenated roman"
+  },
+  {
+   "id": "EX-09",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The weapon was described as Material Object No. 2 in the seizure list.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Material Object No. 2"
+    }
+   ],
+   "note": "spelled-out material object"
+  },
+  {
+   "id": "EX-10",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The photograph was marked Exhibit-1/a in the trial.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exhibit-1/a"
+    }
+   ],
+   "note": "sub-exhibit"
+  },
+  {
+   "id": "EX-11",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The sketch map was marked Ext.1 in the trial.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext.1"
+    }
+   ],
+   "note": "bare numeric"
+  },
+  {
+   "id": "EX-12",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The endorsement is Ext. P-1/a on the file.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. P-1/a"
+    }
+   ],
+   "note": "sub-mark"
+  },
+  {
+   "id": "EX-13",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The seizure list is Exhibit No. 5 on the record.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exhibit No. 5"
+    }
+   ],
+   "note": "'Exhibit No. n'"
+  },
+  {
+   "id": "EX-14",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The signature is marked Ext. X for identification.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. X"
+    }
+   ],
+   "note": "identification mark"
+  },
+  {
+   "id": "EX-15",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The bond was marked Mark A for identification.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Mark A"
+    }
+   ],
+   "note": "'Mark A'"
+  },
+  {
+   "id": "EX-16",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The statement was marked Ext.C-2 by the court.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext.C-2"
+    }
+   ],
+   "note": "court exhibit"
+  },
+  {
+   "id": "EX-17",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Exhibits P-1 to P-5 were proved through the witness.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exhibits P-1 to P-5"
+    }
+   ],
+   "note": "range"
+  },
+  {
+   "id": "EX-18",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The signature on Ext. P-3 was admitted by him.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. P-3"
+    }
+   ],
+   "note": "embedded"
+  },
+  {
+   "id": "EX-19",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The documents Ext. P-1 and Ext. P-2 were proved.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. P-1"
+    },
+    {
+     "category": "exhibit",
+     "text": "Ext. P-2"
+    }
+   ],
+   "note": "two exhibits"
+  },
+  {
+   "id": "EX-20",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The letter was marked Exhibit P one in evidence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exhibit P one"
+    }
+   ],
+   "note": "REAL-style spoken: number word"
+  },
+  {
+   "id": "EX-21",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The letter was marked Exhibit P Two in evidence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exhibit P Two"
+    }
+   ],
+   "note": "spoken capitalized number word"
+  },
+  {
+   "id": "EX-N01",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The exhibit was produced before the learned Judge.",
+   "expressions": [],
+   "note": "'exhibit' as a common noun"
+  },
+  {
+   "id": "EX-N02",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The ex-serviceman deposed about the incident.",
+   "expressions": [],
+   "note": "'ex-' prefix"
+  },
+  {
+   "id": "EX-N03",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The former Chief Minister, Ex. Chief Minister of the State, was present.",
+   "expressions": [],
+   "note": "'Ex.' as 'former'"
+  },
+  {
+   "id": "EX-N04",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The order was passed ex parte against the respondent.",
+   "expressions": [],
+   "note": "'ex parte'"
+  },
+  {
+   "id": "EX-N05",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "An extension of time was granted to the petitioner.",
+   "expressions": [],
+   "note": "'ext' inside a word"
+  },
+  {
+   "id": "EX-N06",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Mo. Salim was present in court along with his counsel.",
+   "expressions": [],
+   "note": "'Mo.' as Mohammad abbreviation (name!)"
+  },
+  {
+   "id": "EX-N07",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The extract of the map was produced by the surveyor.",
+   "expressions": [],
+   "note": "'ext' prefix"
+  },
+  {
+   "id": "EX-N08",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Several exhibits were seized from the house.",
+   "expressions": [],
+   "note": "'exhibits' plural noun"
+  },
+  {
+   "id": "NM-01",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The complainant, Ram Chandra Das, deposed before the Court.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Chandra Das"
+    }
+   ],
+   "note": "full name after role"
+  },
+  {
+   "id": "NM-02",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The Court examined Shri Ram Das as a witness.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Shri Ram Das"
+    }
+   ],
+   "note": "honorific Shri"
+  },
+  {
+   "id": "NM-03",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The Court examined Smt. Sita Devi as a witness.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Smt. Sita Devi"
+    }
+   ],
+   "note": "honorific Smt."
+  },
+  {
+   "id": "NM-04",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused is the son of Late Gopal Behera of the village.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Late Gopal Behera"
+    }
+   ],
+   "note": "'son of Late ...'"
+  },
+  {
+   "id": "NM-05",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The witness is W/o Sarat Kumar Sahu of the village.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Sarat Kumar Sahu"
+    }
+   ],
+   "note": "W/o anchor"
+  },
+  {
+   "id": "NM-06",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused Pramod Kumar Nayak denied the charge.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Pramod Kumar Nayak"
+    }
+   ],
+   "note": "role + name"
+  },
+  {
+   "id": "NM-07",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The doctor, Dr. A. K. Mohanty, proved the report.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Dr. A. K. Mohanty"
+    }
+   ],
+   "note": "initials"
+  },
+  {
+   "id": "NM-08",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The informant Md. Rafique lodged the report.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Md. Rafique"
+    }
+   ],
+   "note": "Md. abbreviation"
+  },
+  {
+   "id": "NM-09",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The witness Sk. Salim identified the accused.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Sk. Salim"
+    }
+   ],
+   "note": "Sk. abbreviation"
+  },
+  {
+   "id": "NM-10",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The victim Kumari Priya Singh was examined.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Kumari Priya Singh"
+    }
+   ],
+   "note": "Kumari"
+  },
+  {
+   "id": "NM-11",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The priest Sri Jagannath Patra gave evidence.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Sri Jagannath Patra"
+    }
+   ],
+   "note": "Sri"
+  },
+  {
+   "id": "NM-12",
+   "category": "name",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The accused ram das denied the allegation in court.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "ram das"
+    }
+   ],
+   "note": "lowercase (ASR often lowercases names)"
+  },
+  {
+   "id": "NM-13",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused Ram Das alias Rama was arrested.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "name",
+     "text": "Rama"
+    }
+   ],
+   "note": "alias"
+  },
+  {
+   "id": "NM-14",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The appellant Sarat-Chandra Rout filed the appeal.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Sarat-Chandra Rout"
+    }
+   ],
+   "note": "hyphenated given name"
+  },
+  {
+   "id": "NM-15",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The witness S. K. Das supported the case.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "S. K. Das"
+    }
+   ],
+   "note": "spaced initials"
+  },
+  {
+   "id": "NM-16",
+   "category": "name",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The witness SK Das supported the case.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "SK Das"
+    }
+   ],
+   "note": "unspaced initials"
+  },
+  {
+   "id": "NM-17",
+   "category": "name",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "Hon'ble Justice S. Panda delivered the judgment.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "S. Panda"
+    }
+   ],
+   "note": "judge name"
+  },
+  {
+   "id": "NM-18",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The complainant was represented by Advocate Mr. B. Mishra.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Mr. B. Mishra"
+    }
+   ],
+   "note": "advocate"
+  },
+  {
+   "id": "NM-19",
+   "category": "name",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The informant Ravi stated that he saw the accused.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ravi"
+    }
+   ],
+   "note": "single-token name"
+  },
+  {
+   "id": "NM-20",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "PW-1 Ram Das proved the document in his evidence.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "legalRef",
+     "text": "PW-1"
+    }
+   ],
+   "note": "name after a canonical witness ref"
+  },
+  {
+   "id": "NM-21",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Mahesh Chandra Sahoo, aged about 45 years, S/o Late Bhagirathi Sahoo, resident of village Kanpur, deposed.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Mahesh Chandra Sahoo"
+    },
+    {
+     "category": "name",
+     "text": "Bhagirathi Sahoo"
+    },
+    {
+     "category": "quantity",
+     "text": "45 years"
+    }
+   ],
+   "note": "multi-fact sentence"
+  },
+  {
+   "id": "NM-22",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The petitioner Mohd. Ismail filed the writ petition.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Mohd. Ismail"
+    }
+   ],
+   "note": "Mohd."
+  },
+  {
+   "id": "NM-23",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The victim's mother Kamala Devi was examined.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Kamala Devi"
+    }
+   ],
+   "note": "relation + name"
+  },
+  {
+   "id": "NM-24",
+   "category": "name",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The accused Guru Prasad Mishra was acquitted.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Guru Prasad Mishra"
+    }
+   ],
+   "note": "name containing common word 'Guru'"
+  },
+  {
+   "id": "NM-25",
+   "category": "name",
+   "kind": "boundary",
+   "tier": "development",
+   "text": "The witness Rose Mary was declared hostile.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Rose Mary"
+    }
+   ],
+   "note": "name containing common word 'Rose'"
+  },
+  {
+   "id": "NM-N01",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The Court held that the appeal was liable to be dismissed.",
+   "expressions": [],
+   "note": "capitalized 'Court'"
+  },
+  {
+   "id": "NM-N02",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The State of Odisha is the respondent in this case.",
+   "expressions": [],
+   "note": "party that is not a person"
+  },
+  {
+   "id": "NM-N03",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The Central Bureau of Investigation filed the charge-sheet.",
+   "expressions": [],
+   "note": "organization"
+  },
+  {
+   "id": "NM-N04",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The Indian Penal Code was invoked by the prosecution.",
+   "expressions": [],
+   "note": "statute name"
+  },
+  {
+   "id": "NM-N05",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The High Court of Orissa granted the interim relief.",
+   "expressions": [],
+   "note": "court name"
+  },
+  {
+   "id": "NM-N06",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The learned Sessions Judge at Cuttack passed the order.",
+   "expressions": [],
+   "note": "office + place"
+  },
+  {
+   "id": "NM-N07",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The occurrence took place in village Kanpur near Kendrapara.",
+   "expressions": [],
+   "note": "place names"
+  },
+  {
+   "id": "NM-N08",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Therefore the appeal is allowed and the order is set aside.",
+   "expressions": [],
+   "note": "sentence-initial capital"
+  },
+  {
+   "id": "NM-N09",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The Investigating Officer and the Learned Public Prosecutor were present.",
+   "expressions": [],
+   "note": "capitalized offices"
+  },
+  {
+   "id": "NM-N10",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The Shri Jagannath Temple at Puri is a public trust.",
+   "expressions": [],
+   "note": "'Shri' before a deity/temple, not a person"
+  },
+  {
+   "id": "NM-N11",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The accused was produced on Sunday before the Magistrate.",
+   "expressions": [],
+   "note": "weekday"
+  },
+  {
+   "id": "NM-N12",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Accused No. 1 was identified in the dock by the witness.",
+   "expressions": [],
+   "note": "designation 'Accused No. N'"
+  },
+  {
+   "id": "NM-N13",
+   "category": "name",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The matter was heard by the Honourable Judge of the District Court.",
+   "expressions": [],
+   "note": "title case honorifics"
+  },
+  {
+   "id": "NM-26",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Ram Das stated that he saw the accused near the shop.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    }
+   ],
+   "note": "UNANCHORED, sentence-initial"
+  },
+  {
+   "id": "NM-27",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "According to Bimal Kumar Jena the incident occurred at night.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Bimal Kumar Jena"
+    }
+   ],
+   "note": "UNANCHORED, after 'according to'"
+  },
+  {
+   "id": "NM-28",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The statement of Anita Mohapatra was recorded by the police.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Anita Mohapatra"
+    }
+   ],
+   "note": "UNANCHORED, after 'statement of'"
+  },
+  {
+   "id": "NM-29",
+   "category": "name",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Both Ram Das and Shyam Sundar Pradhan were present at the spot.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "name",
+     "text": "Shyam Sundar Pradhan"
+    }
+   ],
+   "note": "UNANCHORED, coordinated names"
+  },
+  {
+   "id": "CL-01",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused is charged under Section 302 IPC by the police.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Section 302 IPC"
+    }
+   ],
+   "note": "canonical statutory ref, ASR-emitted"
+  },
+  {
+   "id": "CL-02",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused is charged under Sections 294, 323 and 506 IPC by the police.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Sections 294, 323 and 506 IPC"
+    }
+   ],
+   "note": "canonical plural ref"
+  },
+  {
+   "id": "CL-03",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused is charged under Section 376A IPC by the police.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Section 376A IPC"
+    }
+   ],
+   "note": "suffix letter"
+  },
+  {
+   "id": "CL-04",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The charge is under Section 101 BNS as amended.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Section 101 BNS"
+    }
+   ],
+   "note": "current code"
+  },
+  {
+   "id": "CL-05",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "development",
+   "text": "PW-1 further stated that he saw the accused.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "PW-1"
+    }
+   ],
+   "note": "canonical witness ref"
+  },
+  {
+   "id": "CL-06",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "development",
+   "text": "DW-2 denied the suggestion put to him.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "DW-2"
+    }
+   ],
+   "note": "canonical defence witness"
+  },
+  {
+   "id": "CL-07",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused is charged under Section 302 read with Section 34 IPC by the police.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Section 302 read with Section 34 IPC"
+    }
+   ],
+   "note": "read-with"
+  },
+  {
+   "id": "MX-01",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "P W one Ram Das proved Ext. P-1 dated 12.07.2026 under section three zero two I P C.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "exhibit",
+     "text": "Ext. P-1"
+    },
+    {
+     "category": "date",
+     "text": "12.07.2026"
+    }
+   ],
+   "note": "witness ref (resolved) + name + exhibit + date + statutory (resolved)"
+  },
+  {
+   "id": "MX-02",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Ext. P-3 was proved by P W two in his evidence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. P-3"
+    }
+   ],
+   "note": "exhibit adjacent to a resolved witness ref"
+  },
+  {
+   "id": "MX-03",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused is charged under section three zero two of the Indian Penal Code, 1860 by the police.",
+   "expressions": [
+    {
+     "category": "year",
+     "text": "1860"
+    }
+   ],
+   "note": "statutory normalization followed by a residual ', 1860' year"
+  },
+  {
+   "id": "MX-04",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Under section three hundred twenty three I P C the fine is Rs. 5,000 for the accused.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 5,000"
+    }
+   ],
+   "note": "declined statutory span adjacent to an amount"
+  },
+  {
+   "id": "MX-05",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Crl. Appeal No. 123 of 2019 was filed under section three seven four Cr P C by the appellant.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Crl. Appeal No. 123 of 2019"
+    }
+   ],
+   "note": "case number + statutory normalization"
+  },
+  {
+   "id": "MX-06",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "P.S. Case No. 78 dated 12.03.2019 was registered under section three zero two I P C.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "P.S. Case No. 78"
+    },
+    {
+     "category": "date",
+     "text": "12.03.2019"
+    }
+   ],
+   "note": "case number + date + resolved statutory"
+  },
+  {
+   "id": "MX-07",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Defence witness number two Sk. Salim denied the charge on 12th July 2026.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Sk. Salim"
+    },
+    {
+     "category": "date",
+     "text": "12th July 2026"
+    }
+   ],
+   "note": "resolved witness ref + name + date"
+  },
+  {
+   "id": "MX-08",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The accused Ram Das was sentenced to seven years and fined Rs. 5,000 under section three zero two I P C.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "quantity",
+     "text": "seven years"
+    },
+    {
+     "category": "amount",
+     "text": "Rs. 5,000"
+    }
+   ],
+   "note": "name + term + fine + resolved statutory"
+  },
+  {
+   "id": "MX-09",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "On 12.07.2026 the accused was charged under section three zero two I P C by the police.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12.07.2026"
+    }
+   ],
+   "note": "date before a resolved statutory span"
+  },
+  {
+   "id": "MX-10",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "P W one Ram Das deposed on 12th July 2026 and marked Ext. P-1 in evidence.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "date",
+     "text": "12th July 2026"
+    },
+    {
+     "category": "exhibit",
+     "text": "Ext. P-1"
+    }
+   ],
+   "note": "resolved witness + name + date + exhibit"
+  },
+  {
+   "id": "MX-11",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "The fine of Rs. 5,000 was imposed under sections two nine four and three two three I P C.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 5,000"
+    }
+   ],
+   "note": "amount before a resolved plural statutory span"
+  },
+  {
+   "id": "MX-12",
+   "category": "mixed",
+   "kind": "positive",
+   "tier": "development",
+   "text": "Ext. P-2 relates to section three zero two read with I P C and stands proved.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. P-2"
+    }
+   ],
+   "note": "exhibit + declined statutory span"
+  },
+  {
+   "id": "GN-01",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The matter is adjourned and the accused shall remain present on the next date.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-02",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The learned counsel for the appellant argued that the finding of the trial court is perverse.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-03",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The witness stated that he had seen the accused running away from the spot.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-04",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "Heard both sides and perused the records of the case in detail.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-05",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The prosecution has failed to prove the charge beyond reasonable doubt.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-06",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The application is allowed and the impugned order is set aside.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-07",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "In view of the above discussion the appeal is dismissed.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-08",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The accused was produced before the learned Magistrate for remand.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-09",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The doctor opined that the injury was simple in nature.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "GN-10",
+   "category": "negative",
+   "kind": "negative",
+   "tier": "development",
+   "text": "The seizure witnesses turned hostile during the trial.",
+   "expressions": [],
+   "note": "generic negative text with no protected expression"
+  },
+  {
+   "id": "HO-D01",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The document was executed on 12th of July, 2026 at Cuttack.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12th of July, 2026"
+    }
+   ],
+   "note": "'of' between ordinal and month"
+  },
+  {
+   "id": "HO-D02",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The deed is dated 12-Jul-2026 as per the registry.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12-Jul-2026"
+    }
+   ],
+   "note": "abbreviated month with hyphens"
+  },
+  {
+   "id": "HO-D03",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The notice is dated 12 Jul 2026 on its face.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12 Jul 2026"
+    }
+   ],
+   "note": "abbreviated month"
+  },
+  {
+   "id": "HO-D04",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The hearing is fixed to July 12th 2026 for orders.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "July 12th 2026"
+    }
+   ],
+   "note": "month-ordinal without comma"
+  },
+  {
+   "id": "HO-D05",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The occurrence was on the twelfth day of July two thousand twenty six as alleged.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "twelfth day of July two thousand twenty six"
+    }
+   ],
+   "note": "spoken 'day of' form"
+  },
+  {
+   "id": "HO-D06",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The order was passed on 12.07.2026.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12.07.2026"
+    }
+   ],
+   "note": "date at sentence end (trailing period)"
+  },
+  {
+   "id": "HO-D07",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The FIR is dt. 12/7/2026 as per the record.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12/7/2026"
+    }
+   ],
+   "note": "unpadded slashed"
+  },
+  {
+   "id": "HO-D08",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The report is dated 12th July,2026 on its face.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12th July,2026"
+    }
+   ],
+   "note": "no space after comma"
+  },
+  {
+   "id": "HO-D09",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "He was born on 01/04/1985 as per the school certificate.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "01/04/1985"
+    }
+   ],
+   "note": "date of birth"
+  },
+  {
+   "id": "HO-D10",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The sanction was granted on Twelfth of July, Two Thousand and Twenty Six.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "Twelfth of July, Two Thousand and Twenty Six"
+    }
+   ],
+   "note": "capitalized spoken with 'and'"
+  },
+  {
+   "id": "HO-D11",
+   "category": "date",
+   "kind": "boundary",
+   "tier": "heldout",
+   "text": "The bail was granted on 12th July 26.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "12th July 26"
+    }
+   ],
+   "note": "month + two-digit year"
+  },
+  {
+   "id": "HO-D12",
+   "category": "date",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The complaint was filed on the 5th of March 2024.",
+   "expressions": [
+    {
+     "category": "date",
+     "text": "5th of March 2024"
+    }
+   ],
+   "note": "'of' form"
+  },
+  {
+   "id": "HO-D13",
+   "category": "date",
+   "kind": "negative",
+   "tier": "heldout",
+   "text": "Order 39 Rule 1 and 2 of the Code was invoked by the plaintiff.",
+   "expressions": [],
+   "note": "rule numbers"
+  },
+  {
+   "id": "HO-D14",
+   "category": "date",
+   "kind": "negative",
+   "tier": "heldout",
+   "text": "The vehicle bearing registration number OD 02 AB 1234 was seized.",
+   "expressions": [],
+   "note": "vehicle registration (an identifier, outside the listed categories)"
+  },
+  {
+   "id": "HO-A01",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "He deposited Rs.15,000 in the account.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs.15,000"
+    }
+   ],
+   "note": "no space"
+  },
+  {
+   "id": "HO-A02",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The cheque was for Rs 25000 only.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs 25000"
+    }
+   ],
+   "note": "'Rs' without a dot"
+  },
+  {
+   "id": "HO-A03",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The loan of ₹ 12,50,000/- was sanctioned.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "₹ 12,50,000/-"
+    }
+   ],
+   "note": "rupee sign, Indian grouping, '/-'"
+  },
+  {
+   "id": "HO-A04",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "He demanded five lakh rupees as a bribe.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "five lakh rupees"
+    }
+   ],
+   "note": "words + lakh + rupees"
+  },
+  {
+   "id": "HO-A05",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The fine is Rupees Ten Thousand only.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rupees Ten Thousand only"
+    }
+   ],
+   "note": "capitalized words"
+  },
+  {
+   "id": "HO-A06",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The amount of Rs.75,000/- (Rupees Seventy Five Thousand only) was recovered.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs.75,000/-"
+    },
+    {
+     "category": "amount",
+     "text": "Rupees Seventy Five Thousand only"
+    }
+   ],
+   "note": "figure + words in parentheses"
+  },
+  {
+   "id": "HO-A07",
+   "category": "amount",
+   "kind": "boundary",
+   "tier": "heldout",
+   "text": "The seized cash was 3.5 lakhs in total.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "3.5 lakhs"
+    }
+   ],
+   "note": "no currency marker at all"
+  },
+  {
+   "id": "HO-A08",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Rs. 1,25,000.00 was credited to the account.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 1,25,000.00"
+    }
+   ],
+   "note": "Indian grouping with .00"
+  },
+  {
+   "id": "HO-A09",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "He paid ten thousand rupees to the middleman.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "ten thousand rupees"
+    }
+   ],
+   "note": "words then 'rupees'"
+  },
+  {
+   "id": "HO-A10",
+   "category": "amount",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The fine of Rs. 2,000/- each was imposed on the accused.",
+   "expressions": [
+    {
+     "category": "amount",
+     "text": "Rs. 2,000/-"
+    }
+   ],
+   "note": "per-person fine"
+  },
+  {
+   "id": "HO-Q01",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "He is sentenced to undergo simple imprisonment for one year.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "one year"
+    }
+   ],
+   "note": "sentence term, singular"
+  },
+  {
+   "id": "HO-Q02",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The accused was a minor aged 17 years and 6 months.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "17 years and 6 months"
+    }
+   ],
+   "note": "age in years and months"
+  },
+  {
+   "id": "HO-Q03",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The recovery of 1.2 kilograms of ganja was made.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "1.2 kilograms"
+    }
+   ],
+   "note": "'kilograms' spelled out"
+  },
+  {
+   "id": "HO-Q04",
+   "category": "quantity",
+   "kind": "boundary",
+   "tier": "heldout",
+   "text": "The distance was about 100 yards from the shop.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "100 yards"
+    }
+   ],
+   "note": "yards"
+  },
+  {
+   "id": "HO-Q05",
+   "category": "quantity",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "He remained absent for 15 days without leave.",
+   "expressions": [
+    {
+     "category": "quantity",
+     "text": "15 days"
+    }
+   ],
+   "note": "days"
+  },
+  {
+   "id": "HO-C01",
+   "category": "case",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Criminal Appeal No.12 of 2020 has been filed.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Criminal Appeal No.12 of 2020"
+    }
+   ],
+   "note": "no space after 'No.'"
+  },
+  {
+   "id": "HO-C02",
+   "category": "case",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "CRLMC No. 3456 of 2021 was filed for quashing.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "CRLMC No. 3456 of 2021"
+    }
+   ],
+   "note": "CRLMC (Orissa HC quashing)"
+  },
+  {
+   "id": "HO-C03",
+   "category": "case",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "In G.R. Case No.789/2018 the charge sheet was filed.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "G.R. Case No.789/2018"
+    }
+   ],
+   "note": "no space after 'No.'"
+  },
+  {
+   "id": "HO-C05",
+   "category": "case",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The matter is Crl. Rev. No. 23/2022 before this Court.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Crl. Rev. No. 23/2022"
+    }
+   ],
+   "note": "Crl. Rev."
+  },
+  {
+   "id": "HO-C06",
+   "category": "case",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "ICC No. 5/2020 is pending before the committee.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "ICC No. 5/2020"
+    }
+   ],
+   "note": "ICC without 'Case'"
+  },
+  {
+   "id": "HO-C07",
+   "category": "case",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Reference is made to Cr. Case No. 34 of 2015 in the order.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "Cr. Case No. 34 of 2015"
+    }
+   ],
+   "note": "'Cr. Case No.'"
+  },
+  {
+   "id": "HO-C08",
+   "category": "case",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The suit being O.S. No. 12 of 2018 was decreed.",
+   "expressions": [
+    {
+     "category": "case",
+     "text": "O.S. No. 12 of 2018"
+    }
+   ],
+   "note": "original suit"
+  },
+  {
+   "id": "HO-E01",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The seizure list is marked as Ext.P-7 in the trial.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext.P-7"
+    }
+   ],
+   "note": "no space"
+  },
+  {
+   "id": "HO-E02",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The photographs are Exts. P-4 to P-6 in the trial.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exts. P-4 to P-6"
+    }
+   ],
+   "note": "plural 'Exts.' range"
+  },
+  {
+   "id": "HO-E03",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The chemical examination report is Ext. 12 in the trial.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. 12"
+    }
+   ],
+   "note": "bare numeric"
+  },
+  {
+   "id": "HO-E04",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The M.O.III was the blood stained shirt of the deceased.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "M.O.III"
+    }
+   ],
+   "note": "roman III"
+  },
+  {
+   "id": "HO-E05",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Ext.P/2 series were the bills produced by the shopkeeper.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext.P/2"
+    }
+   ],
+   "note": "slash designator"
+  },
+  {
+   "id": "HO-E06",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Exhibit Q was tendered by the defence in evidence.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Exhibit Q"
+    }
+   ],
+   "note": "letter-only 'Q'"
+  },
+  {
+   "id": "HO-E07",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The FSL report, marked Ext. P-9, was proved through the expert.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext. P-9"
+    }
+   ],
+   "note": "parenthetical marking"
+  },
+  {
+   "id": "HO-E08",
+   "category": "exhibit",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Ext-P1 was the sale deed executed by the vendor.",
+   "expressions": [
+    {
+     "category": "exhibit",
+     "text": "Ext-P1"
+    }
+   ],
+   "note": "hyphen after Ext"
+  },
+  {
+   "id": "HO-E09",
+   "category": "exhibit",
+   "kind": "negative",
+   "tier": "heldout",
+   "text": "The examinee extended his hand towards the constable.",
+   "expressions": [],
+   "note": "'extended'"
+  },
+  {
+   "id": "HO-E10",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Ex-MLA Sri Ram Charan was present in the court hall.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Sri Ram Charan"
+    }
+   ],
+   "note": "'Ex-' prefix + honorific name"
+  },
+  {
+   "id": "HO-N01",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Ram Das stated that he saw the accused near the shop.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    }
+   ],
+   "note": "unanchored sentence-initial"
+  },
+  {
+   "id": "HO-N02",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "According to Bimal Kumar Jena the incident occurred at night.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Bimal Kumar Jena"
+    }
+   ],
+   "note": "unanchored"
+  },
+  {
+   "id": "HO-N03",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The statement of Anita Mohapatra was recorded under section one sixty four Cr P C.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Anita Mohapatra"
+    }
+   ],
+   "note": "unanchored + normalization"
+  },
+  {
+   "id": "HO-N04",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Both Ram Das and Shyam Sundar Pradhan were present at the spot.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "name",
+     "text": "Shyam Sundar Pradhan"
+    }
+   ],
+   "note": "coordinated unanchored"
+  },
+  {
+   "id": "HO-N05",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The case was investigated by S.I. Prakash Chandra Dash of the police station.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Prakash Chandra Dash"
+    }
+   ],
+   "note": "rank abbreviation title"
+  },
+  {
+   "id": "HO-N06",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "Learned counsel Mr. R. K. Nayak appeared for the appellant.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Mr. R. K. Nayak"
+    }
+   ],
+   "note": "honorific + initials"
+  },
+  {
+   "id": "HO-N07",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The deceased was one Sunita Behera aged about 30 years.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Sunita Behera"
+    },
+    {
+     "category": "quantity",
+     "text": "30 years"
+    }
+   ],
+   "note": "'one' + name + age"
+  },
+  {
+   "id": "HO-N08",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The informant Chandan Kumar Sethi is a resident of Bhubaneswar.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Chandan Kumar Sethi"
+    }
+   ],
+   "note": "role-anchored"
+  },
+  {
+   "id": "HO-N09",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The accused, Bhagaban Mallick, was arrested by the police.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Bhagaban Mallick"
+    }
+   ],
+   "note": "comma-wrapped role-anchored"
+  },
+  {
+   "id": "HO-N10",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The accused Ram Das @ Rama was arrested by the police.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Ram Das"
+    },
+    {
+     "category": "name",
+     "text": "Rama"
+    }
+   ],
+   "note": "'@' alias"
+  },
+  {
+   "id": "HO-N11",
+   "category": "name",
+   "kind": "negative",
+   "tier": "heldout",
+   "text": "The Orissa High Court dismissed the writ petition on merits.",
+   "expressions": [],
+   "note": "court name"
+  },
+  {
+   "id": "HO-N12",
+   "category": "name",
+   "kind": "negative",
+   "tier": "heldout",
+   "text": "The Kendrapara Police Station registered the case on the report.",
+   "expressions": [],
+   "note": "place + station"
+  },
+  {
+   "id": "HO-N13",
+   "category": "name",
+   "kind": "negative",
+   "tier": "heldout",
+   "text": "The Hon'ble Supreme Court laid down the law in that regard.",
+   "expressions": [],
+   "note": "court"
+  },
+  {
+   "id": "HO-N14",
+   "category": "name",
+   "kind": "negative",
+   "tier": "heldout",
+   "text": "Shri Jagannath Temple Administration is a party to the suit.",
+   "expressions": [],
+   "note": "'Shri' + deity/temple (looks like a person)"
+  },
+  {
+   "id": "HO-N15",
+   "category": "name",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The case was registered on the report of Bishnu Charan Sahu at the station.",
+   "expressions": [
+    {
+     "category": "name",
+     "text": "Bishnu Charan Sahu"
+    }
+   ],
+   "note": "unanchored after 'report of'"
+  },
+  {
+   "id": "HO-L01",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The charge is under Section 302/34 IPC as alleged.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Section 302/34 IPC"
+    }
+   ],
+   "note": "slash-joined provisions"
+  },
+  {
+   "id": "HO-L02",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The charge is under Section 20(b)(ii)(C) NDPS Act as alleged.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Section 20(b)(ii)(C) NDPS Act"
+    }
+   ],
+   "note": "nested sub-clauses"
+  },
+  {
+   "id": "HO-L03",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The accused was examined under Section 313 CrPC in the trial.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "Section 313 CrPC"
+    }
+   ],
+   "note": "CrPC"
+  },
+  {
+   "id": "HO-L04",
+   "category": "legalRef",
+   "kind": "positive",
+   "tier": "heldout",
+   "text": "The witness PW-12 was declared hostile by the prosecution.",
+   "expressions": [
+    {
+     "category": "legalRef",
+     "text": "PW-12"
+    }
+   ],
+   "note": "two-digit witness number"
+  }
+ ]
+}

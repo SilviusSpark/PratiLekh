@@ -62,6 +62,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.9 — protected-span derivation: **investigation only; derivation NOT implemented** — coordinate model proven, lossless derivation blocked by a provenance gap (no typed pass identity; lookup provenance unlocatable); characterization tests + findings doc | ✅ committed | see `git log` ("Record normalization provenance coordinate findings") |
 | Intelligence V1.10 — normalization provenance foundation: typed `NormalizationPassID` on every record, `(pass, step)` coordinate spaces, per-occurrence located lookup provenance, `NormalizationReplay` exact `R→L→S→N` reconstruction; normalization output preserved exactly (differentially tested); no protected-span derivation | ✅ committed | see `git log` ("Add reconstructable normalization provenance") |
 | Intelligence V1.11 — protected-span derivation (`Intelligence/Provenance/ProtectedSpanDerivation`): applied→`.deterministicallyResolved`, declined→`.deterministicallyUnresolved`, projected into `normalized` coordinates from replay-verified provenance; typed failures (invalid provenance / unprojectable / verification); not wired | ✅ committed | see `git log` ("Derive Intelligence protected spans from provenance") |
+| Intelligence V1.12 — independent-protection investigation: 299-entry labeled corpus (dev + held-out), experimental candidate signals, real-Authority hazard measurement; **no production recognizer built**; recommends a category-agnostic numeric-token gate (V1.13), rejects capitalization-based name protection | ✅ committed | see `git log` ("Record independent protection findings") |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -781,7 +782,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.11 (test-infra repair through protected-span derivation)
+## Intelligence V1.3A–V1.12 (test-infra repair through independent-protection investigation)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -913,6 +914,20 @@ unmodified Authority) resolved regions are rejected and declined regions review-
 at the derivation level only; still open: wiring/fail-closed policy, `.independentlyProtected` spans (dates, amounts, case numbers,
 exhibits, names — no recognizers), edit application/review handling, and live-model evaluation. **The warning stands: do not wire
 Intelligence into dictation until those are resolved.**
+
+**V1.12** investigated what `.independentlyProtected` should protect (`Evaluation/Intelligence/V1_12_INDEPENDENT_PROTECTION_FINDINGS.md`;
+corpus `Evaluation/References/independent-protection/corpus.json`; experimental detectors + harness under
+`Evaluation/Intelligence/Experimental/`; on-demand `scripts/test_independent_protection_investigation.sh`, which pins every quoted
+number). **Investigation only — no production recognizer.** Findings: the classifier lets Intelligence autonomously apply
+value-changing surface edits (`Rs. 5,000`→`Rs. 5.000`, `12.07.2026`→`12072026`, `Ram Das`→`RamDas`; 52–53% of single-character
+edits inside protected-category expressions are structural); category recognizers **do not generalize** (dev→held-out exact:
+dates 36/36→7/12, case numbers 33/33→4/7, names →5/14) while a **category-agnostic numeric-token gate blocked 0 of 2,924
+digit-structural hazards across both tiers** (recognizers let 108 escape); capitalization-based name protection is rejected
+(409/451 false positives, all negatives flagged), anchored name recognition deferred; already-canonical statutory/witness text
+gets no derived span (1/12 covered); spelled dates are the dominant real-ASR form and remain unprotected. Proposed V1.13: a
+narrow numeric-token gate with measurable criteria against a fresh held-out corpus. Also flagged for the architect (not
+implemented): the classifier's punctuation-/whitespace-only predicates permit digit-adjacent edits and word merge/split.
+**The do-not-wire warning stands.**
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1216,12 +1231,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.11" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.12" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.11" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.12" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,
