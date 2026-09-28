@@ -61,6 +61,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.8 — deterministic composition boundary (`Composition/IntelligenceEditComposition`: response + immutable source + caller protected spans → V1.7 adapter/parser → V1.6 bridge → unmodified Safety Authority → structured result; applies nothing, returns no text; no model, no dictation wiring) | ✅ committed | see `git log` ("Add Intelligence composition boundary") |
 | Intelligence V1.9 — protected-span derivation: **investigation only; derivation NOT implemented** — coordinate model proven, lossless derivation blocked by a provenance gap (no typed pass identity; lookup provenance unlocatable); characterization tests + findings doc | ✅ committed | see `git log` ("Record normalization provenance coordinate findings") |
 | Intelligence V1.10 — normalization provenance foundation: typed `NormalizationPassID` on every record, `(pass, step)` coordinate spaces, per-occurrence located lookup provenance, `NormalizationReplay` exact `R→L→S→N` reconstruction; normalization output preserved exactly (differentially tested); no protected-span derivation | ✅ committed | see `git log` ("Add reconstructable normalization provenance") |
+| Intelligence V1.11 — protected-span derivation (`Intelligence/Provenance/ProtectedSpanDerivation`): applied→`.deterministicallyResolved`, declined→`.deterministicallyUnresolved`, projected into `normalized` coordinates from replay-verified provenance; typed failures (invalid provenance / unprojectable / verification); not wired | ✅ committed | see `git log` ("Derive Intelligence protected spans from provenance") |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -96,6 +97,8 @@ its own design/legal-domain review pass before implementation, not opportunistic
 xcodebuild test -project PratiLekh.xcodeproj -scheme PratiLekh -destination 'platform=macOS'
 ./scripts/format-and-lint.sh # swiftformat + swiftlint --strict (auto-installs via brew if missing)
 ./scripts/test_legal_language.sh  # standalone Legal Language Architecture test suite (see below)
+./scripts/test_intelligence_safety.sh   # standalone Intelligence chain suite (Safety/Transport/Generation/Addressing/Composition)
+./scripts/test_protected_span_derivation.sh  # protected-span derivation (needs both LegalLanguage + Intelligence sources)
 ```
 
 - **Gotcha:** `scripts/format-and-lint.sh` runs SwiftFormat in *write* mode and rewrites large
@@ -778,7 +781,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.10 (test-infra repair through normalization provenance foundation)
+## Intelligence V1.3A–V1.11 (test-infra repair through protected-span derivation)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -898,6 +901,18 @@ unchanged (600-case differential test against the pre-V1.10 lookup algorithm; 1,
 spans are **still not derived** (V1.11): the coordinate problem is closed, what remains is policy (e.g. a span endpoint
 inside a later replaced span → fail closed). **The warning stands: do not wire Intelligence into dictation until
 protected-span derivation exists.**
+
+**V1.11** then derived the protected spans (`Evaluation/Intelligence/V1_11_PROTECTED_SPAN_DERIVATION.md`):
+`ProtectedSpanDerivation.derive(from: NormalizationOutcome)` replays the V1.10 provenance (`NormalizationReplay`) and projects
+every record's range forward through later steps' replacements into `normalized` UTF-16 coordinates — applied →
+`.deterministicallyResolved`, declined → `.deterministicallyUnresolved` — verifying each span against the final text. A boundary
+strictly inside a later replacement is **unprojectable** (typed failure listing every such span; never an invented coordinate,
+never a silently omitted protection); tampered provenance is `invalidProvenance`. End-to-end (outcome → spans → V1.8 composition →
+unmodified Authority) resolved regions are rejected and declined regions review-only; text outside is still accepted. Runner:
+`scripts/test_protected_span_derivation.sh`. **Not wired into dictation.** The deterministic-normalization protection gap is closed
+at the derivation level only; still open: wiring/fail-closed policy, `.independentlyProtected` spans (dates, amounts, case numbers,
+exhibits, names — no recognizers), edit application/review handling, and live-model evaluation. **The warning stands: do not wire
+Intelligence into dictation until those are resolved.**
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1201,12 +1216,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.10" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.11" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.10" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.11" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,
