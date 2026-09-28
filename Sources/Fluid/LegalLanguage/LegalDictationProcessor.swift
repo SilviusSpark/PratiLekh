@@ -24,8 +24,8 @@ final class LegalDictationProcessor {
     }
 
     /// Returns the normalized text together with the applied/declined
-    /// provenance. Each change's `range` indexes the input of the normalizer
-    /// pass that produced it (see `AppliedNormalizationChange.range`).
+    /// provenance. Each change's `range` indexes the input of the pass/step
+    /// that produced it (see the coordinate contract in `LegalNormalizer.swift`).
     func process(_ text: String) -> NormalizationOutcome {
         coordinator.normalize(text)
     }
@@ -44,7 +44,10 @@ extension NormalizationOutcome {
     /// is never protected.
     func protectsLeadingCapitalization(of text: String) -> Bool {
         let leadingWhitespace = normalized.prefix { $0.isWhitespace }.utf16.count
-        guard let leading = appliedChanges.last(where: { $0.range?.location == leadingWhitespace }) else {
+        // Structured Phase 3 rules only: lookup-table replacements (which had
+        // no range before V1.10 and so never matched here) are deliberately
+        // still excluded, preserving this presentation rule's behavior exactly.
+        guard let leading = appliedChanges.last(where: { $0.pass != .lookupTable && $0.range.location == leadingWhitespace }) else {
             return false
         }
         return text.drop { $0.isWhitespace }.hasPrefix(leading.replacement)

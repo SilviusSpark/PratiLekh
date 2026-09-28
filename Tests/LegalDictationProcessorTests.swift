@@ -136,8 +136,8 @@ enum LegalDictationProcessorTests {
         precondition(out.appliedChanges.count == 2)
         // The statutory pass runs first, so its span indexes `input`.
         let statutory = out.appliedChanges.first { $0.sourcePackID == "phase3.statutoryProvision" }
-        precondition(statutory?.range.map { (input as NSString).substring(with: $0) } == "section three zero two of the I P C")
-        precondition(out.appliedChanges.allSatisfy { $0.range != nil })
+        precondition(statutory.map { (input as NSString).substring(with: $0.range) } == "section three zero two of the I P C")
+        precondition(out.appliedChanges.allSatisfy { $0.range.length > 0 })
     }
 
     private static func testMissingPackStillSafe() {

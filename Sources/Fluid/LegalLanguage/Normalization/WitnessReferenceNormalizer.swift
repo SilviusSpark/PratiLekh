@@ -16,6 +16,8 @@ import Foundation
 /// ("PW one, or was it PW two") declines the whole reference -- a hedge
 /// elsewhere in the sentence does not.
 struct WitnessReferenceNormalizer: LegalNormalizer {
+    var passID: NormalizationPassID { .witnessReference }
+
     private static let hedgeConnectors: Set<String> = ["or", "maybe"]
     private static let confirmatoryContinuations: Set<String> = ["possibly", "was", "it"]
 
@@ -48,6 +50,7 @@ struct WitnessReferenceNormalizer: LegalNormalizer {
                             trigger: (text as NSString).substring(with: full),
                             candidates: [],
                             reason: "\(DeclineReason.unresolvedUncertainty.rawValue): witness reference expressed with uncertainty",
+                            pass: .witnessReference,
                             range: full
                         )
                     )
@@ -63,6 +66,7 @@ struct WitnessReferenceNormalizer: LegalNormalizer {
                         trigger: (text as NSString).substring(with: fullRange),
                         replacement: replacement,
                         sourcePackID: "phase3.witnessReference",
+                        pass: .witnessReference,
                         range: fullRange
                     )
                 )

@@ -174,8 +174,8 @@ enum EvalRunner {
                 source: $0.trigger,
                 replacement: $0.replacement,
                 rule: $0.sourcePackID,
-                rangeLocation: $0.range?.location,
-                rangeLength: $0.range?.length
+                rangeLocation: $0.range.location,
+                rangeLength: $0.range.length
             )
         }
         provenance += outcome.declinedChanges.map {
@@ -184,8 +184,8 @@ enum EvalRunner {
                 source: $0.trigger,
                 replacement: nil,
                 rule: $0.reason,
-                rangeLocation: $0.range?.location,
-                rangeLength: $0.range?.length
+                rangeLocation: $0.range.location,
+                rangeLength: $0.range.length
             )
         }
         let stages = [

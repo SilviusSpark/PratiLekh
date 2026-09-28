@@ -1,12 +1,19 @@
 import Foundation
 
-/// The provenance Phase 1 actually needs: the untouched recognizer input, the
-/// text after normalization, and what happened along the way. No separate
-/// staged-text wrapper or reserved future-stage cases -- those are added when
-/// AI and final-output provenance actually exist (Phase 7 and beyond).
+/// The provenance normalization records: the untouched recognizer input, the
+/// text after normalization, the passes that ran (in order), and what happened
+/// along the way. Intermediate texts are deliberately not stored: `recognized`
+/// plus the records and `passes` reconstruct every one of them exactly (see the
+/// coordinate contract in `LegalNormalizer.swift` and `NormalizationReplay`).
+///
+/// `appliedChanges`/`declinedChanges` list records pass by pass in `passes`
+/// order. Each record carries its own typed `pass`, `step` and `range`, so the
+/// flat lists lose no information.
 struct NormalizationOutcome: Equatable {
     let recognized: String
     let normalized: String
+    /// The normalizers that ran, in order (including any that changed nothing).
+    let passes: [NormalizationPassID]
     let appliedChanges: [AppliedNormalizationChange]
     let declinedChanges: [DeclinedNormalization]
 
@@ -27,10 +34,15 @@ enum LegalNormalizationPipeline {
         normalizers: [LegalNormalizer] = [LookupTableNormalizer()]
     ) -> NormalizationOutcome {
         var currentText = recognizedText
+        var passes: [NormalizationPassID] = []
         var applied: [AppliedNormalizationChange] = []
         var declined: [DeclinedNormalization] = []
 
         for normalizer in normalizers {
+            // Pass identity must be unambiguous: a pipeline configuration
+            // error (two normalizers sharing an id), not a runtime condition.
+            precondition(!passes.contains(normalizer.passID), "duplicate normalization pass id \(normalizer.passID)")
+            passes.append(normalizer.passID)
             let result = normalizer.normalize(currentText, using: context)
             currentText = result.text
             applied.append(contentsOf: result.appliedChanges)
@@ -40,6 +52,7 @@ enum LegalNormalizationPipeline {
         return NormalizationOutcome(
             recognized: recognizedText,
             normalized: currentText,
+            passes: passes,
             appliedChanges: applied,
             declinedChanges: declined
         )

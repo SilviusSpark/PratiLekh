@@ -1,5 +1,11 @@
 # Intelligence V1.9 — Protected-Span Derivation: Coordinate Findings and Provenance Gap
 
+> **Update (V1.10):** gaps G1–G3 below were closed by
+> `V1_10_NORMALIZATION_PROVENANCE_FOUNDATION.md` (typed pass identity, located
+> lookup provenance, replay-based reconstruction). This document remains the
+> record of the state at V1.9; its statements about "today's" provenance are
+> historical.
+
 ## 1. Outcome
 
 Phase 1 (prove coordinate semantics first) was carried out against the real

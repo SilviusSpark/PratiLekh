@@ -19,6 +19,7 @@ Sources/Fluid/LegalLanguage/Normalization/NormalizationContext.swift
 Sources/Fluid/LegalLanguage/Normalization/LegalNormalizer.swift
 Sources/Fluid/LegalLanguage/Normalization/LookupTableNormalizer.swift
 Sources/Fluid/LegalLanguage/Normalization/NormalizationOutcome.swift
+Sources/Fluid/LegalLanguage/Normalization/NormalizationReplay.swift
 Sources/Fluid/LegalLanguage/Normalization/WordTokenizer.swift
 Sources/Fluid/LegalLanguage/Normalization/SpokenNumberParser.swift
 Sources/Fluid/LegalLanguage/Normalization/StatuteRecognizer.swift
@@ -41,6 +42,7 @@ for task_test_file in \
     Tests/WitnessReferenceNormalizerTests.swift \
     Tests/LegalDictationProcessorTests.swift \
     Tests/NormalizationProvenanceCoordinateTests.swift \
+    Tests/NormalizationProvenanceFoundationTests.swift \
 ; do
     task_binary_name=$(basename "$task_test_file" .swift)
     # shellcheck disable=SC2086

@@ -65,8 +65,9 @@ enum LookupTableNormalizerTests {
         ])
         let result = LookupTableNormalizer().normalize("sec. 302, distt. court", using: NormalizationContext(resolvedTable: table, resolvedRecognitionVocabulary: nil))
         precondition(result.text == "Section 302, distt. court", "Safe match applied, conflicted match left untouched")
-        precondition(result.appliedChanges == [AppliedNormalizationChange(trigger: "sec.", replacement: "Section", sourcePackID: "fixture")])
+        precondition(result.appliedChanges == [AppliedNormalizationChange(trigger: "sec.", replacement: "Section", sourcePackID: "fixture", pass: .lookupTable, step: 0, range: NSRange(location: 0, length: 4))])
         precondition(result.declinedChanges.count == 1 && result.declinedChanges[0].trigger == "distt.")
+        precondition(result.declinedChanges[0].range == NSRange(location: 13, length: 6) && result.declinedChanges[0].step == 1, "declined occurrence is located in its step's input")
     }
 
     private static func testSameRankSameValueDeduplicationIsAppliedNotDeclined() {

@@ -31,6 +31,8 @@ import Foundation
 /// having been mentioned at all -- the two are semantically different, so
 /// the former always fully declines rather than falling back to shape 1.
 struct StatutoryProvisionNormalizer: LegalNormalizer {
+    var passID: NormalizationPassID { .statutoryProvision }
+
     private struct Candidate {
         let startToken: Int
         let endToken: Int // exclusive
@@ -533,11 +535,11 @@ struct StatutoryProvisionNormalizer: LegalNormalizer {
                 let replacement = StatutoryProvisionRenderer.renderDefault(reference)
                 resultText = resultText.replacingCharacters(in: candidate.range, with: replacement) as NSString
                 applied.append(
-                    AppliedNormalizationChange(trigger: original, replacement: replacement, sourcePackID: "phase3.statutoryProvision", range: candidate.range)
+                    AppliedNormalizationChange(trigger: original, replacement: replacement, sourcePackID: "phase3.statutoryProvision", pass: .statutoryProvision, range: candidate.range)
                 )
             case let .declined(reason, detail):
                 declined.append(
-                    DeclinedNormalization(trigger: original, candidates: [], reason: "\(reason.rawValue): \(detail)", range: candidate.range)
+                    DeclinedNormalization(trigger: original, candidates: [], reason: "\(reason.rawValue): \(detail)", pass: .statutoryProvision, range: candidate.range)
                 )
             }
         }

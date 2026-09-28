@@ -89,13 +89,13 @@ enum WitnessReferenceNormalizerTests {
         let applied = "as stated by P W one and defence witness number two today"
         let r1 = normalize(applied)
         precondition(r1.appliedChanges.count == 2)
-        let spans = r1.appliedChanges.compactMap { change in change.range.map { (applied as NSString).substring(with: $0) } }
+        let spans = r1.appliedChanges.map { (applied as NSString).substring(with: $0.range) }
         precondition(spans == ["P W one", "defence witness number two"] || spans == ["defence witness number two", "P W one"], "\(spans)")
 
         let declined = "P W one, or was it P W two"
         let r2 = normalize(declined)
         precondition(r2.declinedChanges.count == 1)
-        guard let range = r2.declinedChanges[0].range else { preconditionFailure("declined witness candidate must carry its span") }
+        let range = r2.declinedChanges[0].range
         precondition((declined as NSString).substring(with: range) == r2.declinedChanges[0].trigger)
         precondition(range.location == 0)
     }

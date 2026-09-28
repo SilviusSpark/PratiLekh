@@ -1,15 +1,14 @@
 import Foundation
 
-/// Characterization tests recording WHICH TEXT each normalization provenance
-/// range refers to today, as observed in the V1.9 investigation (see
-/// `Evaluation/Intelligence/V1_9_PROTECTED_SPAN_COORDINATE_FINDINGS.md`). They
-/// describe current behavior only -- they do not prescribe how provenance
-/// should change. If normalization provenance is changed for any reason, these
-/// assertions are expected to be revisited deliberately rather than silently
-/// invalidated.
+/// Coordinate-semantics tests for normalization provenance: WHICH TEXT each
+/// record's range refers to. Established by the V1.9 investigation and kept
+/// valid through V1.10, which made pass identity typed and lookup provenance
+/// locatable (see `NormalizationProvenanceFoundationTests` for those, and
+/// `Evaluation/Intelligence/V1_9_PROTECTED_SPAN_COORDINATE_FINDINGS.md` /
+/// `V1_10_NORMALIZATION_PROVENANCE_FOUNDATION.md`).
 ///
-/// Nothing here derives protected spans; it only asserts what the existing
-/// provenance does and does not record.
+/// Nothing here derives protected spans; it only asserts what the provenance
+/// records.
 @main
 enum NormalizationProvenanceCoordinateTests {
     static func main() {
@@ -22,9 +21,8 @@ enum NormalizationProvenanceCoordinateTests {
         self.testWitnessRangesIndexTheStatutoryOutputNotRecognizedNorFinalText(processor, pack: pack)
         self.testAppliedProvenanceReconstructsTheFinalTextWhenPassIsKnown(processor)
         self.testDeclinedRangesIndexTheirPassInputAndTextIsPreserved(processor)
-        self.testLookupProvenanceHasNoRangesAndShiftsLaterCoordinates(pack: pack)
-        self.testProvenanceRecordsCarryNoTypedPassIdentity()
-        print("PASS: normalization provenance coordinate model as currently observed (UTF-16, per-pass input coordinates, no typed pass identity)")
+        self.testLookupOccurrencesAreLocatedAndShiftLaterCoordinates(pack: pack)
+        print("PASS: normalization provenance coordinate model (UTF-16, per-step input coordinates, typed pass identity)")
     }
 
     // MARK: - Fixtures
@@ -45,13 +43,9 @@ enum NormalizationProvenanceCoordinateTests {
         return ns.substring(with: range)
     }
 
-    private static func range(_ change: AppliedNormalizationChange, file: StaticString = #file, line: UInt = #line) -> NSRange {
-        guard let range = change.range else { preconditionFailure("expected a range on \(change.sourcePackID)", file: file, line: line) }
-        return range
+    private static func range(_ change: AppliedNormalizationChange) -> NSRange {
+        change.range
     }
-
-    private static let statutory = "phase3.statutoryProvision"
-    private static let witness = "phase3.witnessReference"
 
     // MARK: - Tests
 
@@ -60,7 +54,7 @@ enum NormalizationProvenanceCoordinateTests {
         // location 5 = 2 + 2 + 1, not the 3 Swift Characters before it.
         let input = "\u{1F60A}\u{1F60A} section three zero two I P C"
         let outcome = processor.process(input)
-        guard let change = outcome.appliedChanges.first(where: { $0.sourcePackID == self.statutory }) else { preconditionFailure("expected a statutory change") }
+        guard let change = outcome.appliedChanges.first(where: { $0.pass == .statutoryProvision }) else { preconditionFailure("expected a statutory change") }
         precondition(self.range(change).location == 5, "ranges are UTF-16 offsets: \(self.range(change))")
         precondition(self.substring(input, self.range(change)) == change.trigger)
     }
@@ -77,7 +71,7 @@ enum NormalizationProvenanceCoordinateTests {
     private static func testAppliedChangesWithinAPassAreDescendingAndAllPreChange(_ processor: LegalDictationProcessor) {
         let input = "section two nine four and section three two three I P C then section three zero two B N S"
         let outcome = processor.process(input)
-        let statutory = outcome.appliedChanges.filter { $0.sourcePackID == self.statutory }
+        let statutory = outcome.appliedChanges.filter { $0.pass == .statutoryProvision }
         precondition(statutory.count == 3)
         precondition(statutory.map { self.range($0).location } == statutory.map { self.range($0).location }.sorted(by: >), "a pass reports changes from the end backward")
         for change in statutory {
@@ -88,7 +82,7 @@ enum NormalizationProvenanceCoordinateTests {
     private static func testWitnessRangesIndexTheStatutoryOutputNotRecognizedNorFinalText(_ processor: LegalDictationProcessor, pack: LanguagePack) {
         let input = "section two nine four and section three two three I P C then P W one then section three zero two B N S"
         let outcome = processor.process(input)
-        guard let witnessChange = outcome.appliedChanges.first(where: { $0.sourcePackID == self.witness }) else { preconditionFailure("expected a witness change") }
+        guard let witnessChange = outcome.appliedChanges.first(where: { $0.pass == .witnessReference }) else { preconditionFailure("expected a witness change") }
         let witnessRange = self.range(witnessChange)
 
         // The intermediate text after the statutory pass only -- never
@@ -111,11 +105,10 @@ enum NormalizationProvenanceCoordinateTests {
     }
 
     private static func testAppliedProvenanceReconstructsTheFinalTextWhenPassIsKnown(_ processor: LegalDictationProcessor) {
-        // If (and only if) each change's pass is known, applied provenance
-        // is sufficient to reproduce the final text exactly: statutory
+        // Applied provenance reproduces the final text exactly: statutory
         // changes replace spans of the recognized input; witness changes
-        // replace spans of that result. Pass identity here comes from the
-        // loosely-typed `sourcePackID` family string.
+        // replace spans of that result. (Pass identity is the typed `pass`;
+        // `NormalizationReplay` generalizes this and is tested separately.)
         let input = "section two nine four and section three two three I P C then P W one then section three zero two B N S and D W two"
         let outcome = processor.process(input)
         func apply(_ changes: [AppliedNormalizationChange], to text: String) -> String {
@@ -125,8 +118,8 @@ enum NormalizationProvenanceCoordinateTests {
             }
             return result as String
         }
-        let afterStatutory = apply(outcome.appliedChanges.filter { $0.sourcePackID == self.statutory }, to: input)
-        let final = apply(outcome.appliedChanges.filter { $0.sourcePackID == self.witness }, to: afterStatutory)
+        let afterStatutory = apply(outcome.appliedChanges.filter { $0.pass == .statutoryProvision }, to: input)
+        let final = apply(outcome.appliedChanges.filter { $0.pass == .witnessReference }, to: afterStatutory)
         precondition(final == outcome.normalized, "\(final) vs \(outcome.normalized)")
     }
 
@@ -136,7 +129,8 @@ enum NormalizationProvenanceCoordinateTests {
         // words have moved left.
         let input = "section three zero two I P C and section three zero two read with"
         let outcome = processor.process(input)
-        guard let declined = outcome.declinedChanges.first, let range = declined.range else { preconditionFailure("expected a declined change") }
+        guard let declined = outcome.declinedChanges.first else { preconditionFailure("expected a declined change") }
+        let range = declined.range
         precondition(self.substring(input, range) == declined.trigger)
         precondition(outcome.normalized.hasSuffix(declined.trigger), "declined text is preserved verbatim in the output")
         precondition(self.substring(outcome.normalized, range) != declined.trigger, "but its recorded range is not a final-text coordinate once an earlier change shortened the text")
@@ -144,14 +138,15 @@ enum NormalizationProvenanceCoordinateTests {
         // A witness decline's range indexes the statutory OUTPUT.
         let mixed = "section three zero two I P C then P W one or was it P W two"
         let mixedOutcome = processor.process(mixed)
-        guard let witnessDecline = mixedOutcome.declinedChanges.first, let witnessRange = witnessDecline.range else { preconditionFailure("expected a witness decline") }
+        guard let witnessDecline = mixedOutcome.declinedChanges.first else { preconditionFailure("expected a witness decline") }
+        let witnessRange = witnessDecline.range
         precondition(self.substring(mixed, witnessRange) != witnessDecline.trigger, "a witness decline range is NOT a recognized-text coordinate")
         precondition(self.substring(mixedOutcome.normalized, witnessRange) == witnessDecline.trigger, "here it happens to equal the final coordinate only because nothing after it changed length")
     }
 
-    private static func testLookupProvenanceHasNoRangesAndShiftsLaterCoordinates(pack: LanguagePack) {
+    private static func testLookupOccurrencesAreLocatedAndShiftLaterCoordinates(pack: LanguagePack) {
         // The bundled pack has no normalization entries, so lookup never
-        // fires in production today; a pack that does exposes the gap.
+        // fires in production today; a pack that does is used here.
         precondition(pack.normalizationEntries.isEmpty, "premise: the builtin pack ships 0 normalization entries")
         let withLookup = LanguagePack(
             id: pack.id,
@@ -163,21 +158,13 @@ enum NormalizationProvenanceCoordinateTests {
         )
         let input = "the distt. court and distt. jail section three zero two I P C"
         let outcome = LegalDictationProcessor(builtinPack: withLookup).process(input)
-        let lookup = outcome.appliedChanges.filter { $0.range == nil }
-        precondition(lookup.count == 1, "ONE record covers every occurrence of the trigger (two here)")
-        precondition(lookup[0].sourcePackID == pack.id && lookup[0].trigger == "distt.")
-        guard let statutory = outcome.appliedChanges.first(where: { $0.sourcePackID == self.statutory }) else { preconditionFailure("expected a statutory change") }
-        precondition(self.substring(input, self.range(statutory)) != statutory.trigger, "once lookup changes lengths, later ranges are NOT recognized-text coordinates")
-    }
-
-    /// Records the current shape of the two provenance types: neither carries
-    /// a typed identity of the normalizer pass that produced it (the applied
-    /// type has only the loosely-typed `sourcePackID`; the declined type has
-    /// no equivalent). A pure observation of stored properties.
-    private static func testProvenanceRecordsCarryNoTypedPassIdentity() {
-        let applied = Mirror(reflecting: AppliedNormalizationChange(trigger: "t", replacement: "r", sourcePackID: "p", range: nil)).children.compactMap(\.label)
-        let declined = Mirror(reflecting: DeclinedNormalization(trigger: "t", candidates: [], reason: "r", range: nil)).children.compactMap(\.label)
-        precondition(applied == ["trigger", "replacement", "sourcePackID", "range"], "\(applied)")
-        precondition(declined == ["trigger", "candidates", "reason", "range"], "\(declined)")
+        let lookup = outcome.appliedChanges.filter { $0.pass == .lookupTable }
+        precondition(lookup.count == 2, "one record per occurrence of the trigger")
+        precondition(lookup.map(\.range) == [NSRange(location: 4, length: 6), NSRange(location: 21, length: 6)])
+        for change in lookup {
+            precondition(self.substring(input, change.range) == change.trigger, "lookup ranges index the recognized input (its step's input)")
+        }
+        guard let statutory = outcome.appliedChanges.first(where: { $0.pass == .statutoryProvision }) else { preconditionFailure("expected a statutory change") }
+        precondition(self.substring(input, self.range(statutory)) != statutory.trigger, "once lookup changes lengths, later passes' ranges are NOT recognized-text coordinates")
     }
 }
