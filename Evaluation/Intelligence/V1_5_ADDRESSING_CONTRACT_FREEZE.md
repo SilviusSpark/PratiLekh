@@ -5,7 +5,10 @@
 > differs — overlapping literal matches count as candidates; context matching
 > zero candidates rejects (superseding rows 4/10/12/13 as written, and
 > V1.4C's A10); `detectOverlaps` not promoted — the V1.6 document governs the
-> production implementation.
+> production implementation. **V1.7** further supersedes the §16 pipeline
+> diagram: the V1.1 parser cannot parse the model-facing shape, so a separate
+> model-facing wire parser precedes the resolver (see
+> `V1_7_MODEL_FACING_WIRE_CONTRACT.md`).
 
 ## 1. Status and scope
 

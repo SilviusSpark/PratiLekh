@@ -57,6 +57,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.4/V1.4B/V1.4C — model-facing addressing contract search, selection (occurrence-primary, 1-based), and adversarial validation (20/20 deterministic, 40/40 live ordinal trials) | ✅ documented (experimental, `Evaluation/Intelligence/Experimental/`) | `1a6c7cb` (full: `1a6c7cba788fb82267cc62d12f2b594379a20812`) |
 | Intelligence V1.5 — addressing contract freeze (design/documentation only; zero production code) | ✅ committed | `1a6c7cb` (full: `1a6c7cba788fb82267cc62d12f2b594379a20812`) |
 | Intelligence V1.6 — production addressing resolver (`Sources/Fluid/Intelligence/Addressing/`: `ModelFacingEdit`, `IntelligenceAddressingResolver`, `IntelligenceAddressingBridge`; overlapping-literal + zero/one/multi-match context clarifications to V1.5; no wire schema/parser, no model, no dictation wiring, no insertion) | ✅ committed | see `git log` ("Add Intelligence production addressing resolver") |
+| Intelligence V1.7 — model-facing wire contract & strict parser (`Transport/ModelFacingEditTransportParser`, `Generation/ModelFacingGenerationContract`, `Generation/ModelFacingResponseAdapter`; raw args → parser → `[ModelFacingEdit]` → V1.6 bridge → Safety Authority; V1.2 contract retained; no model, no insertion, no dictation wiring) | ✅ committed | see `git log` ("Add Intelligence model-facing wire contract") |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -773,7 +774,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.6 (test-infra repair through production addressing resolver)
+## Intelligence V1.3A–V1.7 (test-infra repair through model-facing wire contract)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -841,6 +842,21 @@ Insertion, the model-facing wire schema/parser, `IntelligenceGenerationContract`
 UTF-16 offsets) and any model/dictation wiring remain **not built**. The V1.1 parser cannot parse the
 model-facing shape, so the V1.5 §16 diagram's "V1.1 parser before resolver" step is still missing a
 model-facing counterpart.
+
+**V1.7** then built the model-facing wire boundary (`Evaluation/Intelligence/V1_7_MODEL_FACING_WIRE_CONTRACT.md`):
+`ModelFacingEditTransportParser` (strict, all-or-nothing, duplicate/unknown-key rejection, no coercion,
+own size bounds, root key `edits`), `ModelFacingGenerationContract` (tool `propose_literal_transcript_edits`,
+schema mirroring the parser, instructions stating literal source / smallest span / 1-based occurrence /
+optional context / no offsets-ids-categories), and `ModelFacingResponseAdapter` (raw arguments → parser →
+V1.6 bridge; does not call the Safety Authority). **Decided ownership: the wire parser owns only lexical
+integer-ness of `occurrence`; `0`/negative/out-of-range parse and are judged by addressing**, preserving
+the frozen fallback rule and per-item isolation. This **supersedes the V1.5 §16 diagram** (the V1.1
+parser cannot parse the model-facing shape). The V1.2 internal contract/adapter and V1.1 parser are
+retained unmodified (still used by their tests and by `LLMClientRequestBodyTests`). No model is invoked and
+nothing is wired into dictation; insertion remains unbuilt. The model-facing schema is the **V1 Intelligence
+capability contract** (correction-oriented surface edits), distinct from the legacy internal/UTF-16
+contract, and explicitly not a permanent definition of all future Intelligence capabilities — no
+richer-intent abstraction is to be added speculatively.
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1144,12 +1160,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.6" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.7" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.6" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.7" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,

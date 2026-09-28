@@ -522,8 +522,11 @@ contract into a normative, model-independent design record:
 **The addressing contract is designed and frozen. V1.6 has since implemented its deterministic
 addressing layer in production (`Sources/Fluid/Intelligence/Addressing/`, see
 [`Evaluation/Intelligence/V1_6_PRODUCTION_ADDRESSING_RESOLVER.md`](Evaluation/Intelligence/V1_6_PRODUCTION_ADDRESSING_RESOLVER.md),
-which also records three clarifications to the freeze); it is not wired into dictation, and no model
-wire schema/parser, insertion or live model integration exists yet.** See `CLAUDE.md`'s "Intelligence V1.3A–V1.6" section
+which also records three clarifications to the freeze); V1.7 then added the model-facing wire
+contract, strict parser and response adapter
+([`Evaluation/Intelligence/V1_7_MODEL_FACING_WIRE_CONTRACT.md`](Evaluation/Intelligence/V1_7_MODEL_FACING_WIRE_CONTRACT.md),
+which supersedes the V1.5 §16 pipeline diagram). None of it is wired into dictation; insertion and live
+model integration do not exist yet.** See `CLAUDE.md`'s "Intelligence V1.3A–V1.7" section
 for the summary and open risks (Unicode fidelity, mutually-consistent-but-wrong addressing
 evidence, over-broad literal spans).
 

@@ -129,6 +129,8 @@ Safety Authority produces resulting text, from the resolved proposals.
 
 ## 6. Still open / out of scope
 
+_(Update: the wire schema and parser item below was built in V1.7 — see `V1_7_MODEL_FACING_WIRE_CONTRACT.md`.)_
+
 Insertion (`anchorText`/`atStart`/`atEnd`, V1.5 §8 — the experimental
 insertion path still uses the pre-V1.4C occurrence-then-context filter and is
 not promoted). The model-facing wire JSON/schema and its strict parser
