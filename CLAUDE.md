@@ -58,6 +58,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.5 — addressing contract freeze (design/documentation only; zero production code) | ✅ committed | `1a6c7cb` (full: `1a6c7cba788fb82267cc62d12f2b594379a20812`) |
 | Intelligence V1.6 — production addressing resolver (`Sources/Fluid/Intelligence/Addressing/`: `ModelFacingEdit`, `IntelligenceAddressingResolver`, `IntelligenceAddressingBridge`; overlapping-literal + zero/one/multi-match context clarifications to V1.5; no wire schema/parser, no model, no dictation wiring, no insertion) | ✅ committed | see `git log` ("Add Intelligence production addressing resolver") |
 | Intelligence V1.7 — model-facing wire contract & strict parser (`Transport/ModelFacingEditTransportParser`, `Generation/ModelFacingGenerationContract`, `Generation/ModelFacingResponseAdapter`; raw args → parser → `[ModelFacingEdit]` → V1.6 bridge → Safety Authority; V1.2 contract retained; no model, no insertion, no dictation wiring) | ✅ committed | see `git log` ("Add Intelligence model-facing wire contract") |
+| Intelligence V1.8 — deterministic composition boundary (`Composition/IntelligenceEditComposition`: response + immutable source + caller protected spans → V1.7 adapter/parser → V1.6 bridge → unmodified Safety Authority → structured result; applies nothing, returns no text; no model, no dictation wiring) | ✅ committed | see `git log` ("Add Intelligence composition boundary") |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -774,7 +775,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.7 (test-infra repair through model-facing wire contract)
+## Intelligence V1.3A–V1.8 (test-infra repair through deterministic composition boundary)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -857,6 +858,17 @@ nothing is wired into dictation; insertion remains unbuilt. The model-facing sch
 capability contract** (correction-oriented surface edits), distinct from the legacy internal/UTF-16
 contract, and explicitly not a permanent definition of all future Intelligence capabilities — no
 richer-intent abstraction is to be added speculatively.
+
+**V1.8** then added the single deterministic composition entry point
+(`Evaluation/Intelligence/V1_8_COMPOSITION_BOUNDARY.md`): `IntelligenceEditComposition.evaluate(response:source:protectedSpans:)`
+→ `Result<IntelligenceCompositionResult, ModelFacingAdapterFailure>`, reusing V1.7 parsing, V1.6 addressing and
+the unmodified Safety Authority with no policy of its own (parity-tested). Three domains stay distinct:
+transport/batch failure (`.failure`), per-edit addressing rejection, and Safety Authority disposition
+(`IntelligenceComposedEdit.stage`). The Authority runs **once over the whole resolved batch** (per-proposal
+invocation would defeat pairwise overlap detection). The result carries `schemaVersion` and per-edit outcomes in
+original order with stable `p<n>` ids, and **no resulting text — nothing is applied**. Model/provider/runtime
+independent; still not wired into dictation. The V1 model-facing schema remains a versioned V1 capability
+subset; no richer-intent abstraction was added.
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1160,12 +1172,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.7" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.8" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.7" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.8" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,

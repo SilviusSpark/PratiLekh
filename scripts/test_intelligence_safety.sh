@@ -23,6 +23,7 @@ Sources/Fluid/Intelligence/Addressing/IntelligenceAddressingBridge.swift
 Sources/Fluid/Intelligence/Transport/ModelFacingEditTransportParser.swift
 Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift
 Sources/Fluid/Intelligence/Generation/ModelFacingResponseAdapter.swift
+Sources/Fluid/Intelligence/Composition/IntelligenceEditComposition.swift
 "
 
 for task_test_file in \
@@ -36,6 +37,7 @@ for task_test_file in \
     Tests/ModelFacingEditTransportParserTests.swift \
     Tests/ModelFacingGenerationContractTests.swift \
     Tests/ModelFacingResponseAdapterTests.swift \
+    Tests/IntelligenceEditCompositionTests.swift \
 ; do
     task_binary_name=$(basename "$task_test_file" .swift)
     # shellcheck disable=SC2086

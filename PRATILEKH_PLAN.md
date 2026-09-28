@@ -525,8 +525,10 @@ addressing layer in production (`Sources/Fluid/Intelligence/Addressing/`, see
 which also records three clarifications to the freeze); V1.7 then added the model-facing wire
 contract, strict parser and response adapter
 ([`Evaluation/Intelligence/V1_7_MODEL_FACING_WIRE_CONTRACT.md`](Evaluation/Intelligence/V1_7_MODEL_FACING_WIRE_CONTRACT.md),
-which supersedes the V1.5 §16 pipeline diagram). None of it is wired into dictation; insertion and live
-model integration do not exist yet.** See `CLAUDE.md`'s "Intelligence V1.3A–V1.7" section
+which supersedes the V1.5 §16 pipeline diagram), and V1.8 composed the chain into one deterministic entry
+point that returns structured outcomes and applies nothing
+([`Evaluation/Intelligence/V1_8_COMPOSITION_BOUNDARY.md`](Evaluation/Intelligence/V1_8_COMPOSITION_BOUNDARY.md)).
+None of it is wired into dictation; insertion, edit application and live model integration do not exist yet.** See `CLAUDE.md`'s "Intelligence V1.3A–V1.8" section
 for the summary and open risks (Unicode fidelity, mutually-consistent-but-wrong addressing
 evidence, over-broad literal spans).
 
