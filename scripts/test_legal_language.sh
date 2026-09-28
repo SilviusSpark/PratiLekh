@@ -40,6 +40,7 @@ for task_test_file in \
     Tests/StatutoryProvisionNormalizerTests.swift \
     Tests/WitnessReferenceNormalizerTests.swift \
     Tests/LegalDictationProcessorTests.swift \
+    Tests/NormalizationProvenanceCoordinateTests.swift \
 ; do
     task_binary_name=$(basename "$task_test_file" .swift)
     # shellcheck disable=SC2086
@@ -66,6 +67,11 @@ fi
 if grep -rq 'LegalDictationProcessor' Sources/Fluid/Services; then
     echo "FAIL: LegalDictationProcessor must not be referenced from Services (ASR/streaming)"; exit 1
 fi
+# The text handed onward to AI (and therefore to any future Intelligence
+# stage) is exactly `NormalizationOutcome.normalized` -- no text change
+# between normalization and that hand-off. V1.9's coordinate model depends on it.
+task_normalized_handoffs=$(grep -c 'let legalNormalizedText = legalNormalization.normalized' Sources/Fluid/ContentView.swift)
+test "$task_normalized_handoffs" -eq 2 || { echo "FAIL: expected 2 'legalNormalizedText = legalNormalization.normalized' hand-offs, found $task_normalized_handoffs"; exit 1; }
 echo "PASS: live seam structure (legal normalization precedes AI; ASR layer untouched)"
 
 # Legal normalization vs. inherited first-letter formatters (GAAV, context-aware
