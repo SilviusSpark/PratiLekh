@@ -2,6 +2,8 @@
 
 ## 1. Status and scope
 
+> **Follow-up (V1.13):** the numeric-token mechanism recommended here was implemented and validated on a fresh, frozen corpus — see `V1_13_NUMERIC_STRUCTURAL_PROTECTION.md`. This document is the record of the investigation.
+
 Investigation and evaluation only. **No production recognizer was built**; nothing
 under `Sources/` changed, no `ProtectedSpan` of kind `.independentlyProtected` is
 produced by any production path, and no model was called. Everything below is

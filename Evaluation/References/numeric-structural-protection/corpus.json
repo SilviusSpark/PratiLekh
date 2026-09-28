@@ -1,0 +1,1955 @@
+{
+ "schemaVersion": 1,
+ "description": "V1.13 numeric-structural-protection validation corpus. FROZEN before any V1.13 production code existed; see README.md in this directory for the pre-registered rule, labeling guideline, hazard oracle and acceptance criteria. `expressions` are exact, unique substrings of `text` that are intended numeric spans.",
+ "entries": [
+  {
+   "id": "NS-001",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The witness was examined on 03-11-1998 in the forenoon.",
+   "expressions": [
+    "03-11-1998"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-002",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "Dated 12.07.26 at Bhubaneswar.",
+   "expressions": [
+    "12.07.26"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-003",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "Born on 3rd Nov., 1998 as per the matriculation certificate.",
+   "expressions": [
+    "3",
+    "1998"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-004",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "Vide notification dt. 31/12/99 the rule was amended.",
+   "expressions": [
+    "31/12/99"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-005",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The licence was valid from 01.01.2000 to 31.12.2000 only.",
+   "expressions": [
+    "01.01.2000",
+    "31.12.2000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-006",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The alarm rang at 10:45 in the night.",
+   "expressions": [
+    "10:45"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-007",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "He left the house at about 2:30 p.m. and returned at 6.15 p.m.",
+   "expressions": [
+    "2:30",
+    "6.15"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-008",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The raid was conducted between 10.30 and 11.15 hrs.",
+   "expressions": [
+    "10.30",
+    "11.15"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-009",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The order dated 12.07.2026 - 15.07.2026 was placed on record.",
+   "expressions": [
+    "12.07.2026 - 15.07.2026"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-010",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "Hearing on 5th, 6th and 7th August 2024.",
+   "expressions": [
+    "5",
+    "6",
+    "7",
+    "2024"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-011",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "In the year 1857 the rebellion began.",
+   "expressions": [
+    "1857"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-012",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The FIR was lodged on 2024-03-15 at 09:05:30 hours.",
+   "expressions": [
+    "2024-03-15",
+    "09:05:30"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-013",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The lease expires on 31.03.2031.",
+   "expressions": [
+    "31.03.2031"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-014",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The incident of 14/2/2017 was recorded on 15/2/2017.",
+   "expressions": [
+    "14/2/2017",
+    "15/2/2017"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-015",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "Agreement dated 1.4.2019 between the parties.",
+   "expressions": [
+    "1.4.2019"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-016",
+   "group": "dates-times",
+   "kind": "boundary",
+   "text": "The report is dated 30-09-2024, 11:20 AM.",
+   "expressions": [
+    "30-09-2024, 11:20"
+   ],
+   "note": "punctuation+space gap between two numerals merges"
+  },
+  {
+   "id": "NS-017",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The accused was in custody from 05.06.2019 till 18.06.2019.",
+   "expressions": [
+    "05.06.2019",
+    "18.06.2019"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-018",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "At 9.05 a.m. the court assembled.",
+   "expressions": [
+    "9.05"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-019",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The 15th August 1947 is remembered.",
+   "expressions": [
+    "15",
+    "1947"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-020",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The meeting is fixed for 18:30 hours on 22.11.2025.",
+   "expressions": [
+    "18:30",
+    "22.11.2025"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-021",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "Sunday, 07.09.2025, was a holiday.",
+   "expressions": [
+    "07.09.2025"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-022",
+   "group": "dates-times",
+   "kind": "boundary",
+   "text": "The notice was served on 12 .07 .2026 by post.",
+   "expressions": [
+    "12 .07 .2026"
+   ],
+   "note": "malformed spacing"
+  },
+  {
+   "id": "NS-023",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "His date of birth is 29/02/1988.",
+   "expressions": [
+    "29/02/1988"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-024",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "The deed was registered on 7-8-2015 (Regd. No. 1234/2015).",
+   "expressions": [
+    "7-8-2015",
+    "1234/2015"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-025",
+   "group": "dates-times",
+   "kind": "positive",
+   "text": "Timing: 10-12 noon and 3-5 pm.",
+   "expressions": [
+    "10-12",
+    "3-5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-026",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "He received Rs.2,50,000/- as advance.",
+   "expressions": [
+    "2,50,000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-027",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The bank statement showed ₹ 1,23,456.78 as balance.",
+   "expressions": [
+    "1,23,456.78"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-028",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "Payment of USD 12,500.50 was remitted.",
+   "expressions": [
+    "12,500.50"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-029",
+   "group": "amounts",
+   "kind": "boundary",
+   "text": "The scribe wrote Rs. 5 000 for thousand.",
+   "expressions": [
+    "5 000"
+   ],
+   "note": "space-grouped thousands"
+  },
+  {
+   "id": "NS-030",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The gratuity was Rs. 5,00,000 in total.",
+   "expressions": [
+    "5,00,000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-031",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The loan of Rs. 12,50,00,000 was sanctioned.",
+   "expressions": [
+    "12,50,00,000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-032",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "Interest at 12.5% per annum was payable.",
+   "expressions": [
+    "12.5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-033",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "Rs.1000/- (Rupees One Thousand only) was paid.",
+   "expressions": [
+    "1000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-034",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The old style Rs. 25000-00 was written.",
+   "expressions": [
+    "25000-00"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-035",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "He gave ₹5k as a tip.",
+   "expressions": [
+    "5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-036",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The fine was Rs. 500 or 2 months imprisonment.",
+   "expressions": [
+    "500",
+    "2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-037",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "Compensation of Rs 7,50,000 was awarded, i.e. 7.5 lakh.",
+   "expressions": [
+    "7,50,000",
+    "7.5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-038",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The cheque No. 004512 for Rs. 45,000/- bounced.",
+   "expressions": [
+    "004512",
+    "45,000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-039",
+   "group": "amounts",
+   "kind": "boundary",
+   "text": "He paid 1,000 + 500 as fees.",
+   "expressions": [
+    "1,000 + 500"
+   ],
+   "note": "operator gap merges"
+  },
+  {
+   "id": "NS-040",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "Price: 99.99 per unit.",
+   "expressions": [
+    "99.99"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-041",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The amount is ₹12,34,567.",
+   "expressions": [
+    "12,34,567"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-042",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "Fee of 250/- was charged.",
+   "expressions": [
+    "250"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-043",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "Total 45,000 (forty five thousand).",
+   "expressions": [
+    "45,000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-044",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "The deposit of 1 lakh 25 thousand was made.",
+   "expressions": [
+    "1",
+    "25"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-045",
+   "group": "amounts",
+   "kind": "positive",
+   "text": "It cost 3.50 rupees per kg.",
+   "expressions": [
+    "3.50"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-046",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "CRLMC No. 1234 of 2021 is listed at item 5.",
+   "expressions": [
+    "1234",
+    "2021",
+    "5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-047",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Ref. No. OD/CUT/2019/00123 dated 04.05.2019.",
+   "expressions": [
+    "2019/00123",
+    "04.05.2019"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-048",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Case No.CT-123/2020 is pending.",
+   "expressions": [
+    "123/2020"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-049",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "GR Case 456/19 is before the SDJM.",
+   "expressions": [
+    "456/19"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-050",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "The CNR OROR010012342019 was noted.",
+   "expressions": [
+    "010012342019"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-051",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Criminal Appeal No. 12 of 2020 (Old No. 34 of 2015).",
+   "expressions": [
+    "12",
+    "2020",
+    "34",
+    "2015"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-052",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Sessions Trial No. 7(a)/2021 was heard.",
+   "expressions": [
+    "7",
+    "2021"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-053",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "T.S. No. 45/2018 and T.S. No. 46/2018 were tried together.",
+   "expressions": [
+    "45/2018",
+    "46/2018"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-054",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "P.S. Case No. 78 dated 12.03.2019 u/s 302/34 IPC.",
+   "expressions": [
+    "78",
+    "12.03.2019",
+    "302/34"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-055",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Bail Application No. 98 of 2021, Misc. Case No. 45 of 2020.",
+   "expressions": [
+    "98",
+    "2021",
+    "45",
+    "2020"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-056",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "W.P.(C) No. 2345 of 2022 was allowed.",
+   "expressions": [
+    "2345",
+    "2022"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-057",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "RSA 12/2020, decided 3.5.2023.",
+   "expressions": [
+    "12/2020",
+    "3.5.2023"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-058",
+   "group": "case-reference",
+   "kind": "boundary",
+   "text": "Item Nos. 3, 4 and 5 are connected.",
+   "expressions": [
+    "3, 4",
+    "5"
+   ],
+   "note": "comma-space gap merges; 'and' breaks"
+  },
+  {
+   "id": "NS-059",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "See Paras 12 - 15 of the judgment.",
+   "expressions": [
+    "12 - 15"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-060",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Crl. Rev. No. 23/2022 (arising out of C.C. No. 234/2017).",
+   "expressions": [
+    "23/2022",
+    "234/2017"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-061",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "FIR No. 0123/2019, Cr. No. 45/2018.",
+   "expressions": [
+    "0123/2019",
+    "45/2018"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-062",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "The file number is 2019/OD/00234.",
+   "expressions": [
+    "2019",
+    "00234"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-063",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Docket 12-345-6789 was cited.",
+   "expressions": [
+    "12-345-6789"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-064",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Bench Appeal 4 of 2020 vs 5 of 2021.",
+   "expressions": [
+    "4",
+    "2020",
+    "5",
+    "2021"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-065",
+   "group": "case-reference",
+   "kind": "positive",
+   "text": "Under Article 226 of the Constitution.",
+   "expressions": [
+    "226"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-066",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "The charge is under Sections 302/34 IPC.",
+   "expressions": [
+    "302/34"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-067",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Convicted under Section 20(b)(ii)(C) NDPS Act.",
+   "expressions": [
+    "20"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-068",
+   "group": "statutory-witness-exhibit",
+   "kind": "boundary",
+   "text": "Offence under Section 3(1)(r) of the SC/ST Act.",
+   "expressions": [
+    "3(1"
+   ],
+   "note": "paren gap merges up to the next letter"
+  },
+  {
+   "id": "NS-069",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "PW-12 deposed that DW-3 was absent.",
+   "expressions": [
+    "12",
+    "3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-070",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "The document Ext.P-7/a was proved.",
+   "expressions": [
+    "7"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-071",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Exhibit 12-A is the sale deed.",
+   "expressions": [
+    "12"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-072",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Order 39 Rule 1 and 2 of the Code.",
+   "expressions": [
+    "39",
+    "1",
+    "2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-073",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Clause (4) of the agreement was invoked.",
+   "expressions": [
+    "4"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-074",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Section 376A and Section 354D were read.",
+   "expressions": [
+    "376",
+    "354"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-075",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "He is charged under Sections 294, 323 and 506 IPC.",
+   "expressions": [
+    "294, 323",
+    "506"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-076",
+   "group": "statutory-witness-exhibit",
+   "kind": "boundary",
+   "text": "PW-1 2 accused were named.",
+   "expressions": [
+    "1 2"
+   ],
+   "note": "witness number followed by a bare numeral"
+  },
+  {
+   "id": "NS-077",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Ext. P-1 to P-5 were marked.",
+   "expressions": [
+    "1",
+    "5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-078",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "M.O. 3 and M.O. 4 are the knives.",
+   "expressions": [
+    "3",
+    "4"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-079",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Articles 14, 19 and 21 are invoked.",
+   "expressions": [
+    "14, 19",
+    "21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-080",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "The witnesses PW-2 to PW-9 turned hostile.",
+   "expressions": [
+    "2",
+    "9"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-081",
+   "group": "statutory-witness-exhibit",
+   "kind": "boundary",
+   "text": "Rule 10(2) applies.",
+   "expressions": [
+    "10(2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-082",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "The exhibit is marked Exhibit 3.",
+   "expressions": [
+    "3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-083",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Section 313 CrPC examination was done on 12.07.2026.",
+   "expressions": [
+    "313",
+    "12.07.2026"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-084",
+   "group": "statutory-witness-exhibit",
+   "kind": "boundary",
+   "text": "Sec. 5(1)(a) and Sec. 7 were charged.",
+   "expressions": [
+    "5(1",
+    "7"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-085",
+   "group": "statutory-witness-exhibit",
+   "kind": "positive",
+   "text": "Table 2.1 lists the sections.",
+   "expressions": [
+    "2.1"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-086",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "Room No. 15 was locked.",
+   "expressions": [
+    "15"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-087",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "He took bus No. 3 to the court.",
+   "expressions": [
+    "3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-088",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "See page 12 of 40 in the file.",
+   "expressions": [
+    "12",
+    "40"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-089",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "Mobile 9437012345 was used.",
+   "expressions": [
+    "9437012345"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-090",
+   "group": "ordinary-numbers",
+   "kind": "boundary",
+   "text": "Aadhaar 1234 5678 9012 was produced.",
+   "expressions": [
+    "1234 5678 9012"
+   ],
+   "note": "identifier written in space-separated groups"
+  },
+  {
+   "id": "NS-091",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "The vehicle OD 02 AB 1234 was seized.",
+   "expressions": [
+    "02",
+    "1234"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-092",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "PIN 754001 is of Cuttack.",
+   "expressions": [
+    "754001"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-093",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "There were 3 accused and 12 witnesses.",
+   "expressions": [
+    "3",
+    "12"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-094",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "The temperature was 38.5 degrees.",
+   "expressions": [
+    "38.5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-095",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "Channel 5 broadcast it.",
+   "expressions": [
+    "5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-096",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "Flat 4B, Block 12, Sector 7.",
+   "expressions": [
+    "4",
+    "12",
+    "7"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-097",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "The 3rd accused is a 25 year old.",
+   "expressions": [
+    "3",
+    "25"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-098",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "Version 2.0.1 of the software was used.",
+   "expressions": [
+    "2.0.1"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-099",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "A crowd of 1,500 people gathered.",
+   "expressions": [
+    "1,500"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-100",
+   "group": "ordinary-numbers",
+   "kind": "positive",
+   "text": "The score was 3-2 in the final.",
+   "expressions": [
+    "3-2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-101",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "The figure 12 34 appears in the register.",
+   "expressions": [
+    "12 34"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-102",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Serial 1 2 3 was struck out.",
+   "expressions": [
+    "1 2 3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-103",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Sections 294 323 506 were read.",
+   "expressions": [
+    "294 323 506"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-104",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "The number 12  34 has two spaces.",
+   "expressions": [
+    "12  34"
+   ],
+   "note": "double space"
+  },
+  {
+   "id": "NS-105",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "The figure 12\t34 uses a tab.",
+   "expressions": [
+    "12\t34"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-106",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Values 12\n34 are on separate lines.",
+   "expressions": [
+    "12",
+    "34"
+   ],
+   "note": "a line break separates numerals"
+  },
+  {
+   "id": "NS-107",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "She paid Rs. 1 50 000 in cash.",
+   "expressions": [
+    "1 50 000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-108",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Cheque 0451 2233 4455 6677 was used.",
+   "expressions": [
+    "0451 2233 4455 6677"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-109",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "The ratio 3 : 4 was maintained.",
+   "expressions": [
+    "3 : 4"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-110",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Counts 10 000 and 20 000 were noted.",
+   "expressions": [
+    "10 000",
+    "20 000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-111",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Digits 7 8 9 and then 10 11.",
+   "expressions": [
+    "7 8 9",
+    "10 11"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-112",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "The gap 5 \u00a0 6 has a no-break space.",
+   "expressions": [
+    "5 \u00a0 6"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-113",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Tel 98765 43210 is on record.",
+   "expressions": [
+    "98765 43210"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-114",
+   "group": "whitespace-separated",
+   "kind": "positive",
+   "text": "Entry 45 and 46 are void.",
+   "expressions": [
+    "45",
+    "46"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-115",
+   "group": "whitespace-separated",
+   "kind": "boundary",
+   "text": "Form 16 17 was filed.",
+   "expressions": [
+    "16 17"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-116",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "See paragraph 12. 5 witnesses were examined.",
+   "expressions": [
+    "12. 5"
+   ],
+   "note": "sentence period between numerals"
+  },
+  {
+   "id": "NS-117",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "The date 12.07.2026. 5 witnesses were examined.",
+   "expressions": [
+    "12.07.2026. 5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-118",
+   "group": "punctuation-linked",
+   "kind": "positive",
+   "text": "Numbers 1.2.3 and 4.5.6 are versions.",
+   "expressions": [
+    "1.2.3",
+    "4.5.6"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-119",
+   "group": "punctuation-linked",
+   "kind": "positive",
+   "text": "Time 3:45:20 was recorded.",
+   "expressions": [
+    "3:45:20"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-120",
+   "group": "punctuation-linked",
+   "kind": "positive",
+   "text": "Range 15-20 was allowed.",
+   "expressions": [
+    "15-20"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-121",
+   "group": "punctuation-linked",
+   "kind": "positive",
+   "text": "Fraction 12/07 is a date.",
+   "expressions": [
+    "12/07"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-122",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "Malformed 5,,000 was typed.",
+   "expressions": [
+    "5,,000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-123",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "Dots ..5.. only.",
+   "expressions": [
+    "5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-124",
+   "group": "punctuation-linked",
+   "kind": "positive",
+   "text": "Item 1. was struck.",
+   "expressions": [
+    "1"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-125",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "Decimal .5 is odd.",
+   "expressions": [
+    "5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-126",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "Negative -5 units.",
+   "expressions": [
+    "5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-127",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "Call +91 98765 43210 for details.",
+   "expressions": [
+    "91 98765 43210"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-128",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "Steps (1) (2) (3) were followed.",
+   "expressions": [
+    "1) (2) (3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-129",
+   "group": "punctuation-linked",
+   "kind": "boundary",
+   "text": "Pages 10-12, 15-17 are relevant.",
+   "expressions": [
+    "10-12, 15-17"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-130",
+   "group": "punctuation-linked",
+   "kind": "positive",
+   "text": "Clause 4.2(b)(i) and 5.1 apply.",
+   "expressions": [
+    "4.2",
+    "5.1"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-131",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ତାରିଖ ୧୨.୦୭.୨୦୨୬",
+   "expressions": [
+    "୧୨.୦୭.୨୦୨୬"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-132",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ମାମଲା ନଂ ୧୨୩/୨୦୧୯",
+   "expressions": [
+    "୧୨୩/୨୦୧୯"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-133",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ଟ. ୫,୦୦୦ ଜରିମାନା",
+   "expressions": [
+    "୫,୦୦୦"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-134",
+   "group": "odia-digits",
+   "kind": "boundary",
+   "text": "ସଂଖ୍ୟା ୧୨ ୩୪",
+   "expressions": [
+    "୧୨ ୩୪"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-135",
+   "group": "odia-digits",
+   "kind": "boundary",
+   "text": "Date 12.07.୨୦୨୬",
+   "expressions": [
+    "12.07.୨୦୨୬"
+   ],
+   "note": "mixed Latin and Odia digits are one run family"
+  },
+  {
+   "id": "NS-136",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ଧାରା ୩୦୨ ଓ ୩୪",
+   "expressions": [
+    "୩୦୨",
+    "୩୪"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-137",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ସାକ୍ଷୀ ୧ ଏବଂ ୨",
+   "expressions": [
+    "୧",
+    "୨"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-138",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ସମୟ ୧୦:୪୫",
+   "expressions": [
+    "୧୦:୪୫"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-139",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ଅଙ୍କ ୩.୫",
+   "expressions": [
+    "୩.୫"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-140",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "୧,୫୦,୦୦୦ ଟଙ୍କା",
+   "expressions": [
+    "୧,୫୦,୦୦୦"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-141",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "The register shows ୧୨୩ entries.",
+   "expressions": [
+    "୧୨୩"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-142",
+   "group": "odia-digits",
+   "kind": "positive",
+   "text": "ପୃଷ୍ଠା ୧୨ ରୁ ୪୦",
+   "expressions": [
+    "୧୨",
+    "୪୦"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-143",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "तारीख १२.०७.२०२६",
+   "expressions": [
+    "१२.०७.२०२६"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-144",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "मामला संख्या १२३/२०१९",
+   "expressions": [
+    "१२३/२०१९"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-145",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "₹ ५,००० जुर्माना",
+   "expressions": [
+    "५,०००"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-146",
+   "group": "devanagari-digits",
+   "kind": "boundary",
+   "text": "संख्या १२ ३४",
+   "expressions": [
+    "१२ ३४"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-147",
+   "group": "devanagari-digits",
+   "kind": "boundary",
+   "text": "Date 12.०७.2026",
+   "expressions": [
+    "12.०७.2026"
+   ],
+   "note": "mixed Latin and Devanagari digits"
+  },
+  {
+   "id": "NS-148",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "धारा ३०२ और ३४",
+   "expressions": [
+    "३०२",
+    "३४"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-149",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "गवाह १ तथा २",
+   "expressions": [
+    "१",
+    "२"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-150",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "समय १०:४५",
+   "expressions": [
+    "१०:४५"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-151",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "अंक ३.५",
+   "expressions": [
+    "३.५"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-152",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "१,५०,००० रुपये",
+   "expressions": [
+    "१,५०,०००"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-153",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "पृष्ठ १२ से ४०",
+   "expressions": [
+    "१२",
+    "४०"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-154",
+   "group": "devanagari-digits",
+   "kind": "positive",
+   "text": "The register shows १२३ entries.",
+   "expressions": [
+    "१२३"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-155",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "The learned counsel argued at length on the point of limitation.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-156",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "Section is not mentioned in the complaint.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-157",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "The witness said he saw the accused near the shop.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-158",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "ଅଭିଯୁକ୍ତ ଏହି ମାମଲାରେ ଉପସ୍ଥିତ ଥିଲେ।",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-159",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "आरोपी इस मामले में उपस्थित था।",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-160",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "....",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-161",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "He said: \"No, I did not.\"",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-162",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "The matter is posted to twelve July twenty twenty six.",
+   "expressions": [],
+   "note": "spelled numbers are outside this mechanism"
+  },
+  {
+   "id": "NS-163",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "Roman numeral Section IV of the Act was cited.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-164",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "He paid five thousand rupees only.",
+   "expressions": [],
+   "note": "spelled amount, outside this mechanism"
+  },
+  {
+   "id": "NS-165",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "😊 The witness smiled 😊",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-166",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "The Hon'ble Court, after hearing both sides, reserved the order.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-167",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "Rs. is the abbreviation used.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-168",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "The Chief Judicial Magistrate, Cuttack passed the order.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-169",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "Order dated the twelfth of July was challenged.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-170",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "See the Annexure-A and Annexure-B.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-171",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "The accused was represented by Advocate Ram Das.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-172",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "PW-one and PW-two were examined.",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-173",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "अध्याय एक और दो पढ़े गए।",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-174",
+   "group": "digit-free",
+   "kind": "negative",
+   "text": "ସାକ୍ଷୀ ଏକ ଓ ଦୁଇ ଆସିଲେ।",
+   "expressions": [],
+   "note": ""
+  },
+  {
+   "id": "NS-175",
+   "group": "unicode-boundary",
+   "kind": "positive",
+   "text": "😊12😊",
+   "expressions": [
+    "12"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-176",
+   "group": "unicode-boundary",
+   "kind": "positive",
+   "text": "Cafe\u0301 12 is open.",
+   "expressions": [
+    "12"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-177",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "𝟏𝟐.𝟎𝟕 uses mathematical digits.",
+   "expressions": [
+    "𝟏𝟐.𝟎𝟕"
+   ],
+   "note": "astral decimal digits"
+  },
+  {
+   "id": "NS-178",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Fullwidth １２３，４５６ is one figure.",
+   "expressions": [
+    "１２３，４５６"
+   ],
+   "note": "fullwidth digits and comma"
+  },
+  {
+   "id": "NS-179",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Arabic-Indic ١٢٣ ٤٥٦ digits.",
+   "expressions": [
+    "١٢٣ ٤٥٦"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-180",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Joined 1\u200d2 by a zero-width joiner.",
+   "expressions": [
+    "1\u200d2"
+   ],
+   "note": "format character in a gap"
+  },
+  {
+   "id": "NS-181",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "No-break 1\u00a02 space.",
+   "expressions": [
+    "1\u00a02"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-182",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Marked \u200f12\u200f.\u200f07\u200f done.",
+   "expressions": [
+    "12\u200f.\u200f07"
+   ],
+   "note": "right-to-left marks around a figure"
+  },
+  {
+   "id": "NS-183",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Accent 12\u0301 34 follows.",
+   "expressions": [
+    "12",
+    "34"
+   ],
+   "note": "a combining mark breaks the gap"
+  },
+  {
+   "id": "NS-184",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Half ½ and x² are not decimal digits.",
+   "expressions": [],
+   "note": "numeric-valued non-Nd characters: documented gap, no span expected"
+  },
+  {
+   "id": "NS-185",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Roman Ⅻ numeral only.",
+   "expressions": [],
+   "note": "Nl character: documented gap"
+  },
+  {
+   "id": "NS-186",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Values 12\u202834 split by a line separator.",
+   "expressions": [
+    "12",
+    "34"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-187",
+   "group": "unicode-boundary",
+   "kind": "boundary",
+   "text": "Keycap 1\ufe0f\u20e32\ufe0f\u20e3 emoji.",
+   "expressions": [
+    "1",
+    "2"
+   ],
+   "note": "marks break the gap"
+  },
+  {
+   "id": "NS-188",
+   "group": "prose",
+   "kind": "positive",
+   "text": "The prosecution examined twelve witnesses in support of the charge. the informant stated that on 12.07.2026 at about 10.30 PM the accused came to his shop and demanded Rs. 5,000/- failing which he threatened to burn it down. The testimony was corroborated by a neighbour, who reached the spot immediately. The defence pleaded false implication, but no material was produced to support the plea.",
+   "expressions": [
+    "12.07.2026",
+    "10.30",
+    "5,000"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-189",
+   "group": "prose",
+   "kind": "positive",
+   "text": "Heard learned counsel for the appellant and the learned Public Prosecutor for the State. The trial court convicted the appellant under Section 302 IPC and sentenced him to life imprisonment. On a careful reappraisal of the evidence this Court finds that the ocular version is consistent with the medical evidence, and no ground for interference is made out in the appeal.",
+   "expressions": [
+    "302"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-190",
+   "group": "prose",
+   "kind": "positive",
+   "text": "The seizure list, marked as Ext. P-3, records the recovery of one knife from beneath the bed of the accused in the presence of two independent witnesses. Both witnesses supported the prosecution on this point and nothing in their cross-examination shakes their testimony. The learned trial court rightly relied upon it while holding the accused guilty of the offence.",
+   "expressions": [
+    "3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-191",
+   "group": "prose",
+   "kind": "positive",
+   "text": "The application under Section 439 CrPC for bail was moved on 18.06.2025 and was opposed by the State on the ground that the accused is a habitual offender with three prior cases registered against him. Having considered the rival submissions and the period of custody undergone, this Court is inclined to grant bail on stringent conditions to be complied with by the petitioner.",
+   "expressions": [
+    "439",
+    "18.06.2025"
+   ],
+   "note": ""
+  },
+  {
+   "id": "NS-192",
+   "group": "prose",
+   "kind": "positive",
+   "text": "The learned counsel submitted that the impugned order suffers from non-application of mind and that the reasons recorded are perfunctory. Reliance was placed on several decisions of the Supreme Court. However, none of those decisions is applicable to the peculiar facts of the case at hand, and the argument is therefore rejected without any further discussion.",
+   "expressions": [],
+   "note": ""
+  }
+ ]
+}

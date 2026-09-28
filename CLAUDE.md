@@ -63,6 +63,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.10 — normalization provenance foundation: typed `NormalizationPassID` on every record, `(pass, step)` coordinate spaces, per-occurrence located lookup provenance, `NormalizationReplay` exact `R→L→S→N` reconstruction; normalization output preserved exactly (differentially tested); no protected-span derivation | ✅ committed | see `git log` ("Add reconstructable normalization provenance") |
 | Intelligence V1.11 — protected-span derivation (`Intelligence/Provenance/ProtectedSpanDerivation`): applied→`.deterministicallyResolved`, declined→`.deterministicallyUnresolved`, projected into `normalized` coordinates from replay-verified provenance; typed failures (invalid provenance / unprojectable / verification); not wired | ✅ committed | see `git log` ("Derive Intelligence protected spans from provenance") |
 | Intelligence V1.12 — independent-protection investigation: 299-entry labeled corpus (dev + held-out), experimental candidate signals, real-Authority hazard measurement; **no production recognizer built**; recommends a category-agnostic numeric-token gate (V1.13), rejects capitalization-based name protection | ✅ committed | see `git log` ("Record independent protection findings") |
+| Intelligence V1.13 — numeric structural protection (`Intelligence/Protection/NumericStructuralProtection`): category-agnostic `.independentlyProtected` spans over `Nd` digit runs joined across letter/mark/line-break-free gaps; validated on a corpus frozen before implementation (192 entries, SHA-256 pinned): 5,831 hazard edits, 0 escape; composes with V1.11 spans; not wired | ✅ committed | see `git log` ("Add numeric structural protection") |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -782,7 +783,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.12 (test-infra repair through independent-protection investigation)
+## Intelligence V1.3A–V1.13 (test-infra repair through numeric structural protection)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -928,6 +929,17 @@ gets no derived span (1/12 covered); spelled dates are the dominant real-ASR for
 narrow numeric-token gate with measurable criteria against a fresh held-out corpus. Also flagged for the architect (not
 implemented): the classifier's punctuation-/whitespace-only predicates permit digit-adjacent edits and word merge/split.
 **The do-not-wire warning stands.**
+
+**V1.13** implemented the mechanism V1.12 recommended (`Evaluation/Intelligence/V1_13_NUMERIC_STRUCTURAL_PROTECTION.md`):
+`NumericStructuralProtection.spans(in:)` emits `.independentlyProtected` spans over decimal-digit (`Nd`, any script) runs, joining runs whose
+gap has no letter/mark/line break (so whitespace-separated numerals like `12 34` are one span — deleting the space would merge them).
+Category-agnostic: no lexicon, no meaning inference. **Pre-registered and validated on a fresh corpus frozen before any production code
+(192 entries, SHA-256 pinned in the test):** 5,831 digit-structural hazard edits through the real classifier and real Authority, **0 escape**
+(all escape without spans); all 244 labeled expressions covered; 0 spans on digit-free text; 0.000% protected outside labels (2.0% overall in
+prose); Odia and Devanagari digits verified; edge behavior of zero-length insertions tested; seeded randomized robustness (13,584 hazards, 0 escapes).
+`NormalizationProtectedSpans.spansIncludingNumericStructure` concatenates V1.11 + numeric spans of the same text; the Authority is unchanged.
+Limits recorded: coverage labels follow the same rule (not independent), oracle limited to single surface edits, spelled numbers/dates, names
+and word-structural damage remain unprotected. **Not wired; the do-not-wire warning stands.**
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1231,12 +1243,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.12" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.13" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.12" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.13" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,

@@ -51,10 +51,12 @@ Sources/Fluid/Intelligence/Addressing/IntelligenceAddressingResolver.swift
 Sources/Fluid/Intelligence/Addressing/IntelligenceAddressingBridge.swift
 Sources/Fluid/Intelligence/Composition/IntelligenceEditComposition.swift
 Sources/Fluid/Intelligence/Provenance/ProtectedSpanDerivation.swift
+Sources/Fluid/Intelligence/Protection/NumericStructuralProtection.swift
 "
 
 for task_test_file in \
     Tests/ProtectedSpanDerivationTests.swift \
+    Tests/NumericStructuralProtectionTests.swift \
 ; do
     task_binary_name=$(basename "$task_test_file" .swift)
     # shellcheck disable=SC2086
