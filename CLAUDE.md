@@ -52,11 +52,14 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1 foundation — deterministic proposal/protected-span/validator types + adversarial unit tests (`Sources/Fluid/Intelligence/Safety/`); zero LLM/model/network integration | ✅ committed | `5d83c11` (full: `5d83c110bf374ea1c94a2511038d627669dfc34a`) |
 | Intelligence V1.1 — Proposal transport/parsing boundary (`Sources/Fluid/Intelligence/Transport/`: strict JSON→native-proposal parser, provider-independent, structural-all-or-nothing); zero LLM/model/network integration | ✅ committed | `ca63584` (full: `ca635849e65ee9b583dfabf9e3b5189fc91d52c5`) |
 | Intelligence V1.2 — Proposal generation contract & provider-envelope adapter (`Sources/Fluid/Intelligence/Generation/`: tool schema, instructions, minimal provider-independent response envelope, adapter enforcing expected-tool-call policy); entirely synthetic, zero LLM/network/provider-specific integration | ✅ committed | `7ff7a13` (full: `7ff7a1327ecb4cb0742c016dd306a5d56d361bb1`) |
-| Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ implemented, tests green; staged, pending architectural review | staged, not yet committed |
+| Intelligence V1.2 test-infrastructure repair (stale pre-rebrand `FluidVoice_Debug` imports fixed; 3 blocked raw-argument tests executed for real) | ✅ committed | `b5969ba` (full: `b5969baa5c5382c16740af41522c046c924881f8`) |
+| Intelligence V1.3 — local-model evaluation: Qwen2.5 1.5B tool-engagement failure (V1.3B, 0/15 framing matrix) and Granite 4 3B protocol-viability success (V1.3C, 25/25 Stage 1) | ✅ documented | `cc6052e`, `7496074`, `b84bd26` |
+| Intelligence V1.4/V1.4B/V1.4C — model-facing addressing contract search, selection (occurrence-primary, 1-based), and adversarial validation (20/20 deterministic, 40/40 live ordinal trials) | ✅ documented (experimental, `Evaluation/Intelligence/Experimental/`) | pending V1.5 commit |
+| Intelligence V1.5 — addressing contract freeze (design/documentation only; zero production code) | ✅ this milestone | pending commit |
+| Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
-Local `main` is 22 commits ahead of `origin/main`, 0 behind, nothing pushed (before this
-milestone's staged-but-uncommitted test-file changes). Verify current ahead/behind state with
-Git rather than relying on this document.
+Local `main` is 26 commits ahead of `origin/main`, 0 behind, nothing pushed as of this entry.
+Verify current ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
 families only). **Phase 3D Slices A+B (committed, `0abf627`)** live-activate that normalization at one
@@ -769,6 +772,67 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
+## Intelligence V1.3A–V1.5 (test-infra repair through addressing-contract freeze)
+
+**This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
+`Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
+— read those for full raw counts. This section is a pointer/summary, not a duplicate.**
+
+Since Intelligence V1.2 was committed, the following happened, in order (all committed except
+where noted): a test-infrastructure verification milestone (stale pre-rebrand `FluidVoice_Debug`
+imports across `FluidDictationIntegrationTests`, fixed; the 3 blocked V1.2 raw-argument tests
+executed for real and passed); **V1.3 — Local Model Evaluation Harness**, which installed Ollama
+locally (cloud explicitly disabled throughout) and found `qwen2.5:1.5b` cannot engage tool-calling
+for any supplied-text-processing task despite reliably engaging for a trivial factual/action tool
+(V1.3B: 0/15 across a full framing matrix — tool name, description, user framing, and semantic task
+class all ruled out as the cause); **V1.3C**, which then tested a Granite 4 escalation ladder and
+found `granite4:3b` (3.4B params, Q4_K_M) is **the first tested model to qualify as a viable
+protocol candidate** — 25/25 on the Stage 1 capability gate, and zero unsafe accepted edits /
+zero source-resolution defects when its (imperfect) real output was run through the unmodified V1.0
+Safety Authority. This is a protocol-capability finding only — legal-domain quality, proper-noun
+handling, and correction precision/recall remain untested.
+
+**V1.4 / V1.4B / V1.4C** then investigated, selected, and adversarially validated the **model-facing
+addressing contract** — how a model expresses *which* text it means without ever computing UTF-16
+offsets itself. Key results: a bare `sourceText`/`replacementText` representation cannot express
+repeated-text disambiguation (a real model silently mis-targets rather than signaling the gap);
+**occurrence (1-based) is the primary discriminator** (V1.4B: 4/4 correct vs. exact-context's 0/4 on
+genuine short-fragment cases; V1.4C: 40/40 correct across repetition counts 2/3/5/10, including
+genuine — non-workaround — 10-way short-fragment counting, 10/10); optional exact left/right context
+provides corroboration/fallback under a precise, fully adversarially-tested decision table (V1.4C,
+20/20 deterministic cases, superseding V1.4B's broader description); and — the single most important
+confirmed property — **a proposal can resolve correctly and unambiguously while still being unsafe
+to apply**, and the unmodified V1.0 Safety Authority catches this every time it was tested live
+(V1.4C's `E5`: a real Granite proposal resolved to an entire two-sentence passage with a valid
+occurrence, correctly identified by the resolver, then correctly rejected by Safety Authority as not
+a punctuation/capitalization/whitespace-only edit). **Zero resolver safety failures and zero unsafe
+accepted edits across all of V1.3C/V1.4/V1.4B/V1.4C.**
+
+**V1.5** froze this into a normative, model-independent addressing contract
+(`Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`) — the decision table, field semantics
+(occurrence is 1-based, `0` always invalid, never auto-corrected), the "smallest correction-bearing
+span" model-facing instruction (a prompt guideline only — the resolver never shrinks or guesses a
+model-selected span; the Safety Authority is what contains an over-broad-but-literal span), and an
+explicit resolver-vs-Safety-Authority separation. **This is a design/documentation freeze only — no
+production code exists for any of this yet.** `Sources/Fluid/Intelligence/` (V1.0/V1.1/V1.2) remains
+completely unmodified throughout V1.3–V1.5; every experiment reused those committed types verbatim,
+never a reimplementation. All experimental Swift/tests/scripts live under
+`Evaluation/Intelligence/Experimental/`, deterministic and Ollama-free except where a file's own name
+says otherwise. `granite4:3b` is a **research/protocol candidate only** — never document it as the
+selected production model.
+
+**Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
+evidence — if a model's occurrence and context agree with each other but both misidentify the
+intended occurrence relative to true intent, the resolver resolves consistently and correctly *per
+its own contract*; this is provably undetectable by resolver consistency alone (V1.4C, test `A13`)
+and is a model/evaluation-layer risk, not an addressing-layer defect; (2) Granite's Unicode fidelity
+remains poor and unresolved (Odia text hallucinated into an unrelated script; a non-BMP emoji
+reproduced with a spurious adjacent newline) — both failure classes fail closed every time observed,
+and this is deliberately not "fixed" by the addressing contract; (3) offering multiple optional
+discriminator fields together, under permissive prompting, correlated with the model choosing
+whole-passage `sourceText` over minimal-diff spans — safe (contained by Safety Authority) but a real
+efficiency/usability concern, not yet mitigated.
+
 ## Evaluation framework (Phase 3E.1, `Evaluation/`)
 
 Standalone tooling to measure where dictation fails, stage by stage. **Governing principle: the
@@ -1058,14 +1122,18 @@ from the real-audio run (private results, not committed):
     - **Scope discipline:** only `Tests/FluidDictationIntegrationTests/*.swift` files were touched
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
-      milestone's explicit scope. **Staged, not committed** — awaiting architectural review.
-13. **Must NOT be started yet:** connecting any model/provider, live inference, Ollama/LM Studio
-    integration, audio-aware Intelligence, fine-tuning of any kind, and Intelligence V2 all remain
-    unauthorized until the V1.2 generation/adapter boundary above is reviewed and committed. The
-    recognition-tuning branch is closed — do not resume it: no threshold tuning, alias additions,
-    another vocabulary-boosting experiment, modifying the three-character compound-length rule,
-    modifying FluidAudio, exposing rejected-candidate score structures, a production
-    vocabulary-boosting default, or a Phase 3G.D recognition experiment. Also not started:
-    date normalization, punctuation/sentence-boundary heuristics, custom-dictionary reconciliation
-    (Slice D), evaluation-framework redesign, UI/history work, and Phase 4 — none of these are
+      milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.5" above for
+      everything since, including the now-frozen addressing contract and its own open risks.
+13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
+    production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
+    benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
+    (see "Intelligence V1.3A–V1.5" above) is a design/documentation milestone only, with zero
+    production code written from it yet. The recognition-tuning branch remains closed — do not
+    resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,
+    modifying the three-character compound-length rule, modifying FluidAudio, exposing
+    rejected-candidate score structures, a production vocabulary-boosting default, or a Phase 3G.D
+    recognition experiment. Also not started: date normalization, punctuation/sentence-boundary
+    heuristics, custom-dictionary reconciliation (Slice D), evaluation-framework redesign,
+    UI/history work, and Phase 4 — none of these are
     authorized by any evidence gathered so far.

@@ -509,13 +509,20 @@ dictation interpretation / surface polishing), each with different evidence requ
 profiles. The Text-Only Intelligence Baseline (span-based proposals, exact source-text matching,
 independently re-derived edit categories, three-way protected-span semantics — resolved /
 unresolved / independently-protected, never treated as equivalent — and a zero-unsafe-accepted-
-edits raw-count target) is designed, not implemented, and not discarded; it is planned as
-Intelligence V1 in a four-generation, non-committal roadmap (V1 safety architecture, V2 recognition
-evidence, V3 audio-aware, V4 domain adaptation — see `CLAUDE.md` for the full breakdown). **The
-next authorized milestone is implementing the V1 safety-contract foundation** (proposal data
-types, protected-span representation, deterministic validator, hostile-input unit tests) with
-**zero LLM/model/network integration** — proving the safety boundary before any model is
-connected.
+edits raw-count target) was implemented and committed (`Sources/Fluid/Intelligence/Safety/`,
+`Transport/`, `Generation/` — V1.0/V1.1/V1.2, zero LLM/model/network integration); it is planned
+as Intelligence V1 in a four-generation, non-committal roadmap (V1 safety architecture, V2
+recognition evidence, V3 audio-aware, V4 domain adaptation — see `CLAUDE.md` for the full
+breakdown). Since then, a local-model evaluation track (V1.3, `granite4:3b` found to be the first
+tested viable **protocol** candidate — not a selected production model) and a model-facing
+addressing-contract investigation (V1.4/V1.4B/V1.4C) were carried out entirely under
+`Evaluation/Intelligence/Experimental/`, with zero production code changes, and V1.5 froze that
+contract into a normative, model-independent design record:
+[`Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`](Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md).
+**The addressing contract is now designed and frozen; no production implementation of it exists
+yet, and no model is wired into dictation.** See `CLAUDE.md`'s "Intelligence V1.3A–V1.5" section
+for the summary and open risks (Unicode fidelity, mutually-consistent-but-wrong addressing
+evidence, over-broad literal spans).
 
 **Deferred (each needs its own design/domain review before implementation):** exhibit
 references (needs research into Indian exhibit conventions), case numbers, dates, amounts,
