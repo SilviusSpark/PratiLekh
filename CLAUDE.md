@@ -54,11 +54,12 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.2 — Proposal generation contract & provider-envelope adapter (`Sources/Fluid/Intelligence/Generation/`: tool schema, instructions, minimal provider-independent response envelope, adapter enforcing expected-tool-call policy); entirely synthetic, zero LLM/network/provider-specific integration | ✅ committed | `7ff7a13` (full: `7ff7a1327ecb4cb0742c016dd306a5d56d361bb1`) |
 | Intelligence V1.2 test-infrastructure repair (stale pre-rebrand `FluidVoice_Debug` imports fixed; 3 blocked raw-argument tests executed for real) | ✅ committed | `b5969ba` (full: `b5969baa5c5382c16740af41522c046c924881f8`) |
 | Intelligence V1.3 — local-model evaluation: Qwen2.5 1.5B tool-engagement failure (V1.3B, 0/15 framing matrix) and Granite 4 3B protocol-viability success (V1.3C, 25/25 Stage 1) | ✅ documented | `cc6052e`, `7496074`, `b84bd26` |
-| Intelligence V1.4/V1.4B/V1.4C — model-facing addressing contract search, selection (occurrence-primary, 1-based), and adversarial validation (20/20 deterministic, 40/40 live ordinal trials) | ✅ documented (experimental, `Evaluation/Intelligence/Experimental/`) | pending V1.5 commit |
-| Intelligence V1.5 — addressing contract freeze (design/documentation only; zero production code) | ✅ this milestone | pending commit |
+| Intelligence V1.4/V1.4B/V1.4C — model-facing addressing contract search, selection (occurrence-primary, 1-based), and adversarial validation (20/20 deterministic, 40/40 live ordinal trials) | ✅ documented (experimental, `Evaluation/Intelligence/Experimental/`) | `1a6c7cb` (full: `1a6c7cba788fb82267cc62d12f2b594379a20812`) |
+| Intelligence V1.5 — addressing contract freeze (design/documentation only; zero production code) | ✅ committed | `1a6c7cb` (full: `1a6c7cba788fb82267cc62d12f2b594379a20812`) |
+| Intelligence V1.6 — production addressing resolver (`Sources/Fluid/Intelligence/Addressing/`: `ModelFacingEdit`, `IntelligenceAddressingResolver`, `IntelligenceAddressingBridge`; overlapping-literal + zero/one/multi-match context clarifications to V1.5; no wire schema/parser, no model, no dictation wiring, no insertion) | ✅ committed | see `git log` ("Add Intelligence production addressing resolver") |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
-Local `main` is 26 commits ahead of `origin/main`, 0 behind, nothing pushed as of this entry.
+Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
 Verify current ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
@@ -772,7 +773,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.5 (test-infra repair through addressing-contract freeze)
+## Intelligence V1.3A–V1.6 (test-infra repair through production addressing resolver)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -820,6 +821,26 @@ never a reimplementation. All experimental Swift/tests/scripts live under
 `Evaluation/Intelligence/Experimental/`, deterministic and Ollama-free except where a file's own name
 says otherwise. `granite4:3b` is a **research/protocol candidate only** — never document it as the
 selected production model.
+
+**V1.6** then implemented the frozen contract's *addressing layer* in production
+(`Sources/Fluid/Intelligence/Addressing/`; full record in
+`Evaluation/Intelligence/V1_6_PRODUCTION_ADDRESSING_RESOLVER.md`): `ModelFacingEdit` (narrow, no id/
+category/range), `IntelligenceAddressingResolver` (pure, typed rejections), and
+`IntelligenceAddressingBridge` (immutable-source batch → standard `IntelligenceProposal`; ids `p<n>`
+1-based by original position, `claimedCategory = .other`, `expectedSourceText` from the real source;
+per-item failure isolation; nothing applied). It **clarifies/corrects V1.5** (V1.5 is left intact as
+history; the V1.6 doc governs): (1) overlapping literal matches are all candidates — the experimental
+non-overlapping scan silently resolved `"aa"` in `"aaa"` to position 0; (2) supplied context matching
+zero candidates is contradictory evidence and rejects (unique or repeated, any occurrence) — this
+*corrects* V1.4C's A10; one match is informative; several is non-narrowing but does not contradict a
+valid occurrence *inside* the matching set (an occurrence outside it rejects as
+`occurrenceContradictsContext` — decided, architect-confirmed); (3) bridge metadata as above. Experimental `detectOverlaps` was not
+promoted (V1.5's "mirrors the Authority" claim was inaccurate for same-position zero-length ranges);
+`IntelligenceSafetyAuthority` stays sole authority on overlap/protected spans/classification.
+Insertion, the model-facing wire schema/parser, `IntelligenceGenerationContract` (still asks for
+UTF-16 offsets) and any model/dictation wiring remain **not built**. The V1.1 parser cannot parse the
+model-facing shape, so the V1.5 §16 diagram's "V1.1 parser before resolver" step is still missing a
+model-facing counterpart.
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1123,13 +1144,14 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.5" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.6" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.5" above) is a design/documentation milestone only, with zero
-    production code written from it yet. The recognition-tuning branch remains closed — do not
+    (see "Intelligence V1.3A–V1.6" above) was design/documentation only; V1.6 implemented only its
+    deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
+    insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,
     modifying the three-character compound-length rule, modifying FluidAudio, exposing
     rejected-candidate score structures, a production vocabulary-boosting default, or a Phase 3G.D

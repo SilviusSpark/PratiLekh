@@ -1,5 +1,12 @@
 # Intelligence V1.5 — Addressing Contract Freeze
 
+> **Amended by V1.6** (`V1_6_PRODUCTION_ADDRESSING_RESOLVER.md`). This document
+> is preserved unchanged as the V1.5 record, except for this note. Where V1.6
+> differs — overlapping literal matches count as candidates; context matching
+> zero candidates rejects (superseding rows 4/10/12/13 as written, and
+> V1.4C's A10); `detectOverlaps` not promoted — the V1.6 document governs the
+> production implementation.
+
 ## 1. Status and scope
 
 This document **freezes the V1 model-facing addressing semantics** —

@@ -519,8 +519,11 @@ addressing-contract investigation (V1.4/V1.4B/V1.4C) were carried out entirely u
 `Evaluation/Intelligence/Experimental/`, with zero production code changes, and V1.5 froze that
 contract into a normative, model-independent design record:
 [`Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`](Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md).
-**The addressing contract is now designed and frozen; no production implementation of it exists
-yet, and no model is wired into dictation.** See `CLAUDE.md`'s "Intelligence V1.3A–V1.5" section
+**The addressing contract is designed and frozen. V1.6 has since implemented its deterministic
+addressing layer in production (`Sources/Fluid/Intelligence/Addressing/`, see
+[`Evaluation/Intelligence/V1_6_PRODUCTION_ADDRESSING_RESOLVER.md`](Evaluation/Intelligence/V1_6_PRODUCTION_ADDRESSING_RESOLVER.md),
+which also records three clarifications to the freeze); it is not wired into dictation, and no model
+wire schema/parser, insertion or live model integration exists yet.** See `CLAUDE.md`'s "Intelligence V1.3A–V1.6" section
 for the summary and open risks (Unicode fidelity, mutually-consistent-but-wrong addressing
 evidence, over-broad literal spans).
 
