@@ -104,3 +104,15 @@ After validation, SwiftLint's inclusive-language rule flagged the identifiers
 is a **pure rename**: all 162 recorded numbers were re-extracted and are identical
 before and after (only the bundle's key name changed). The rules-file SHA-256 was
 re-pinned to `b20b001153fbecffaede9eec736c50d462a759990469350c9bd42b004416aafe` (the freeze-time hash above is the pre-rename file).
+
+
+## V1.15 fresh validation (frozen)
+
+`fresh.json` (128 entries) was authored independently for V1.15, checked
+mechanically to share no text with `development.json`, `validation.json`, or the
+V1.12/V1.13 corpora, and scored once against the **unmodified** rules file above
+(SHA-256 `b20b001153fbecffaede9eec736c50d462a759990469350c9bd42b004416aafe`,
+identical to the V1.14 freeze). `fresh.json` SHA-256 at freeze:
+`f8ed62da0c3426c9d6f27f4fd91385dd162782f54e493fcf4cacee661a3496d6`. See `V1_15_FRESH_AUTONOMOUS_POLICY_VALIDATION.md` for results,
+including two newly-discovered hazard sub-shapes and one disclosed (uncorrected)
+corpus artifact with zero effect on any measurement.

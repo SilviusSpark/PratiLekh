@@ -65,6 +65,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.12 — independent-protection investigation: 299-entry labeled corpus (dev + held-out), experimental candidate signals, real-Authority hazard measurement; **no production recognizer built**; recommends a category-agnostic numeric-token gate (V1.13), rejects capitalization-based name protection | ✅ committed | see `git log` ("Record independent protection findings") |
 | Intelligence V1.13 — numeric structural protection (`Intelligence/Protection/NumericStructuralProtection`): category-agnostic `.independentlyProtected` spans over `Nd` digit runs joined across letter/mark/line-break-free gaps; validated on a corpus frozen before implementation (192 entries, SHA-256 pinned): 5,831 hazard edits, 0 escape; composes with V1.11 spans; not wired | ✅ committed | see `git log` ("Add numeric structural protection") |
 | Intelligence V1.14 — autonomous-edit-policy investigation: measured the classifier's remaining leniency after V1.11+V1.13 (155-entry dev + 126-entry validation corpora, frozen), evaluated 8 candidate structural invariants; recommends tightening generic policy (punctuation allowlist + no intra-token change + merge-only whitespace + acronym/identifier capitalization guards) over new recognizers for most of the gap; **no production change** | ✅ committed | see `git log` ("Record autonomous edit policy findings") |
+| Intelligence V1.15 — fresh autonomous-policy validation: V1.14 bundle re-scored unmodified against a genuinely fresh, frozen 128-entry corpus (zero text overlap with prior corpora); cost/benefit replicates (1 legit edit lost, same acronym-guard driver; 83.3% of dangerous edits blocked); two new hazard sub-shapes found (punctuation-split tokens), not falsifying; recommends a distinct Safety-Authority-consumed gate over extending the classifier; **no production change** | ✅ documented, **uncommitted at time of writing** | pending commit |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -784,7 +785,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.14 (test-infra repair through autonomous-edit-policy investigation)
+## Intelligence V1.3A–V1.15 (test-infra repair through fresh autonomous-policy validation)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -958,6 +959,22 @@ on each tier. Word splits (`constable→const able` vs legitimate `witnessreache
 **open, unsolved risk** — structurally identical, distinguishable only with a dictionary, deliberately not
 addressed by policy. Recommends tightening generic policy over new recognizers for most of the gap;
 production implementation is a separate, future, explicitly-authorized milestone.
+
+**V1.15** re-scored the V1.14 recommended bundle, unmodified, against a genuinely fresh, frozen corpus
+(`Evaluation/Intelligence/V1_15_FRESH_AUTONOMOUS_POLICY_VALIDATION.md`; `Evaluation/References/autonomous-edit-policy/fresh.json`,
+128 entries, zero text overlap with any prior corpus, SHA-256 pinned alongside the unchanged V1.14 rules-file hash).
+**Investigation/validation only — the frozen rules file (`AutonomousEditInvariants.swift`) is byte-for-byte unchanged; no
+`Sources/` file changed.** The bundle's cost/benefit replicates: one legitimate edit lost on the fresh corpus too, caused
+by the same acronym-capitalization guard as V1.14's `ODISHA→Odisha`, while blocking 83.3% of the remaining dangerous edits
+(vs 87–92% on V1.14's own corpora) — every other component still costs zero. Two hazard sub-shapes not present in V1.14's
+corpora surfaced (`viz.`-style terminal-period abbreviations before a space; apostrophe-split names like `O'Connell`
+defeating the acronym guard) — both fit the **same recurring pattern** already flagged as the `designatorCase` residual
+(punctuation splitting a structural invariant's token boundary away from the logical name/abbreviation); this is evidence
+of a shared limitation across three observed cases, not a formally-proven single root cause, and not material
+falsification. **Architecture-boundary finding (not implemented):** these invariants need surrounding
+text `IntelligenceEditClassifier.classify(from:to:)` does not receive; they belong in a new, narrow, dedicated deterministic
+type consumed by `IntelligenceSafetyAuthority` (alongside protected-span intersection), not folded into the classifier.
+Recommendation stands for a future, separately-authorized production milestone; nothing is implemented from V1.15.
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1261,12 +1278,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.14" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.15" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.14" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.15" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,

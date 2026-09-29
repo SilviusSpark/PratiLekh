@@ -63,7 +63,7 @@ enum AutonomousEditPolicyInvestigation {
         let policyDirectory = root.appendingPathComponent("Evaluation/References/autonomous-edit-policy")
 
         print("rules file SHA-256: \(sha256(root.appendingPathComponent("Evaluation/Intelligence/Experimental/AutonomousEditInvariants.swift")))")
-        for tier in ["development", "validation"] {
+        for tier in ["development", "validation", "fresh"] {
             let url = policyDirectory.appendingPathComponent("\(tier).json")
             guard let data = try? Data(contentsOf: url), let corpus = try? JSONDecoder().decode(Corpus.self, from: data) else {
                 print("\n################ TIER: \(tier) — corpus not present ################")
@@ -206,6 +206,7 @@ enum AutonomousEditPolicyInvestigation {
     private static let frozenRulesSHA256 = "b20b001153fbecffaede9eec736c50d462a759990469350c9bd42b004416aafe"
     private static let frozenDevelopmentSHA256 = "7854a3f02dea82d5cc0050707e6a82876099f0fcf218d5f1dec162965feaa3a2"
     private static let frozenValidationSHA256 = "89a9982c737fb5ddeb8f127147176121a686d41e48662e01d99bfe270c80de66"
+    private static let frozenFreshSHA256 = "f8ed62da0c3426c9d6f27f4fd91385dd162782f54e493fcf4cacee661a3496d6"
 
     private static func pin(root: URL) {
         // The rule freeze and both corpora are pinned by hash: a change to any of them must be a documented decision.
@@ -213,8 +214,62 @@ enum AutonomousEditPolicyInvestigation {
         precondition(sha256(root.appendingPathComponent("Evaluation/Intelligence/Experimental/AutonomousEditInvariants.swift")) == self.frozenRulesSHA256, "the frozen invariant rules changed")
         precondition(sha256(directory.appendingPathComponent("development.json")) == self.frozenDevelopmentSHA256, "the development corpus changed")
         precondition(sha256(directory.appendingPathComponent("validation.json")) == self.frozenValidationSHA256, "the validation corpus changed")
+        precondition(sha256(directory.appendingPathComponent("fresh.json")) == self.frozenFreshSHA256, "the V1.15 fresh corpus changed")
         // The findings document quotes exactly these numbers.
         let expected: [(String, Int)] = [
+            ("fresh.ambiguousRemaining", 10), ("fresh.dangerousRemaining", 66), ("fresh.funnel.ambiguous.classifier", 10),
+            ("fresh.funnel.ambiguous.effective", 10), ("fresh.funnel.ambiguous.n", 10), ("fresh.funnel.ambiguous.v111", 10),
+            ("fresh.funnel.dangerous.classifier", 67), ("fresh.funnel.dangerous.effective", 66), ("fresh.funnel.dangerous.n", 67),
+            ("fresh.funnel.dangerous.v111", 67), ("fresh.funnel.legit.classifier", 50), ("fresh.funnel.legit.effective", 50),
+            ("fresh.funnel.legit.n", 51), ("fresh.funnel.legit.v111", 50), ("fresh.gap.acronymCase.remaining", 7),
+            ("fresh.gap.acronymCase.total", 7), ("fresh.gap.alphanumericIdentifier.remaining", 6), ("fresh.gap.alphanumericIdentifier.total", 6),
+            ("fresh.gap.designatorCase.remaining", 4), ("fresh.gap.designatorCase.total", 4), ("fresh.gap.digitLetterBoundary.remaining", 6),
+            ("fresh.gap.digitLetterBoundary.total", 6), ("fresh.gap.identifierCase.remaining", 2), ("fresh.gap.identifierCase.total", 3),
+            ("fresh.gap.intraTokenPunctuation.remaining", 10), ("fresh.gap.intraTokenPunctuation.total", 10), ("fresh.gap.midTokenCase.remaining", 3),
+            ("fresh.gap.midTokenCase.total", 3), ("fresh.gap.spelledNumber.remaining", 6), ("fresh.gap.spelledNumber.total", 6),
+            ("fresh.gap.structuralPunctuation.remaining", 8), ("fresh.gap.structuralPunctuation.total", 8), ("fresh.gap.wordMerge.remaining", 9),
+            ("fresh.gap.wordMerge.total", 9), ("fresh.gap.wordSplit.remaining", 5), ("fresh.gap.wordSplit.total", 5),
+            ("fresh.inv.C-A.ambiguous", 0), ("fresh.inv.C-A.blocked", 10), ("fresh.inv.C-A.demoted", 1),
+            ("fresh.inv.C-A2.ambiguous", 0), ("fresh.inv.C-A2.blocked", 10), ("fresh.inv.C-A2.demoted", 1),
+            ("fresh.inv.C-B.ambiguous", 0), ("fresh.inv.C-B.blocked", 12), ("fresh.inv.C-B.demoted", 4),
+            ("fresh.inv.C-C.ambiguous", 0), ("fresh.inv.C-C.blocked", 2), ("fresh.inv.C-C.demoted", 0),
+            ("fresh.inv.C-D.ambiguous", 3), ("fresh.inv.C-D.blocked", 16), ("fresh.inv.C-D.demoted", 2),
+            ("fresh.inv.P-A.ambiguous", 2), ("fresh.inv.P-A.blocked", 22), ("fresh.inv.P-A.demoted", 0),
+            ("fresh.inv.P-B.ambiguous", 2), ("fresh.inv.P-B.blocked", 18), ("fresh.inv.P-B.demoted", 0),
+            ("fresh.inv.W-A.ambiguous", 0), ("fresh.inv.W-A.blocked", 25), ("fresh.inv.W-A.demoted", 3),
+            ("fresh.inv.W-A1.ambiguous", 0), ("fresh.inv.W-A1.blocked", 19), ("fresh.inv.W-A1.demoted", 0),
+            ("fresh.inv.W-A2.ambiguous", 0), ("fresh.inv.W-A2.blocked", 6), ("fresh.inv.W-A2.demoted", 3),
+            ("fresh.inv.W-B.ambiguous", 2), ("fresh.inv.W-B.blocked", 25), ("fresh.inv.W-B.demoted", 4),
+            ("fresh.inv.allowlist.ambiguous", 7), ("fresh.inv.allowlist.blocked", 63), ("fresh.inv.allowlist.demoted", 6),
+            ("fresh.inv.core+P-A.ambiguous", 3), ("fresh.inv.core+P-A.blocked", 61), ("fresh.inv.core+P-A.demoted", 4),
+            ("fresh.inv.core-merge-only+P-A.ambiguous", 3), ("fresh.inv.core-merge-only+P-A.blocked", 55), ("fresh.inv.core-merge-only+P-A.demoted", 1),
+            ("fresh.inv.core.ambiguous", 2), ("fresh.inv.core.blocked", 55), ("fresh.inv.core.demoted", 4),
+            ("fresh.legitRemaining", 50), ("fresh.matrix.acronymCase.C-A2", 7), ("fresh.matrix.acronymCase.C-C", 0),
+            ("fresh.matrix.acronymCase.P-A", 0), ("fresh.matrix.acronymCase.P-B", 0), ("fresh.matrix.acronymCase.W-A1", 0),
+            ("fresh.matrix.acronymCase.W-A2", 0), ("fresh.matrix.acronymCase.core+P-A", 7), ("fresh.matrix.alphanumericIdentifier.C-A2", 0),
+            ("fresh.matrix.alphanumericIdentifier.C-C", 0), ("fresh.matrix.alphanumericIdentifier.P-A", 6), ("fresh.matrix.alphanumericIdentifier.P-B", 6),
+            ("fresh.matrix.alphanumericIdentifier.W-A1", 0), ("fresh.matrix.alphanumericIdentifier.W-A2", 0), ("fresh.matrix.alphanumericIdentifier.core+P-A", 6),
+            ("fresh.matrix.designatorCase.C-A2", 1), ("fresh.matrix.designatorCase.C-C", 0), ("fresh.matrix.designatorCase.P-A", 0),
+            ("fresh.matrix.designatorCase.P-B", 0), ("fresh.matrix.designatorCase.W-A1", 0), ("fresh.matrix.designatorCase.W-A2", 0),
+            ("fresh.matrix.designatorCase.core+P-A", 1), ("fresh.matrix.digitLetterBoundary.C-A2", 0), ("fresh.matrix.digitLetterBoundary.C-C", 0),
+            ("fresh.matrix.digitLetterBoundary.P-A", 0), ("fresh.matrix.digitLetterBoundary.P-B", 0), ("fresh.matrix.digitLetterBoundary.W-A1", 5),
+            ("fresh.matrix.digitLetterBoundary.W-A2", 1), ("fresh.matrix.digitLetterBoundary.core+P-A", 6), ("fresh.matrix.identifierCase.C-A2", 0),
+            ("fresh.matrix.identifierCase.C-C", 2), ("fresh.matrix.identifierCase.P-A", 0), ("fresh.matrix.identifierCase.P-B", 0),
+            ("fresh.matrix.identifierCase.W-A1", 0), ("fresh.matrix.identifierCase.W-A2", 0), ("fresh.matrix.identifierCase.core+P-A", 2),
+            ("fresh.matrix.intraTokenPunctuation.C-A2", 0), ("fresh.matrix.intraTokenPunctuation.C-C", 0), ("fresh.matrix.intraTokenPunctuation.P-A", 7),
+            ("fresh.matrix.intraTokenPunctuation.P-B", 9), ("fresh.matrix.intraTokenPunctuation.W-A1", 0), ("fresh.matrix.intraTokenPunctuation.W-A2", 0),
+            ("fresh.matrix.intraTokenPunctuation.core+P-A", 9), ("fresh.matrix.midTokenCase.C-A2", 2), ("fresh.matrix.midTokenCase.C-C", 0),
+            ("fresh.matrix.midTokenCase.P-A", 0), ("fresh.matrix.midTokenCase.P-B", 0), ("fresh.matrix.midTokenCase.W-A1", 0),
+            ("fresh.matrix.midTokenCase.W-A2", 0), ("fresh.matrix.midTokenCase.core+P-A", 2), ("fresh.matrix.spelledNumber.C-A2", 0),
+            ("fresh.matrix.spelledNumber.C-C", 0), ("fresh.matrix.spelledNumber.P-A", 1), ("fresh.matrix.spelledNumber.P-B", 1),
+            ("fresh.matrix.spelledNumber.W-A1", 5), ("fresh.matrix.spelledNumber.W-A2", 0), ("fresh.matrix.spelledNumber.core+P-A", 6),
+            ("fresh.matrix.structuralPunctuation.C-A2", 0), ("fresh.matrix.structuralPunctuation.C-C", 0), ("fresh.matrix.structuralPunctuation.P-A", 8),
+            ("fresh.matrix.structuralPunctuation.P-B", 2), ("fresh.matrix.structuralPunctuation.W-A1", 0), ("fresh.matrix.structuralPunctuation.W-A2", 0),
+            ("fresh.matrix.structuralPunctuation.core+P-A", 8), ("fresh.matrix.wordMerge.C-A2", 0), ("fresh.matrix.wordMerge.C-C", 0),
+            ("fresh.matrix.wordMerge.P-A", 0), ("fresh.matrix.wordMerge.P-B", 0), ("fresh.matrix.wordMerge.W-A1", 9),
+            ("fresh.matrix.wordMerge.W-A2", 0), ("fresh.matrix.wordMerge.core+P-A", 9), ("fresh.matrix.wordSplit.C-A2", 0),
+            ("fresh.matrix.wordSplit.C-C", 0), ("fresh.matrix.wordSplit.P-A", 0), ("fresh.matrix.wordSplit.P-B", 0),
+            ("fresh.matrix.wordSplit.W-A1", 0), ("fresh.matrix.wordSplit.W-A2", 5), ("fresh.matrix.wordSplit.core+P-A", 5),
             ("development.ambiguousRemaining", 12), ("development.dangerousRemaining", 71), ("development.funnel.ambiguous.classifier", 12),
             ("development.funnel.ambiguous.effective", 12), ("development.funnel.ambiguous.n", 12), ("development.funnel.ambiguous.v111", 12),
             ("development.funnel.dangerous.classifier", 74), ("development.funnel.dangerous.effective", 71), ("development.funnel.dangerous.n", 74),
