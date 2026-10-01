@@ -126,5 +126,7 @@ enum ModelFacingGenerationContract {
     entirely.
 
     Prefer proposing zero edits (an empty "edits" array) when nothing clearly needs changing.
+
+    Every tool call you make must include the top-level field "schemaVersion": 1. A tool call that omits schemaVersion is invalid.
     """
 }

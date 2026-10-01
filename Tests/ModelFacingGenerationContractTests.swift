@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 
 /// Guards the V1.7 model-facing generation contract against drifting out of
@@ -28,6 +29,8 @@ enum ModelFacingGenerationContractTests {
         self.testInstructionsRetainV1SurfaceScopeAndZeroEditPreference()
         self.testInstructionsDoNotLeakInternalContractVocabulary()
         self.testInternalContractIsUntouched()
+        self.testInstructionsContainTheV1_21SchemaVersionRequirementSentence()
+        self.testInstructionsHashMatchesTheFrozenV1_19ArmBEvidence()
         print("PASS: ModelFacingGenerationContract schema/parser/instruction consistency suite")
     }
 
@@ -260,5 +263,38 @@ enum ModelFacingGenerationContractTests {
     private static func testInternalContractIsUntouched() {
         precondition(IntelligenceGenerationContract.toolName == "propose_transcript_edits")
         precondition(IntelligenceGenerationContract.instructions.contains("UTF-16 offsets"), "the V1.2 internal contract keeps asking for UTF-16 offsets; V1.7 does not migrate it")
+    }
+
+    // MARK: - V1.21 promoted instruction (drift detection)
+
+    /// V1.19/V1.20 experimentally validated that adding exactly this sentence
+    /// (Arm B) takes `granite4:3b`'s schemaVersion compliance from 0/15 to
+    /// 15/15, including on non-empty proposals. V1.21 promoted it verbatim.
+    /// A readable, human-diagnosable companion to the hash check below.
+    private static func testInstructionsContainTheV1_21SchemaVersionRequirementSentence() {
+        precondition(
+            ModelFacingGenerationContract.instructions.contains(
+                #"Every tool call you make must include the top-level field "schemaVersion": 1. A tool call that omits schemaVersion is invalid."#
+            ),
+            "the V1.19/V1.20-validated Arm B sentence must be present verbatim in the production instructions"
+        )
+    }
+
+    /// Byte-for-byte drift detection: `instructions` must remain exactly the
+    /// text V1.19/V1.20 hashed and experimentally validated as Arm B
+    /// (`Evaluation/Intelligence/V1_19_PROTOCOL_ADHERENCE_EXPERIMENT.md`,
+    /// `Evaluation/Intelligence/V1_20_NONEMPTY_PROTOCOL_COMPLIANCE_VALIDATION.md`).
+    /// If this ever fails, the experimental evidence no longer describes the
+    /// production contract -- do not "fix" this test by updating the hash;
+    /// treat a mismatch as a signal that re-validation is required.
+    private static func testInstructionsHashMatchesTheFrozenV1_19ArmBEvidence() {
+        let digest = SHA256.hash(data: Data(ModelFacingGenerationContract.instructions.utf8))
+        let hex = digest.map { String(format: "%02x", $0) }.joined()
+        let frozenArmBHash = "249ebb6ae1d7d6df9387d5d82ce818a0ccf5bef0b5104a05211f592caf54ad88"
+        precondition(
+            hex == frozenArmBHash,
+            "ModelFacingGenerationContract.instructions sha256=\(hex) no longer matches the frozen V1.19 Arm B hash \(frozenArmBHash) -- "
+                + "the experimental evidence for this contract text is now stale; do not update this hash without re-validating"
+        )
     }
 }

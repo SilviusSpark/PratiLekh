@@ -70,7 +70,8 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.17 — controlled local-model integration harness (`Evaluation/Intelligence/Harness/`, evaluation infrastructure only, zero `Sources/` change): connects the existing unmodified `LLMClient` to the existing unmodified Intelligence chain; deterministic 9-fixture self-test (`scripts/test_intelligence_harness.sh`) is a hard gate, independent of any model; live runner (`scripts/intelligence_harness_run.sh`) ran a real local model (`granite4:3b` via Ollama) across 4 synthetic + 6 private real-dictation samples (two separate evidence tiers) — all 10 calls succeeded and engaged tool calling, all 10 omitted required `schemaVersion`, all 10 failed closed at the strict parser, **zero edits reached autonomous acceptance**; **protocol-compliance finding only — does not establish correction quality or model safety**, since no proposal crossed the strict transport boundary; no prompt/schema/parser/policy/model tuning occurred in response; **not wired into dictation** | ✅ committed | `50c284b` (full: `50c284bab7f74e00a279161352e750973b6e5834`) |
 | Intelligence V1.18 — model protocol-compliance investigation (read-only; no code change): traced why `granite4:3b` omitted required `schemaVersion` in 10/10 V1.17 calls; exonerated PratiLekh request construction and `LLMClient` serialization (byte-for-byte round-trip proof, plus raw-`curl` reproduction bypassing `LLMClient` entirely); Ollama's rendering template showed no field-stripping logic and a same-family cross-model control (`granite4:350m`, identical request) correctly produced `schemaVersion`, making Ollama unlikely to be the cause though the final rendered prompt was not captured byte-for-byte; **model protocol adherence for `granite4:3b` under this exact runtime/framing is the best-supported failure boundary** (12/12 omissions total); `qwen2.5:1.5b` did not engage tool-calling at all (consistent with V1.3B); **no prompt/schema/parser/policy/model tuning occurred** | ✅ committed | `162e970` (full: `162e9706069274d721bb4da7ab8b9c022626b821`) |
 | Intelligence V1.19 — protocol adherence experiment (pre-frozen 3-arm, 45-call, hashed-before-first-call experiment; no production/harness/contract change): Arm A (frozen production instructions, unmodified) 15/15 tool engagement, **0/15** protocol compliance, all 15 failing `missingField("schemaVersion")`; Arm B (A + one explicit `schemaVersion`-requirement sentence) 15/15 engagement, **15/15** compliance; Arm C (B + one minimal structural example) also 15/15/15/15 — **no measurable compliance benefit from the example over the explicit instruction alone**; confound recorded: all 30 B/C responses proposed zero edits while all 15 A responses proposed a (mostly genuine) edit, so **V1.19 does not establish Arm B remains compliant on a non-empty edit proposal**; no correction-quality or safety conclusion drawn; **Arm B recorded as the smallest experimentally-supported candidate instruction change, explicitly not production-approved**; no mid-run tuning or matrix changes | ✅ committed | `7e2d7b4` (full: `7e2d7b49ebba75dd7a61cd58c56c50b4dbf23dae`) |
-| Intelligence V1.20 — non-empty protocol compliance validation (pre-frozen, hashed-before-first-call experiment, Arm B instruction verified by `precondition` to match V1.19's hash exactly before any call; no production/harness/contract change): 5 fixtures (3 punctuation, 2 capitalization) × 3 reps = 15 trials, zero protected spans; 15/15 tool engagement, **15/15** strict V1 protocol compliance (0 parse failures of any kind); 6/15 non-empty proposals, 9/15 valid empty responses; **of the 6 non-empty proposals: 6/6 structurally complete, 6/6 addressing-resolved, 6/6 predetermined-transformation represented, 6/6 autonomously accepted** — Arm B's protocol compliance survives constructing a real non-empty proposal without degradation; punctuation fixtures 0/9 non-empty vs. capitalization fixtures 6/6 non-empty, recorded as a **model usefulness/recall finding, not a protocol-compliance failure**, cause unknown and not investigated; **closes the specific non-empty protocol-adherence gap V1.19 left open — Arm B now has sufficient protocol evidence for a separate production-contract promotion decision, not made here**; no correction-quality or safety generalization claimed | ✅ documented, **uncommitted at time of writing** | pending commit |
+| Intelligence V1.20 — non-empty protocol compliance validation (pre-frozen, hashed-before-first-call experiment, Arm B instruction verified by `precondition` to match V1.19's hash exactly before any call; no production/harness/contract change): 5 fixtures (3 punctuation, 2 capitalization) × 3 reps = 15 trials, zero protected spans; 15/15 tool engagement, **15/15** strict V1 protocol compliance (0 parse failures of any kind); 6/15 non-empty proposals, 9/15 valid empty responses; **of the 6 non-empty proposals: 6/6 structurally complete, 6/6 addressing-resolved, 6/6 predetermined-transformation represented, 6/6 autonomously accepted** — Arm B's protocol compliance survives constructing a real non-empty proposal without degradation; punctuation fixtures 0/9 non-empty vs. capitalization fixtures 6/6 non-empty, recorded as a **model usefulness/recall finding, not a protocol-compliance failure**, cause unknown and not investigated; **closes the specific non-empty protocol-adherence gap V1.19 left open — Arm B now has sufficient protocol evidence for a separate production-contract promotion decision, not made here**; no correction-quality or safety generalization claimed | ✅ committed | `32678c4` (full: `32678c4039c39cf3652996f7c1c44a25a391517d`) |
+| Intelligence V1.21 — explicit schema-version instruction promotion (`Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift`; first production Intelligence code change since V1.16): added exactly the V1.19/V1.20-validated Arm B sentence to `instructions`, nothing else changed (no Arm C, no schema/parser/policy/harness change); **hash-equivalence proof**: the promoted `instructions` string's SHA-256 matches V1.19's frozen Arm B hash (`249ebb6a…4ad88`) exactly, verified on first attempt, no historical evidence adjusted; added two drift-detection regression tests to `ModelFacingGenerationContractTests.swift` (a readable substring check plus the byte-for-byte hash check, warning explicitly against "fixing" a future failure by updating the hash); punctuation/empty-edit recall (V1.20's 0/9 finding) deliberately not addressed; `granite4:3b` not rerun (hash proof was the acceptance criterion and it matched); **not wired into dictation** | ✅ documented, **uncommitted at time of writing** | pending commit |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -790,7 +791,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.20 (test-infra repair through the non-empty protocol compliance validation)
+## Intelligence V1.3A–V1.21 (test-infra repair through the explicit schema-version instruction promotion)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -1116,6 +1117,25 @@ or safety generalization is claimed. No mid-run tuning, selective retries, or ad
 fixtures were introduced. All diagnostic artifacts were written under `/tmp/v120/` and were
 never committed.
 
+**V1.21** then promoted the single instruction change V1.19/V1.20 validated into production
+(`Evaluation/Intelligence/V1_21_SCHEMA_VERSION_INSTRUCTION_PROMOTION.md`) — **the first
+production Intelligence code change since V1.16.** `ModelFacingGenerationContract.instructions`
+gained exactly the Arm B sentence (`Every tool call you make must include the top-level
+field "schemaVersion": 1. A tool call that omits schemaVersion is invalid.`), nothing else:
+no Arm C example, no schema/parser/policy/harness change. **Hash-equivalence proof (the hard
+acceptance criterion): the promoted instructions string's SHA-256 matched V1.19's frozen Arm
+B hash (`249ebb6ae1d7d6df9387d5d82ce818a0ccf5bef0b5104a05211f592caf54ad88`) exactly, on the
+first attempt — no historical evidence was adjusted.** Two drift-detection tests were added
+to `ModelFacingGenerationContractTests.swift`: a readable substring check and the same
+byte-for-byte hash check, the latter explicitly warning against "fixing" a future failure by
+updating the hash rather than re-validating. `granite4:3b` was **not** rerun — the hash proof
+was the acceptance criterion and it was met. V1.20's punctuation/empty-edit recall gap was
+deliberately **not** addressed (a separate, unresolved, future question). All existing
+regressions (`scripts/test_intelligence_safety.sh` 11/11, `scripts/test_intelligence_harness.sh`
+9/9, `scripts/test_protected_span_derivation.sh`, `scripts/test_autonomous_permission_gate.sh`
+— all unaffected, same numbers as before) and `./build.sh unsigned` passed. **Not wired into
+dictation.**
+
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
 intended occurrence relative to true intent, the resolver resolves consistently and correctly *per
@@ -1418,12 +1438,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.20" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.21" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.20" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.21" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,
