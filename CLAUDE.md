@@ -67,7 +67,8 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.14 — autonomous-edit-policy investigation: measured the classifier's remaining leniency after V1.11+V1.13 (155-entry dev + 126-entry validation corpora, frozen), evaluated 8 candidate structural invariants; recommends tightening generic policy (punctuation allowlist + no intra-token change + merge-only whitespace + acronym/identifier capitalization guards) over new recognizers for most of the gap; **no production change** | ✅ committed | see `git log` ("Record autonomous edit policy findings") |
 | Intelligence V1.15 — fresh autonomous-policy validation: V1.14 bundle re-scored unmodified against a genuinely fresh, frozen 128-entry corpus (zero text overlap with prior corpora); cost/benefit replicates (1 legit edit lost, same acronym-guard driver; 83.3% of dangerous edits blocked); two new hazard sub-shapes found (punctuation-split tokens), not falsifying; recommends a distinct Safety-Authority-consumed gate over extending the classifier; **no production change** | ✅ committed | `cebcbfd` (full: `cebcbfd408e6af48f68c44edb891676f2505be52`) |
 | Intelligence V1.16 — autonomous permission gate (`Intelligence/Safety/AutonomousPermissionGate.swift`, a separate deterministic type consumed by `IntelligenceSafetyAuthority`, not folded into the classifier): implements exactly the 5 validated rules (P-A routine-punctuation allowlist, P-B no intra-token punctuation change, W-A1 merge-only whitespace, C-A2 acronym-lowering guard, C-C digit-bearing-token case guard); boundary-directed `String.Index` scanning with a fail-closed 64-scalar resource bound (exceeding it blocks, never permits); disposition is always `.reviewOnly`, never `.rejected`; exact production parity against all three frozen V1.14/V1.15 corpora (development/validation/fresh) via a new replay harness; known cost is the same one acronym-guard legitimate-edit demotion per corpus already documented in V1.14/V1.15; word-split and punctuation-split-token residuals remain unresolved by design; **not wired into dictation** | ✅ committed | `184c09b` (full: `184c09b045d3fcd3f0bcafe9d7bf552d41f4a47c`) |
-| Intelligence V1.17 — controlled local-model integration harness (`Evaluation/Intelligence/Harness/`, evaluation infrastructure only, zero `Sources/` change): connects the existing unmodified `LLMClient` to the existing unmodified Intelligence chain; deterministic 9-fixture self-test (`scripts/test_intelligence_harness.sh`) is a hard gate, independent of any model; live runner (`scripts/intelligence_harness_run.sh`) ran a real local model (`granite4:3b` via Ollama) across 4 synthetic + 6 private real-dictation samples (two separate evidence tiers) — all 10 calls succeeded and engaged tool calling, all 10 omitted required `schemaVersion`, all 10 failed closed at the strict parser, **zero edits reached autonomous acceptance**; **protocol-compliance finding only — does not establish correction quality or model safety**, since no proposal crossed the strict transport boundary; no prompt/schema/parser/policy/model tuning occurred in response; **not wired into dictation** | ✅ documented, **uncommitted at time of writing** | pending commit |
+| Intelligence V1.17 — controlled local-model integration harness (`Evaluation/Intelligence/Harness/`, evaluation infrastructure only, zero `Sources/` change): connects the existing unmodified `LLMClient` to the existing unmodified Intelligence chain; deterministic 9-fixture self-test (`scripts/test_intelligence_harness.sh`) is a hard gate, independent of any model; live runner (`scripts/intelligence_harness_run.sh`) ran a real local model (`granite4:3b` via Ollama) across 4 synthetic + 6 private real-dictation samples (two separate evidence tiers) — all 10 calls succeeded and engaged tool calling, all 10 omitted required `schemaVersion`, all 10 failed closed at the strict parser, **zero edits reached autonomous acceptance**; **protocol-compliance finding only — does not establish correction quality or model safety**, since no proposal crossed the strict transport boundary; no prompt/schema/parser/policy/model tuning occurred in response; **not wired into dictation** | ✅ committed | `50c284b` (full: `50c284bab7f74e00a279161352e750973b6e5834`) |
+| Intelligence V1.18 — model protocol-compliance investigation (read-only; no code change): traced why `granite4:3b` omitted required `schemaVersion` in 10/10 V1.17 calls; exonerated PratiLekh request construction and `LLMClient` serialization (byte-for-byte round-trip proof, plus raw-`curl` reproduction bypassing `LLMClient` entirely); Ollama's rendering template showed no field-stripping logic and a same-family cross-model control (`granite4:350m`, identical request) correctly produced `schemaVersion`, making Ollama unlikely to be the cause though the final rendered prompt was not captured byte-for-byte; **model protocol adherence for `granite4:3b` under this exact runtime/framing is the best-supported failure boundary** (12/12 omissions total); `qwen2.5:1.5b` did not engage tool-calling at all (consistent with V1.3B); **no prompt/schema/parser/policy/model tuning occurred** | ✅ documented, **uncommitted at time of writing** | pending commit |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
@@ -787,7 +788,7 @@ is that unsafe proposals cannot reach final output. **Only after that foundation
 local text model be connected for the first real proposal-generation experiment** — not before,
 and not as part of the same milestone that builds the foundation.
 
-## Intelligence V1.3A–V1.17 (test-infra repair through the controlled local-model integration harness)
+## Intelligence V1.3A–V1.18 (test-infra repair through the model protocol-compliance investigation)
 
 **This section is stale-prose-corrected as of the V1.5 milestone; the detailed evidence lives in
 `Evaluation/Intelligence/Experimental/*.md` and `Evaluation/Intelligence/V1_5_ADDRESSING_CONTRACT_FREEZE.md`
@@ -1041,6 +1042,28 @@ the Safety Authority's behavior against real model proposals remains evidenced o
 deterministic fixtures and the V1.0–V1.16 adversarial suites. **No prompt, schema, parser,
 policy, or model tuning occurred in response to this result** — the contract, parser, gate,
 and harness are byte-for-byte what V1.7/V1.16 committed. **Not wired into dictation.**
+
+**V1.18** then investigated (read-only; no code change) why `granite4:3b` omitted required
+`schemaVersion` in 10/10 V1.17 calls
+(`Evaluation/Intelligence/V1_18_MODEL_PROTOCOL_COMPLIANCE_INVESTIGATION.md`). Traced every
+boundary: `ModelFacingGenerationContract` declares `required: [schemaVersion, edits]`
+unmodified; `LLMClient.buildChatCompletionsBody` passes `config.tools` through with zero
+transformation, proven byte-for-byte via direct serialization + round-trip re-parse; a raw
+`curl` call using those exact bytes, bypassing `LLMClient` entirely, reproduced the identical
+omission — **exonerating PratiLekh's request construction and `LLMClient`'s serialization
+and response parsing.** Ollama's own installed rendering template
+(`ollama show --template`) contains no field-stripping logic, and a minimal, no-download
+cross-model control — the identical request sent to the same-family `granite4:350m` —
+**correctly produced `schemaVersion`**, an existence proof that the full schema reaches the
+model-visible prompt; `qwen2.5:1.5b` did not engage tool-calling at all under this framing
+(consistent with V1.3B). **Ollama showed no evidence of stripping the required field and is
+unlikely to be the cause, though the final rendered prompt text was not captured
+byte-for-byte** — the one residual observability gap. **Model protocol adherence for
+`granite4:3b` under this exact runtime/framing is the best-supported failure boundary**: 12/12
+omissions (the original 10 plus 2 more during this investigation) against the same-family
+smaller model's correct inclusion from the identical pipeline. **No prompt, schema, parser,
+policy, or model tuning occurred** — every call used the frozen, already-committed contract
+verbatim. All diagnostic artifacts were written under `/tmp` and were never committed.
 
 **Known open risks, not solved by any of the above:** (1) mutually-consistent-but-wrong addressing
 evidence — if a model's occurrence and context agree with each other but both misidentify the
@@ -1344,12 +1367,12 @@ from the real-audio run (private results, not committed):
       (21 files); no `Sources/` file, no `project.pbxproj` entry, and no Intelligence V1.0/V1.1/V1.2
       code or architecture was modified. This is test-infrastructure repair only, per this
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
-      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.17" above for
+      — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.18" above for
       everything since, including the now-frozen addressing contract and its own open risks.
 13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
     production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
     benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.17" above) was design/documentation only; V1.6 implemented only its
+    (see "Intelligence V1.3A–V1.18" above) was design/documentation only; V1.6 implemented only its
     deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
     insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
     resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,
