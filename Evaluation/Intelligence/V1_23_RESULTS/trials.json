@@ -1,0 +1,895 @@
+[
+  {
+    "category" : "punctuation-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "PUNC-001",
+    "legalNormalized" : "the accused was present in court",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the accused was present in court",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "punctuation-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "PUNC-002",
+    "legalNormalized" : "the matter is listed for hearing tomorrow",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the matter is listed for hearing tomorrow",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "punctuation-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "PUNC-003",
+    "legalNormalized" : "he said yes and the request was granted",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "he said yes and the request was granted",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "punctuation-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "PUNC-004",
+    "legalNormalized" : "the order was passed accordingly",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the order was passed accordingly",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "punctuation-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "PUNC-005",
+    "legalNormalized" : "the witness stated that he saw the accused",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the witness stated that he saw the accused",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "punctuation-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "PUNC-006",
+    "legalNormalized" : "the application was allowed with costs",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the application was allowed with costs",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "capitalization-correction-warranted",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "autonomouslyAccepted",
+        "correctness" : "incorrect",
+        "disposition" : "autonomouslyAccepted(IntelligenceEditClassification.capitalizationOnly)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "Ram Das appeared as a witness",
+        "sourceText" : "ram das appeared as a witness"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "CAP-001",
+    "legalNormalized" : "ram das appeared as a witness",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"replacementText\":\"Ram Das appeared as a witness\",\"sourceText\":\"ram das appeared as a witness\"}]}"
+    ],
+    "rawInput" : "ram das appeared as a witness",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "capitalization-correction-warranted",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "autonomouslyAccepted",
+        "correctness" : "incorrect",
+        "disposition" : "autonomouslyAccepted(IntelligenceEditClassification.capitalizationOnly)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "the witness Ram Das gave his statement",
+        "sourceText" : "the witness ram das gave his statement"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "CAP-002",
+    "legalNormalized" : "the witness ram das gave his statement",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"edits\":[{\"replacementText\":\"the witness Ram Das gave his statement\",\"sourceText\":\"the witness ram das gave his statement\"}],\"schemaVersion\":1}"
+    ],
+    "rawInput" : "the witness ram das gave his statement",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "capitalization-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CAP-003",
+    "legalNormalized" : "sita devi filed the complaint",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"edits\":[],\"schemaVersion\":1}"
+    ],
+    "rawInput" : "sita devi filed the complaint",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "capitalization-correction-warranted",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "autonomouslyAccepted",
+        "correctness" : "incorrect",
+        "disposition" : "autonomouslyAccepted(IntelligenceEditClassification.capitalizationOnly)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "Mohan Lal was examined",
+        "sourceText" : "mohan lal was examined"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "CAP-004",
+    "legalNormalized" : "mohan lal was examined",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"replacementText\":\"Mohan Lal was examined\",\"sourceText\":\"mohan lal was examined\"}]}"
+    ],
+    "rawInput" : "mohan lal was examined",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "capitalization-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CAP-005",
+    "legalNormalized" : "geeta rani was the complainant",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "geeta rani was the complainant",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "whitespace-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "WS-001",
+    "legalNormalized" : "thewitness was present in court",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "thewitness was present in court",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "whitespace-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "WS-002",
+    "legalNormalized" : "the proceedings beganpromptly that morning",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the proceedings beganpromptly that morning",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "whitespace-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "WS-003",
+    "legalNormalized" : "the statementwas recorded accurately",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the statementwas recorded accurately",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "multi-edit-correction-warranted",
+    "edits" : [
+
+    ],
+    "failureDetail" : "whole-response rejected: wireParseFailure(main.ModelFacingEditParseFailure.missingField(\"replacementText\"))",
+    "id" : "MULTI-001",
+    "legalNormalized" : "ram das appeared as a witness and gave his statement",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"sourceText\":\"ram das appeared as a witness and gave his statement\"}]}"
+    ],
+    "rawInput" : "ram das appeared as a witness and gave his statement",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "protocolFailure"
+  },
+  {
+    "category" : "multi-edit-correction-warranted",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "rejectedBySafetyAuthority",
+        "correctness" : "incorrect",
+        "disposition" : "rejected(ProposalRejectionReason.unsupportedEditCategory)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "Sita Devi was examined as a witness",
+        "sourceText" : "sita devi wasexamined as a witness"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "MULTI-002",
+    "legalNormalized" : "sita devi wasexamined as a witness",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"replacementText\":\"Sita Devi was examined as a witness\",\"sourceText\":\"sita devi wasexamined as a witness\"}]}"
+    ],
+    "rawInput" : "sita devi wasexamined as a witness",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "multi-edit-correction-warranted",
+    "edits" : [
+      {
+        "addressing" : "rejected: contextMatchesNoCandidate",
+        "bucket" : "addressingRejected",
+        "correctness" : "unlabelled",
+        "disposition" : "addressingRejected",
+        "id" : "p1",
+        "literalMatchesExpected" : true,
+        "position" : 1,
+        "replacementText" : "gave his",
+        "sourceText" : "gavehis"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "MULTI-003",
+    "legalNormalized" : "the witness gavehis statement in court",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"leftContext\":\"the\",\"replacementText\":\"gave his\",\"rightContext\":\" statement in court\",\"sourceText\":\"gavehis\"}]}"
+    ],
+    "rawInput" : "the witness gavehis statement in court",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "multi-edit-correction-warranted",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "autonomouslyAccepted",
+        "correctness" : "incorrect",
+        "disposition" : "autonomouslyAccepted(IntelligenceEditClassification.capitalizationOnly)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "Ram Das and Sita Devi appeared as witnesses",
+        "sourceText" : "ram das and sita devi appeared as witnesses"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "MULTI-004",
+    "legalNormalized" : "ram das and sita devi appeared as witnesses",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"replacementText\":\"Ram Das and Sita Devi appeared as witnesses\",\"sourceText\":\"ram das and sita devi appeared as witnesses\"}]}"
+    ],
+    "rawInput" : "ram das and sita devi appeared as witnesses",
+    "recallAnyAddressed" : "missed",
+    "recallAutonomous" : "missed",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "clean-control",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CTRL-001",
+    "legalNormalized" : "The accused was present in court.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"edits\":[],\"schemaVersion\":1}"
+    ],
+    "rawInput" : "The accused was present in court.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "clean-control",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CTRL-002",
+    "legalNormalized" : "The matter is listed for hearing tomorrow.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The matter is listed for hearing tomorrow.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "clean-control",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CTRL-003",
+    "legalNormalized" : "Ram Das appeared as a witness.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"edits\":[],\"schemaVersion\":1}"
+    ],
+    "rawInput" : "Ram Das appeared as a witness.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "clean-control",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CTRL-004",
+    "legalNormalized" : "The order was passed accordingly.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The order was passed accordingly.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "clean-control",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CTRL-005",
+    "legalNormalized" : "The application was allowed with costs.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The application was allowed with costs.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "clean-control",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "CTRL-006",
+    "legalNormalized" : "The witness stated that he saw the accused.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The witness stated that he saw the accused.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-protected-resolved-span",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-PSPAN-001",
+    "legalNormalized" : "the accused was charged under Section 302 IPC",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the accused was charged under section three zero two IPC",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-protected-resolved-span",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-PSPAN-002",
+    "legalNormalized" : "the case falls under Section 120 IPC",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the case falls under section one twenty IPC",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-protected-resolved-span",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-PSPAN-003",
+    "legalNormalized" : "he was booked under Section 34 IPC",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "he was booked under section thirty four IPC",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-intra-token-punctuation",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-INTRA-001",
+    "legalNormalized" : "Hon'ble court directed the parties to appear.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "Hon'ble court directed the parties to appear.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-intra-token-punctuation",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-INTRA-002",
+    "legalNormalized" : "the accused's statement was recorded in full.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "the accused's statement was recorded in full.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-intra-token-punctuation",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "rejectedBySafetyAuthority",
+        "correctness" : "incorrect",
+        "disposition" : "rejected(ProposalRejectionReason.noOpProposal)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "The provision was invoked u/s the relevant code.",
+        "sourceText" : "The provision was invoked u/s the relevant code."
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-INTRA-003",
+    "legalNormalized" : "The provision was invoked u/s the relevant code.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"replacementText\":\"The provision was invoked u/s the relevant code.\",\"sourceText\":\"The provision was invoked u/s the relevant code.\"}]}"
+    ],
+    "rawInput" : "The provision was invoked u/s the relevant code.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-word-merge",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-MERGE-001",
+    "legalNormalized" : "Ram Das appeared as a witness.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"edits\":[],\"schemaVersion\":1}"
+    ],
+    "rawInput" : "Ram Das appeared as a witness.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-word-merge",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-MERGE-002",
+    "legalNormalized" : "Sita Devi filed the complaint.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "Sita Devi filed the complaint.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-word-merge",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-MERGE-003",
+    "legalNormalized" : "Mohan Lal was examined.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "Mohan Lal was examined.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-acronym-lowering",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-ACR-001",
+    "legalNormalized" : "The provisions of IPC were invoked.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The provisions of IPC were invoked.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-acronym-lowering",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-ACR-002",
+    "legalNormalized" : "The matter falls under CrPC.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The matter falls under CrPC.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-acronym-lowering",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-ACR-003",
+    "legalNormalized" : "BNSS replaced the earlier code.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "BNSS replaced the earlier code.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-digit-case",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-DIGIT-001",
+    "legalNormalized" : "Exhibit P9 was produced in court.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "Exhibit P9 was produced in court.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-digit-case",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-DIGIT-002",
+    "legalNormalized" : "Document D2 was admitted as evidence.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "Document D2 was admitted as evidence.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-independently-protected",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-NUM-001",
+    "legalNormalized" : "The amount of Rs. 5,000 was paid.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The amount of Rs. 5,000 was paid.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-independently-protected",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-NUM-002",
+    "legalNormalized" : "The case was registered on 12.07.2026.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "The case was registered on 12.07.2026.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "hazard-independently-protected",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "HAZ-NUM-003",
+    "legalNormalized" : "Case No. 45 of 2026 was listed.",
+    "manualAdjudicationOnly" : false,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "Case No. 45 of 2026 was listed.",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "ambiguous",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "rejectedBySafetyAuthority",
+        "correctness" : "unlabelled",
+        "disposition" : "rejected(ProposalRejectionReason.noOpProposal)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "the witness said she was present",
+        "sourceText" : "the witness said she was present"
+      },
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "rejectedBySafetyAuthority",
+        "correctness" : "unlabelled",
+        "disposition" : "rejected(ProposalRejectionReason.noOpProposal)",
+        "id" : "p2",
+        "literalMatchesExpected" : false,
+        "position" : 2,
+        "replacementText" : "she confirmed the fact",
+        "sourceText" : "she confirmed the fact"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "AMBIG-001",
+    "legalNormalized" : "the witness said she was present she confirmed the fact",
+    "manualAdjudicationOnly" : true,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"edits\":[{\"replacementText\":\"the witness said she was present\",\"sourceText\":\"the witness said she was present\"},{\"replacementText\":\"she confirmed the fact\",\"sourceText\":\"she confirmed the fact\"}],\"schemaVersion\":1}"
+    ],
+    "rawInput" : "the witness said she was present she confirmed the fact",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "ambiguous",
+    "edits" : [
+
+    ],
+    "failureDetail" : null,
+    "id" : "AMBIG-002",
+    "legalNormalized" : "ipc and crpc were both invoked in the case",
+    "manualAdjudicationOnly" : true,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[]}"
+    ],
+    "rawInput" : "ipc and crpc were both invoked in the case",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  },
+  {
+    "category" : "ambiguous",
+    "edits" : [
+      {
+        "addressing" : "resolved (basis: uniqueSource)",
+        "bucket" : "rejectedBySafetyAuthority",
+        "correctness" : "unlabelled",
+        "disposition" : "rejected(ProposalRejectionReason.unsupportedEditCategory)",
+        "id" : "p1",
+        "literalMatchesExpected" : false,
+        "position" : 1,
+        "replacementText" : "the hearing is on the next date",
+        "sourceText" : "the hearing is on the the next date"
+      }
+    ],
+    "failureDetail" : null,
+    "id" : "AMBIG-003",
+    "legalNormalized" : "the hearing is on the the next date",
+    "manualAdjudicationOnly" : true,
+    "modelFreeText" : null,
+    "modelRawToolCallArguments" : [
+      "{\"schemaVersion\":1,\"edits\":[{\"replacementText\":\"the hearing is on the next date\",\"sourceText\":\"the hearing is on the the next date\"}]}"
+    ],
+    "rawInput" : "the hearing is on the the next date",
+    "recallAnyAddressed" : "notApplicable",
+    "recallAutonomous" : "notApplicable",
+    "trial" : "evaluated"
+  }
+]
