@@ -75,7 +75,8 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.22 — model capability evaluation design & freeze (`Evaluation/References/intelligence-v1-capability/`: `README.md` + `corpus.json`, plus `Tests/IntelligenceV1CapabilityCorpusTests.swift`/`scripts/test_intelligence_v1_capability_corpus.sh`; design/freeze only, **no model run, zero `Sources/` change**): a 44-entry, synthetic, pinned-SHA-256 ground-truth corpus covering the three V1 surface categories (14 correction-warranted + 6 matched clean-control minimal pairs), 4 multi-edit entries combining already-covered categories (two independent, non-overlapping warranted corrections per text, exercising partial recall/per-edit precision/deterministic multi-edit addressing), and 17 hazard entries exercising the V1.16 gate and V1.11/V1.13 protected spans individually; frozen adjudication rules (exact-match correctness, the two distinct uses of `recallRequiresAll`, partial recall as its own reportable outcome, multiple/equivalent/unnecessary/missed/ambiguous handling, `manualAdjudicationOnly` exclusion) and 9 separately-reported metrics (never blended, entry-level **and** per-correction recall) reusing the existing V1.17 harness's disposition taxonomy plus a new ground-truth cross-reference step; hard safety criterion restated (0 unsafe autonomous acceptances), no arbitrary recall threshold invented; the corpus-freeze test replays every entry through the real, unmodified `LegalDictationProcessor`/`ProtectedSpanDerivation`/`NumericStructuralProtection` (catching one authoring bug pre-exposure: a digit-bearing hazard fixture that accidentally also carried a numeric protected span) and, for the 4 multi-edit entries specifically, verifies their expected corrections are pairwise non-overlapping so a real overlap check could never spuriously reject two independent correct proposals; explicitly reuses the V1.17 harness/provider/privacy discipline rather than a parallel framework; architectural decisions recorded: no dev/held-out split (single frozen benchmark, not a tuning corpus), 44 entries is sufficient for this first diagnostic (not expanded for scale), and the corpus is immutable once frozen — any future discovered defect must be disclosed/qualified in that run's report, never silently repaired; **not exposed to any model in this milestone** | ✅ documented, **uncommitted at time of writing** | pending commit |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
-Local `main` was 27 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.5 (`1a6c7cb`).
+Local `main` was 44 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.22
+(`b6e967c4fa1d4771c8205cfe919c9dbba7b4605f`).
 Verify current ahead/behind state with Git rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
@@ -1296,6 +1297,40 @@ from the real-audio run (private results, not committed):
 
 ## Current Handoff (read this first in a new session)
 
+**Read this paragraph first; it supersedes anything below that conflicts with it.**
+`main` is at **V1.22**, commit `b6e967c4fa1d4771c8205cfe919c9dbba7b4605f`
+("Freeze Intelligence V1 capability benchmark"), 44 ahead of `origin/main`, 0 behind,
+nothing pushed. The protocol-development sequence (V1.6 production addressing through
+V1.21's schema-version instruction promotion) is **complete** — see "Intelligence
+V1.3A–V1.22" above for the full narrative; this handoff does not repeat it. The
+**Intelligence V1 capability benchmark is frozen**: 44 entries,
+`Evaluation/References/intelligence-v1-capability/corpus.json`, SHA-256
+`0edd60bb456aa34bc62c87cdf3401233f99d7c7e913d30eada3efc511ed3d48b`, pinned in
+`Tests/IntelligenceV1CapabilityCorpusTests.swift`. **The corpus has never been exposed
+to any model.** The **V1.21 production contract
+(`Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift`) remains
+authoritative and unchanged** since its own commit (`d5a37b7`), independently
+hash-pinned in `ModelFacingGenerationContractTests.swift`.
+
+**Next declared work: Intelligence V1.23 — Frozen Intelligence V1 Capability
+Evaluation. Not started; do not begin it without being explicitly asked.** When it
+starts, its discipline is: **evaluation only, not development.** Run `granite4:3b`
+under the committed V1.21 contract against the committed 44-entry benchmark,
+**without modification**. Before the first inference, verify/freeze: the model
+identity, the runtime/configuration, the corpus SHA-256 above, the V1.21 contract's
+own pinned hash, the scoring procedure, and the retry policy — all as already
+specified in `Evaluation/References/intelligence-v1-capability/README.md` (the
+scoring/adjudication source of truth; this paragraph does not duplicate it). **No
+selective retries, prompt/policy/schema changes, benchmark repairs, or tuning after
+results are observed.** Report separately (never blended): correction precision,
+entry-level and per-correction recall, partial multi-edit recall, abstention/missed
+corrections, protocol/provider failures, and addressing/Safety-Authority
+dispositions. **Hard safety observation: unsafe autonomously-accepted edits = 0.**
+Any benchmark defect discovered during the run must be **disclosed and qualified in
+that run's report, never silently repaired** (per the corpus's own immutability
+policy, README §7). Any response to a discovered model deficiency belongs to a
+later, separately-authorized milestone — V1.23 itself only evaluates and reports.
+
 1. **Completed:** Phases 0–2, 3C+3C.1, 3D (live activation), 3E.1 (evaluation framework), 3E.2A and
    3E.2B (diagnostic corpora + real-audio runs, findings above), 3F.A (fail-closed statutory safety,
    real-audio validated), 3F.B (bounded grouped-number grammar, real-audio validated), the post-3F
@@ -1309,18 +1344,19 @@ from the real-audio run (private results, not committed):
    FluidVoice/Fluid-Intelligence runtime-access investigation, Text-Only Intelligence Baseline /
    Safety Contract V1 design, and audio-aware architecture research) — see "PratiLekh Intelligence
    architecture" above. **No Intelligence code has been implemented.**
-2. **Exact current `HEAD` at the time of writing this entry:** `7ff7a1327ecb4cb0742c016dd306a5d56d361bb1`
-   ("Add Intelligence proposal generation boundary"), branch `main`, 22 ahead of `origin/main`/0
-   behind, nothing pushed. Per this file's own opening instruction, trust `git log`/`git status`
-   over this paragraph if time has passed. Immediately preceded by `ca63584` (Intelligence V1.1),
-   `5d83c11` (Intelligence V1.0), `18dc992` (Intelligence architecture doc), `f462ce1` (Phase
-   3G.C), `25cfb32` (Phase 3G.B).
-3. **One pending, staged (not committed) test-only change set: the test-infrastructure
-   verification milestone below (item 14).** All Intelligence V1.0/V1.1/V1.2 source is fully
-   committed at the `HEAD` above; no `Sources/` changes are outstanding. Phase 3F.A, 3F.B and 3G.A
-   remain fully committed. Phase 3G.B was a bounded runtime experiment (settings + a user-level
-   vocabulary file, both outside the repository) and left no tracked-file changes. Phase 3G.C was
-   read-only. Verify with `git status`/`git log` before trusting this if time has passed.
+2. **Exact current `HEAD` at the time of writing this entry:** `b6e967c4fa1d4771c8205cfe919c9dbba7b4605f`
+   ("Freeze Intelligence V1 capability benchmark", V1.22), branch `main`, 44 ahead of
+   `origin/main`/0 behind, nothing pushed — see the lead paragraph above for the full current
+   state. Per this file's own opening instruction, trust `git log`/`git status` over this
+   paragraph if time has passed. This superseded the (now historical) `7ff7a13` HEAD this item
+   previously recorded, back when only Intelligence V1.0–V1.2 existed; see "Intelligence
+   V1.3A–V1.22" above for everything committed since (V1.6 production addressing through V1.22's
+   frozen capability benchmark).
+3. **Nothing is staged or pending.** Everything through V1.22 (the frozen 44-entry capability
+   benchmark) is fully committed at the `HEAD` above; no `Sources/` or `Evaluation/` changes are
+   outstanding. The item-14 "test-infrastructure verification milestone" this item previously
+   cross-referenced as "pending" was committed long ago (`b5969ba`) and item 14 below already
+   says so. Verify with `git status`/`git log` before trusting this if time has passed.
 4. **What 3F.A changed:** see "Phase 3F" above — `hundred`-continuation fail-closed decline;
    fragmented-statute/suffix-ambiguity fail-closed decline. No grammar expansion. Confirmed on real
    audio (N10, N04/N12), not just unit tests.
@@ -1421,11 +1457,10 @@ from the real-audio run (private results, not committed):
     `expectedSourceText` match still fails closed (safety is unaffected), but proposal *usefulness*
     under this representation is an open question for the live-model milestone to actually measure,
     not something this synthetic milestone could resolve. See "PratiLekh Intelligence architecture"
-    above for the full design record. **This is still not Intelligence V1 "generally complete"** —
-    no live model or provider has been wired to any of this yet. **Exact immediate next action
-    now:** architectural review of the staged test-infrastructure fix in item 14; only after that
-    review and a commit should live-model wiring be considered, and only after the UTF-16 gap above
-    is explicitly resolved.
+    above for the full design record. **This item is otherwise historical/superseded** — the
+    "exact immediate next action" and UTF-16-gap caveat it originally recorded were overtaken by
+    V1.6 through V1.22; see "Intelligence V1.3A–V1.22" above and the lead paragraph at the top of
+    this section for the current state and the actual next declared work (V1.23).
 14. **Test-infrastructure verification milestone (staged, not committed as of this entry) —
     the `FluidDictationIntegrationTests` build failure blocking the 3 V1.2 raw-argument tests is
     now root-caused and fixed.** Two distinct, unrelated stale-reference bugs were found in the
@@ -1489,16 +1524,22 @@ from the real-audio run (private results, not committed):
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
       — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.22" above for
       everything since, including the now-frozen addressing contract and its own open risks.
-13. **Must NOT be started yet:** wiring any model/provider into production dictation, live
-    production inference, audio-aware Intelligence, fine-tuning of any kind, legal-domain quality
-    benchmarking, and Intelligence V2 all remain unauthorized — the V1.5 addressing-contract freeze
-    (see "Intelligence V1.3A–V1.22" above) was design/documentation only; V1.6 implemented only its
-    deterministic addressing layer (resolver + bridge, unwired). The model-facing wire schema/parser,
-    insertion and everything downstream remain unstarted. The recognition-tuning branch remains closed — do not
-    resume it: no threshold tuning, alias additions, another vocabulary-boosting experiment,
-    modifying the three-character compound-length rule, modifying FluidAudio, exposing
-    rejected-candidate score structures, a production vocabulary-boosting default, or a Phase 3G.D
-    recognition experiment. Also not started: date normalization, punctuation/sentence-boundary
-    heuristics, custom-dictionary reconciliation (Slice D), evaluation-framework redesign,
-    UI/history work, and Phase 4 — none of these are
-    authorized by any evidence gathered so far.
+13. **Must NOT be started yet (current, as of V1.22 — this replaces this item's older,
+    now-stale V1.5/V1.6-era text):** **Intelligence V1.23 — Frozen Intelligence V1 Capability
+    Evaluation is the next declared work and has NOT been started; do not begin it without
+    being explicitly asked** (see the lead paragraph at the top of this section for its exact
+    discipline). Beyond that: wiring any model/provider into production dictation, live
+    production inference, audio-aware Intelligence, fine-tuning of any kind, and Intelligence V2
+    all remain unauthorized. Insertion (as opposed to replacement/deletion) in the addressing
+    resolver remains unbuilt. The recognition-tuning branch remains closed — do not resume it: no
+    threshold tuning, alias additions, another vocabulary-boosting experiment, modifying the
+    three-character compound-length rule, modifying FluidAudio, exposing rejected-candidate score
+    structures, a production vocabulary-boosting default, or a Phase 3G.D recognition experiment.
+    Also not started: date normalization, punctuation/sentence-boundary heuristics,
+    custom-dictionary reconciliation (Slice D), evaluation-framework redesign, UI/history work,
+    and Phase 4 — none of these are authorized by any evidence gathered so far. **Specifically for
+    V1.23 once it begins:** no selective retries, no prompt/policy/schema tuning in response to
+    observed results, no silent benchmark repair (disclose and qualify any discovered defect
+    instead, per the corpus's immutability policy), and any response to a discovered model
+    deficiency is explicitly out of scope for V1.23 itself (a later, separately-authorized
+    milestone's job).
