@@ -1740,6 +1740,22 @@ final class AIEnhancementSettingsViewModel: ObservableObject {
         self.promptEditorMode = .newPrompt(prefillMode: self.draftPromptMode)
     }
 
+    func openNewPromptEditor(usingTemplate template: IndianLegalPromptTemplate) {
+        self.draftPromptMode = template.mode.normalized
+        self.draftIncludeContext = (self.draftPromptMode == .edit)
+        self.draftPromptName = template.name
+        self.draftPromptText = template.promptBody
+        let defaultProviderID = self.defaultVerifiedPromptProviderID()
+        let defaultModel = defaultProviderID.isEmpty ? "" : self.selectedModel(for: defaultProviderID)
+        self.pendingNewPromptConfiguration = SettingsStore.DictationPromptConfiguration(
+            shortcut: nil,
+            providerID: defaultProviderID,
+            modelName: defaultModel
+        )
+        self.promptEditorSessionID = UUID()
+        self.promptEditorMode = .newPrompt(prefillMode: self.draftPromptMode)
+    }
+
     func openPrivateAIPromptEditor() {
         self.draftPromptMode = .dictate
         self.draftPromptName = PrivateAIProviderFeature.displayName

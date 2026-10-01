@@ -340,6 +340,12 @@ struct CustomDictionaryView: View {
             Spacer(minLength: self.theme.metrics.spacing.md)
 
             HStack(spacing: self.theme.metrics.spacing.sm) {
+                Button(action: self.loadIndianLegalStarterPack) {
+                    Label("Indian Legal Pack", systemImage: "building.columns.fill")
+                }
+                .fluidButton(.compact, size: .compact)
+                .help("Load Indian legal terminology, Latin maxims, court names, and common Indian names and places.")
+
                 Button(action: self.importDictionary) {
                     Label("Import", systemImage: "square.and.arrow.down")
                 }
@@ -2338,6 +2344,24 @@ struct CustomDictionaryView: View {
             )
         } catch {
             self.presentErrorAlert(title: "Dictionary Export Failed", message: error.localizedDescription)
+        }
+    }
+
+    private func loadIndianLegalStarterPack() {
+        do {
+            let document = try DictionaryTransferService.shared.loadIndianLegalStarterPack()
+            guard let mode = self.confirmDictionaryImport(document) else { return }
+
+            let summary = try DictionaryTransferService.shared.restore(document, mode: mode)
+            self.entries = SettingsStore.shared.customDictionaryEntries
+            self.loadBoostTerms()
+
+            self.presentInfoAlert(
+                title: "Indian Legal Pack Loaded",
+                message: "Now using \(summary.replacementCount) replacement rules and \(summary.customWordCount) custom words."
+            )
+        } catch {
+            self.presentErrorAlert(title: "Could Not Load Indian Legal Pack", message: error.localizedDescription)
         }
     }
 
