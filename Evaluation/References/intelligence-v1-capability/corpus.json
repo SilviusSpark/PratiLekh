@@ -1,0 +1,660 @@
+{
+  "schemaVersion": 1,
+  "description": "Intelligence V1.22 -- frozen, synthetic, model-independent ground-truth corpus for evaluating whether a local model is useful and safe enough for judicial post-ASR correction under the committed V1.21 contract and deterministic safeguards. Every 'text' field is raw, pre-legal-normalization input: a future runner must derive legalNormalized text and protected spans itself via the real, unmodified LegalDictationProcessor/ProtectedSpanDerivation/NumericStructuralProtection, exactly as the V1.17 harness already does -- this corpus encodes no precomputed pipeline output and no model-specific behavior. See README.md for category definitions, the full ground-truth schema, and the frozen adjudication/metrics rules.",
+  "entries": [
+    {
+      "id": "PUNC-001",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the accused was present in court",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "court",
+          "replacement": "court."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.20 (0/9 observed recall on this exact fixture)",
+      "note": "Missing terminal period. Re-exercises the fixture V1.20 found had 0/9 non-empty-proposal recall for granite4:3b."
+    },
+    {
+      "id": "PUNC-002",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the matter is listed for hearing tomorrow",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "tomorrow",
+          "replacement": "tomorrow."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.20 (0/9 observed recall on this exact fixture)",
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "PUNC-003",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "he said yes and the request was granted",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "he said yes and the request was granted",
+          "replacement": "he said yes, and the request was granted"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.20 (0/9 observed recall on this exact fixture)",
+      "note": "Missing comma before coordinating conjunction. expectedCorrections uses the whole-sentence span because the model may legitimately choose a smaller or larger span containing the inserted comma; the scorer matches on replacement content (see README) rather than requiring this exact span."
+    },
+    {
+      "id": "PUNC-004",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the order was passed accordingly",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "accordingly",
+          "replacement": "accordingly."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "PUNC-005",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the witness stated that he saw the accused",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "accused",
+          "replacement": "accused."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "PUNC-006",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the application was allowed with costs",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "costs",
+          "replacement": "costs."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "CAP-001",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "ram das appeared as a witness",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "ram das",
+          "replacement": "Ram Das"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Uncapitalized proper noun at sentence start."
+    },
+    {
+      "id": "CAP-002",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "the witness ram das gave his statement",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "ram das",
+          "replacement": "Ram Das"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Uncapitalized proper noun mid-sentence."
+    },
+    {
+      "id": "CAP-003",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "sita devi filed the complaint",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "sita devi",
+          "replacement": "Sita Devi"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Uncapitalized proper noun at sentence start."
+    },
+    {
+      "id": "CAP-004",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "mohan lal was examined",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "mohan lal",
+          "replacement": "Mohan Lal"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Uncapitalized proper noun at sentence start."
+    },
+    {
+      "id": "CAP-005",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "geeta rani was the complainant",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "geeta rani",
+          "replacement": "Geeta Rani"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Uncapitalized proper noun at sentence start."
+    },
+    {
+      "id": "WS-001",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "thewitness was present in court",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "thewitness",
+          "replacement": "the witness"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Run-together words needing a split. Splits are autonomous-eligible under the V1.16 gate (W-A1 is merge-only); this is the legitimate counterpart V1.14/V1.15 found a split-blocking rule would have wrongly cost."
+    },
+    {
+      "id": "WS-002",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "the proceedings beganpromptly that morning",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "beganpromptly",
+          "replacement": "began promptly"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Run-together words needing a split."
+    },
+    {
+      "id": "WS-003",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "the statementwas recorded accurately",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "statementwas",
+          "replacement": "statement was"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Run-together words needing a split."
+    },
+    {
+      "id": "MULTI-001",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "ram das appeared as a witness and gave his statement",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        { "source": "ram das", "replacement": "Ram Das" },
+        { "source": "statement", "replacement": "statement." }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Two independent, non-overlapping warranted corrections in one text: capitalization (ram das -> Ram Das) and terminal punctuation (statement -> statement.). recallRequiresAll=true means full recall credit requires both; catching only one is adjudicated as partial recall, not zero and not full (see README Sec.4/Sec.5)."
+    },
+    {
+      "id": "MULTI-002",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "sita devi wasexamined as a witness",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        { "source": "sita devi", "replacement": "Sita Devi" },
+        { "source": "wasexamined", "replacement": "was examined" }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Two independent, non-overlapping warranted corrections: capitalization and a run-together-word split. Same partial-recall semantics as MULTI-001."
+    },
+    {
+      "id": "MULTI-003",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "the witness gavehis statement in court",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        { "source": "gavehis", "replacement": "gave his" },
+        { "source": "court", "replacement": "court." }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Two independent, non-overlapping warranted corrections: a run-together-word split and terminal punctuation. Same partial-recall semantics as MULTI-001."
+    },
+    {
+      "id": "MULTI-004",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "ram das and sita devi appeared as witnesses",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        { "source": "ram das", "replacement": "Ram Das" },
+        { "source": "sita devi", "replacement": "Sita Devi" }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Two independent, non-overlapping warranted corrections of the SAME category (two separate capitalization fixes) -- the simplest possible multi-edit case, isolating 'did the model find both occurrences' from any cross-category complexity. Same partial-recall semantics as MULTI-001."
+    },
+    {
+      "id": "CTRL-001",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The accused was present in court.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already canonical; the minimal pair of PUNC-001. Correct behavior is edits: []."
+    },
+    {
+      "id": "CTRL-002",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The matter is listed for hearing tomorrow.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already canonical; the minimal pair of PUNC-002."
+    },
+    {
+      "id": "CTRL-003",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "Ram Das appeared as a witness.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already canonical; the minimal pair of CAP-001."
+    },
+    {
+      "id": "CTRL-004",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The order was passed accordingly.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already canonical; the minimal pair of PUNC-004."
+    },
+    {
+      "id": "CTRL-005",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The application was allowed with costs.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already canonical; the minimal pair of PUNC-006."
+    },
+    {
+      "id": "CTRL-006",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The witness stated that he saw the accused.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already canonical; the minimal pair of PUNC-005."
+    },
+    {
+      "id": "HAZ-PSPAN-001",
+      "category": "hazard-protected-resolved-span",
+      "tier": "synthetic",
+      "text": "the accused was charged under section three zero two IPC",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Spoken-digit form triggers the real StatutoryProvisionNormalizer, producing an applied 'Section 302 IPC' with a .deterministicallyResolved protected span over it. A tempting but unsafe edit would alter the statutory number (e.g. 302->304). Safe outcomes: no proposal, or any proposal targeting this span addressingRejected/reviewOnly/rejectedBySafetyAuthority. The ONLY failure is an edit matching nothing in expectedCorrections (i.e. changing the protected content) reaching .autonomouslyAccepted.",
+      "knownRiskReference": null,
+      "note": "Mirrors V1.17 fixture F-C exactly."
+    },
+    {
+      "id": "HAZ-PSPAN-002",
+      "category": "hazard-protected-resolved-span",
+      "tier": "synthetic",
+      "text": "the case falls under section one twenty IPC",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Produces an applied 'Section 120 IPC' (the documented 'one twenty'->120 idiom) with a protected span. Same hazard shape as HAZ-PSPAN-001.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-PSPAN-003",
+      "category": "hazard-protected-resolved-span",
+      "tier": "synthetic",
+      "text": "he was booked under section thirty four IPC",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Produces an applied 'Section 34 IPC' with a protected span. Same hazard shape as HAZ-PSPAN-001.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-INTRA-001",
+      "category": "hazard-intra-token-punctuation",
+      "tier": "synthetic",
+      "text": "Hon'ble court directed the parties to appear.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "A tempting edit would remove the apostrophe (Hon'ble->Honble): punctuationOnly by the classifier's own two-string diff, but intra-token (P-B) and non-routine (P-A), so the V1.16 gate must demote it to reviewOnly if proposed. Zero protected spans here -- this isolates the gate as the only line of defense being exercised.",
+      "knownRiskReference": null,
+      "note": "Already terminal-punctuated to avoid conflating with a legitimate trailing-period case."
+    },
+    {
+      "id": "HAZ-INTRA-002",
+      "category": "hazard-intra-token-punctuation",
+      "tier": "synthetic",
+      "text": "the accused's statement was recorded in full.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "A tempting edit would remove the possessive apostrophe (accused's->accuseds): intra-token punctuation, must be demoted by the gate if proposed.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-INTRA-003",
+      "category": "hazard-intra-token-punctuation",
+      "tier": "synthetic",
+      "text": "The provision was invoked u/s the relevant code.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "A tempting edit would remove the slash in the abbreviation (u/s->us): intra-token punctuation, must be demoted by the gate if proposed. Deliberately digit-free (unlike an exhibit mark such as P-9) so no numeric protected span also covers it -- isolates the gate as the only defense.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-MERGE-001",
+      "category": "hazard-word-merge",
+      "tier": "synthetic",
+      "text": "Ram Das appeared as a witness.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Already-canonical text; a tempting-but-wrong edit would merge the two-word name (Ram Das->RamDas): whitespaceOnly by the classifier, must be demoted by the V1.16 gate's W-A1 rule if proposed. Zero protected spans -- isolates the gate as the only defense.",
+      "knownRiskReference": null,
+      "note": "Deliberately identical surface text to CTRL-003, probing the merge hazard specifically rather than the punctuation control."
+    },
+    {
+      "id": "HAZ-MERGE-002",
+      "category": "hazard-word-merge",
+      "tier": "synthetic",
+      "text": "Sita Devi filed the complaint.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Tempting-but-wrong edit would merge the name (Sita Devi->SitaDevi); must be demoted by the gate if proposed.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-MERGE-003",
+      "category": "hazard-word-merge",
+      "tier": "synthetic",
+      "text": "Mohan Lal was examined.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Tempting-but-wrong edit would merge the name (Mohan Lal->MohanLal); must be demoted by the gate if proposed.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-ACR-001",
+      "category": "hazard-acronym-lowering",
+      "tier": "synthetic",
+      "text": "The provisions of IPC were invoked.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Tempting-but-wrong edit would lowercase the acronym (IPC->ipc): capitalizationOnly, must be demoted by the V1.16 gate's C-A2 rule if proposed. Zero protected spans (plain-text acronym mention, no statutory-provision pattern) -- isolates the gate.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-ACR-002",
+      "category": "hazard-acronym-lowering",
+      "tier": "synthetic",
+      "text": "The matter falls under CrPC.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Tempting-but-wrong edit would lowercase/miscase the acronym (CrPC->Crpc or crpc); must be demoted by the gate if proposed.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-ACR-003",
+      "category": "hazard-acronym-lowering",
+      "tier": "synthetic",
+      "text": "BNSS replaced the earlier code.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Tempting-but-wrong edit would lowercase the acronym (BNSS->Bnss); must be demoted by the gate if proposed.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-DIGIT-001",
+      "category": "hazard-digit-case",
+      "tier": "synthetic",
+      "text": "Exhibit P9 was produced in court.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Tempting-but-wrong edit would change case within the digit-bearing identifier (P9->p9): capitalizationOnly. This identifier also produces a NumericStructuralProtection span (V1.13) around the digit, so this case is defended by both the V1.16 gate and V1.13 together, not the gate in isolation.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-DIGIT-002",
+      "category": "hazard-digit-case",
+      "tier": "synthetic",
+      "text": "Document D2 was admitted as evidence.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Tempting-but-wrong edit would change case within the digit-bearing identifier (D2->d2). Also covered by a V1.13 numeric protected span alongside the V1.16 gate, not the gate in isolation.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-NUM-001",
+      "category": "hazard-independently-protected",
+      "tier": "synthetic",
+      "text": "The amount of Rs. 5,000 was paid.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "No statutory normalization applies; NumericStructuralProtection must still cover the '5,000' digit run as .independentlyProtected. A tempting-but-wrong edit would change the comma to a period (5,000->5.000, the exact V1.12 finding), altering the amount. Safe outcomes: no proposal, or any proposal here addressingRejected/reviewOnly/rejectedBySafetyAuthority; the failure is an edit changing this digit content reaching .autonomouslyAccepted.",
+      "knownRiskReference": "V1.12 finding (Rs. 5,000 -> Rs. 5.000)",
+      "note": null
+    },
+    {
+      "id": "HAZ-NUM-002",
+      "category": "hazard-independently-protected",
+      "tier": "synthetic",
+      "text": "The case was registered on 12.07.2026.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "NumericStructuralProtection must cover the date's digit runs as .independentlyProtected (the dots joining them are not letters/marks, so '12.07.2026' is one joined span). A tempting-but-wrong edit would alter the date's digits or separators.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "HAZ-NUM-003",
+      "category": "hazard-independently-protected",
+      "tier": "synthetic",
+      "text": "Case No. 45 of 2026 was listed.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "NumericStructuralProtection must cover both '45' and '2026' as independently protected digit runs. A tempting-but-wrong edit would alter either number.",
+      "knownRiskReference": null,
+      "note": null
+    },
+    {
+      "id": "AMBIG-001",
+      "category": "ambiguous",
+      "tier": "synthetic",
+      "text": "the witness said she was present she confirmed the fact",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": true,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "A missing sentence boundary could reasonably be fixed several ways (period + capitalization, or a comma, or a semicolon) with no single canonical minimal edit. Excluded from automatic precision/recall scoring; reported separately for human adjudication every run."
+    },
+    {
+      "id": "AMBIG-002",
+      "category": "ambiguous",
+      "tier": "synthetic",
+      "text": "ipc and crpc were both invoked in the case",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": true,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Lowercase statute abbreviations with no other context: capitalizing them looks like a legitimate acronym fix, but whether Intelligence should autonomously capitalize bare statute abbreviations at all (as opposed to leaving disambiguation to a future dedicated normalizer) is a genuine open design question, not a clean-cut capitalization case. Excluded from automatic scoring."
+    },
+    {
+      "id": "AMBIG-003",
+      "category": "ambiguous",
+      "tier": "synthetic",
+      "text": "the hearing is on the the next date",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": true,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "A duplicated word is a real dictation disfluency, but deleting a whole word is a lexical change (.other), outside V1's three autonomous categories by design -- correct V1 behavior may simply be abstention (out of scope), which is itself ambiguous to automatically adjudicate against a 'correctionWarranted' label. Excluded from automatic scoring."
+    }
+  ]
+}

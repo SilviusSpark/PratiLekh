@@ -223,6 +223,7 @@ scripts/*
 !scripts/test_autonomous_permission_gate.sh
 !scripts/test_intelligence_harness.sh
 !scripts/intelligence_harness_run.sh
+!scripts/test_intelligence_v1_capability_corpus.sh
 !scripts/test_v1_3a_experimental_resolver.sh
 !scripts/test_v1_4_experimental_resolver.sh
 !scripts/test_v1_4b_experimental_policies.sh
