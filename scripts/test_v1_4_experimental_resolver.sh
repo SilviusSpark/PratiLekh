@@ -16,6 +16,7 @@ task_test_dir=$(mktemp -d /tmp/pratilekh-v1-4-resolver-tests.XXXXXX)
 task_sources="
 Evaluation/Intelligence/Experimental/V1_4_ModelFacingResolver.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceProposal.swift
+Sources/Fluid/Intelligence/Safety/AutonomousPermissionGate.swift
 Sources/Fluid/Intelligence/Safety/ProtectedSpan.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceEditClassifier.swift
 Sources/Fluid/Intelligence/Safety/ProposalDisposition.swift

@@ -105,12 +105,19 @@ enum NumericStructuralProtectionTests {
         self.expect("2026. 5 witnesses", ["2026. 5"])
         self.expect("294, 323, 506", ["294, 323, 506"])
         self.expect("(1) (2) (3)", ["1) (2) (3"])
-        // ... and the rule is what protects the value: deleting the space is blocked.
+        // ... and the rule is what protects the value: deleting the space is
+        // blocked by the numeric span. Digits are word-forming, so this exact
+        // merge is ALSO independently blocked by
+        // `AutonomousPermissionGate`'s (V1.16) merge-only whitespace rule,
+        // even with no numeric spans supplied at all -- two independent
+        // layers converging on the same shape, neither redundant: the gate
+        // has no notion of a numeric span, and V1.13's derivation has no
+        // notion of word-forming tokens.
         let text = "Aadhaar 1234 5678 9012 was produced."
         let spans = NumericStructuralProtection.spans(in: text)
         let space = (text as NSString).range(of: " ", options: [], range: NSRange(location: 12, length: 5))
         precondition(self.disposition(text, edit: space, to: "", spans: spans) == .reviewOnly(.intersectsIndependentlyProtectedSpan), "deleting the space between numeral groups must not be autonomous")
-        precondition({ if case .autonomouslyAccepted = self.disposition(text, edit: space, to: "", spans: []) { return true } else { return false } }(), "premise: without spans that same edit IS autonomous")
+        precondition(self.disposition(text, edit: space, to: "", spans: []) == .reviewOnly(.wordBoundaryMerged), "the gate alone, with no protected spans, must also block this merge")
     }
 
     private static func testGapBreakers() {
@@ -350,7 +357,14 @@ enum NumericStructuralProtectionTests {
         print("hazard oracle: \(hazardSummary); protected chars outside labels \(outsideLabeled)/\(totalCharacters) (\(String(format: "%.3f", percent))%)")
         for group in perGroup.keys.sorted() { print("  \(group): hazards \(perGroup[group]?.hazards ?? 0), escapes \(perGroup[group]?.escapes ?? 0)") }
 
-        precondition(structuralHazards > 0 && escapesWithoutSpans == structuralHazards, "the oracle must be live: with no spans every hazard escapes")
+        // "The oracle is live": with no numeric spans supplied, at least some
+        // hazards still escape, proving V1.13's spans are doing real,
+        // necessary work below -- not all necessarily escape, since V1.16's
+        // AutonomousPermissionGate (a separate, always-active layer) already
+        // independently blocks some digit-merge and digit-intra-punctuation
+        // shapes with no spans at all (see NumericStructuralProtectionTests'
+        // dedicated cross-layer case for a concrete instance).
+        precondition(structuralHazards > 0 && escapesWithoutSpans > 0, "the oracle must be live: at least some hazards escape with no numeric spans")
         precondition(escapesWithSpans == 0, "acceptance criterion 1 failed: \(escapesWithSpans) digit-structural hazard edits escaped")
         precondition(percent <= 2.0, "acceptance criterion 4 failed: \(percent)% protected outside labeled expressions")
         for group in ["odia-digits", "devanagari-digits"] { precondition(perGroup[group]?.escapes == 0 && perGroup[group]?.uncovered ?? 0 == 0, "acceptance criterion 5 failed for \(group)") }
@@ -422,13 +436,19 @@ enum NumericStructuralProtectionTests {
             ("Section", "SECTION"), // capitalization inside a V1.11 resolved span
             ("302", "3,02"), // punctuation edit on digits INSIDE a V1.11 resolved span (overlapping spans)
             ("stands", "Stands"), // outside every span
-            ("Ram Das", "RamDas"), // names remain unprotected (out of scope)
+            ("Ram Das", "RamDas"), // a word-forming merge -- V1.16's gate blocks this independent of any span
         ]
-        // Without the numeric spans (V1.11 alone) the numeric hazards are autonomous.
+        // Without the numeric spans (V1.11 alone) the numeric hazards are
+        // autonomous -- EXCEPT edit 2 ("12 34"->"1234"), a digit merge that
+        // AutonomousPermissionGate (V1.16) independently blocks regardless
+        // of any span at all (digits are word-forming); edits 0 and 1 are
+        // punctuation-only changes to routine marks that stay outside the
+        // gate's scope, so V1.11's own gap is still visible through them.
         let v111Only = compose(edits, spans: derived.spans)
-        for index in [0, 1, 2] {
+        for index in [0, 1] {
             guard case .autonomouslyAccepted = v111Only.edits[index].disposition ?? .rejected(.invalidRange) else { preconditionFailure("premise: V1.11 alone lets edit \(index) through") }
         }
+        precondition(v111Only.edits[2].disposition == .reviewOnly(.wordBoundaryMerged), "\(String(describing: v111Only.edits[2].disposition))")
         // With them: review-only for the numeric ones; resolved spans still win where they overlap.
         let protected = compose(edits, spans: combined)
         precondition(protected.edits[0].disposition == .reviewOnly(.intersectsIndependentlyProtectedSpan))
@@ -437,7 +457,12 @@ enum NumericStructuralProtectionTests {
         precondition(protected.edits[3].disposition == .rejected(.intersectsResolvedSpan))
         precondition(protected.edits[4].disposition == .rejected(.intersectsResolvedSpan), "overlap of a resolved and an independent span: the more restrictive (resolved) wins")
         guard case .autonomouslyAccepted = protected.edits[5].disposition ?? .rejected(.invalidRange) else { preconditionFailure("an edit outside every span is still accepted") }
-        guard case .autonomouslyAccepted = protected.edits[6].disposition ?? .rejected(.invalidRange) else { preconditionFailure("names are out of scope and stay unprotected") }
-        precondition(protected.accepted.map(\.id) == ["p6", "p7"] && protected.reviewOnly.map(\.id) == ["p1", "p2", "p3"] && protected.rejectedBySafetyAuthority.map(\.id) == ["p4", "p5"])
+        // Not because of any span -- names carry none -- but because merging
+        // two word-forming tokens is exactly what V1.16's gate blocks,
+        // regardless of what the two tokens happen to spell. This is not
+        // name recognition: the same rule already fired on "12 34"->"1234"
+        // above, and would fire on any other word pair identically.
+        precondition(protected.edits[6].disposition == .reviewOnly(.wordBoundaryMerged), "\(String(describing: protected.edits[6].disposition))")
+        precondition(protected.accepted.map(\.id) == ["p6"] && protected.reviewOnly.map(\.id) == ["p1", "p2", "p3", "p7"] && protected.rejectedBySafetyAuthority.map(\.id) == ["p4", "p5"])
     }
 }

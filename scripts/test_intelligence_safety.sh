@@ -8,6 +8,7 @@ task_test_dir=$(mktemp -d /tmp/pratilekh-intelligence-safety-tests.XXXXXX)
 
 task_sources="
 Sources/Fluid/Intelligence/Safety/IntelligenceProposal.swift
+Sources/Fluid/Intelligence/Safety/AutonomousPermissionGate.swift
 Sources/Fluid/Intelligence/Safety/ProtectedSpan.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceEditClassifier.swift
 Sources/Fluid/Intelligence/Safety/ProposalDisposition.swift

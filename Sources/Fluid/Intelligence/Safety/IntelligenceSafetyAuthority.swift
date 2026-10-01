@@ -27,6 +27,13 @@ import Foundation
 ///   - Overlapping/conflicting proposals never gain authority through
 ///     input order: both members of an intersecting pair are rejected,
 ///     independent of which came first in `proposals`.
+///   - An independently-derived punctuation-only/capitalization-only/
+///     whitespace-only classification is necessary but not sufficient for
+///     autonomous application: `AutonomousPermissionGate` (V1.16) may still
+///     downgrade it to review-only when a validated structural invariant
+///     says the classification's category, though technically correct,
+///     should not be trusted here (see the gate's own documentation). This
+///     never applies to `.other`, and never rejects outright.
 enum IntelligenceSafetyAuthority {
     struct ProposalOutcome: Equatable {
         let proposal: IntelligenceProposal
@@ -80,6 +87,12 @@ enum IntelligenceSafetyAuthority {
     ///      survivors of 5;
     ///   7. independent edit classification and comparison against V1's
     ///      autonomous categories, for survivors of 6;
+    ///   7a. autonomous-permission gate (`AutonomousPermissionGate`), for
+    ///      survivors of 7 that classified as punctuation-only,
+    ///      capitalization-only, or whitespace-only: downgrades to
+    ///      review-only when a validated structural invariant says the
+    ///      edit should not be trusted despite its classification -- never
+    ///      consulted for `.other`, never rejects outright;
     ///   8. safe application of every `.autonomouslyAccepted` proposal, in
     ///      descending source-range order, against the original `source`.
     static func validate(
@@ -89,11 +102,13 @@ enum IntelligenceSafetyAuthority {
     ) -> Result {
         let sourceUTF16Length = (source as NSString).length
         var dispositions = [ProposalDisposition?](repeating: nil, count: proposals.count)
-        // (index, range) for every proposal that survived the structural
-        // checks below -- built as an array, not a dictionary, so the
-        // overlap/protected-span passes never need a keyed lookup that
-        // could fail.
-        var survivingCandidates: [(index: Int, range: NSRange)] = []
+        // (index, range, swiftRange) for every proposal that survived the
+        // structural checks below -- built as an array, not a dictionary, so
+        // the overlap/protected-span passes never need a keyed lookup that
+        // could fail. `swiftRange` is the same `String.Index` range already
+        // derived to verify `expectedSourceText` below; carrying it forward
+        // lets step 7a reuse it instead of converting `range` a second time.
+        var survivingCandidates: [(index: Int, range: NSRange, swiftRange: Range<String.Index>)] = []
 
         for (index, proposal) in proposals.enumerated() {
             guard
@@ -121,7 +136,7 @@ enum IntelligenceSafetyAuthority {
                 continue
             }
 
-            survivingCandidates.append((index: index, range: proposal.range))
+            survivingCandidates.append((index: index, range: proposal.range, swiftRange: swiftRange))
         }
 
         // Overlap/conflict detection: every pairwise intersection rejects
@@ -170,7 +185,17 @@ enum IntelligenceSafetyAuthority {
             )
             switch classification {
             case .punctuationOnly, .capitalizationOnly, .whitespaceOnly:
-                dispositions[index] = .autonomouslyAccepted(classification)
+                if let block = AutonomousPermissionGate.block(
+                    classification: classification,
+                    source: source,
+                    range: candidate.swiftRange,
+                    expectedSourceText: proposal.expectedSourceText,
+                    replacementText: proposal.replacementText
+                ) {
+                    dispositions[index] = .reviewOnly(block.reviewReason)
+                } else {
+                    dispositions[index] = .autonomouslyAccepted(classification)
+                }
             case .other:
                 dispositions[index] = .rejected(.unsupportedEditCategory)
             }

@@ -23,6 +23,35 @@ enum ProposalDisposition: Equatable {
 enum ReviewReason: Equatable {
     case intersectsUnresolvedSpan
     case intersectsIndependentlyProtectedSpan
+    /// `AutonomousPermissionGate` declined to trust an otherwise
+    /// punctuation-only/capitalization-only/whitespace-only classification.
+    /// One case per validated V1.14/V1.15 invariant; see
+    /// `AutonomousPermissionBlock`'s own documentation for exactly what each
+    /// means. A gate block never rejects outright -- the edit is well-formed
+    /// and plausibly correct, so it is queued the same way a protected-span
+    /// intersection already is: not applied now, not discarded either.
+    case nonRoutinePunctuationChanged
+    case intraTokenPunctuationChanged
+    case wordBoundaryMerged
+    case acronymCapitalizationLowered
+    case identifierCapitalizationChanged
+}
+
+extension AutonomousPermissionBlock {
+    /// The `ReviewReason` an `IntelligenceSafetyAuthority` disposition uses
+    /// for this block -- a one-to-one, purely mechanical mapping (both enums
+    /// share the same five case names) kept as an explicit, exhaustive
+    /// `switch` so a future case added to either enum without the other is a
+    /// compile error, never a silently-dropped block reason.
+    var reviewReason: ReviewReason {
+        switch self {
+        case .nonRoutinePunctuationChanged: return .nonRoutinePunctuationChanged
+        case .intraTokenPunctuationChanged: return .intraTokenPunctuationChanged
+        case .wordBoundaryMerged: return .wordBoundaryMerged
+        case .acronymCapitalizationLowered: return .acronymCapitalizationLowered
+        case .identifierCapitalizationChanged: return .identifierCapitalizationChanged
+        }
+    }
 }
 
 /// Every reason a proposal can be rejected outright, in roughly the order

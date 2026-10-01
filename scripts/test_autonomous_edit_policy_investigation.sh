@@ -6,11 +6,19 @@ test -d "$task_developer_dir/Platforms/MacOSX.platform"
 export DEVELOPER_DIR="$task_developer_dir"
 task_test_dir=$(mktemp -d /tmp/pratilekh-autonomous-edit-policy-investigation.XXXXXX)
 
-# EXPERIMENTAL -- Intelligence V1.14 investigation only. Deterministic, model-free.
+# EXPERIMENTAL -- Intelligence V1.14/V1.15 investigation only. Deterministic, model-free.
 # Not part of the normal acceptance gate; run on demand:
 #   scripts/test_autonomous_edit_policy_investigation.sh
 # It needs the LegalLanguage sources (real normalization), the Intelligence chain
 # (classifier, Authority, resolver, V1.11 derivation, V1.13 numeric protection).
+#
+# ARCHIVED PRE-V1.16 MEASUREMENT: this script's pinned `precondition`s (including
+# the fresh-tier V1.15 additions) were measured against the classifier/Authority
+# as it existed before V1.16 added AutonomousPermissionGate. Since that gate
+# shipped, this script's pinned numbers no longer match -- expected, not a
+# regression; see Evaluation/Intelligence/V1_16_AUTONOMOUS_PERMISSION_GATE.md
+# section 6. Do not repin this script's expectations against current behavior;
+# the current, authoritative measurement is scripts/test_autonomous_permission_gate.sh.
 
 task_sources="
 Sources/Fluid/LegalLanguage/Packs/LanguagePack.swift
@@ -36,6 +44,7 @@ Sources/Fluid/LegalLanguage/LegalLanguageCoordinator.swift
 Sources/Fluid/LegalLanguage/Packs/BuiltInPacks.swift
 Sources/Fluid/LegalLanguage/LegalDictationProcessor.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceProposal.swift
+Sources/Fluid/Intelligence/Safety/AutonomousPermissionGate.swift
 Sources/Fluid/Intelligence/Safety/ProtectedSpan.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceEditClassifier.swift
 Sources/Fluid/Intelligence/Safety/ProposalDisposition.swift

@@ -60,6 +60,10 @@ enum IntelligenceSafetyAuthorityTests {
         testSafeWhitespaceCleanupIsApplied()
         testMultipleSafeEditsAppliedTogetherProduceCorrectFinalText()
 
+        testAutonomousPermissionGateDowngradesWordMergeToReviewOnly()
+        testAutonomousPermissionGateNeverConsultedForUnsupportedCategory()
+        testAutonomousPermissionGateAndProtectedSpansAreIndependentLayers()
+
         print("PASS: IntelligenceSafetyAuthority adversarial and positive-control suite")
     }
 
@@ -202,10 +206,15 @@ enum IntelligenceSafetyAuthorityTests {
     private static func testEditEntirelyOutsideProtectedSpanIsUnaffected() {
         let source = self.syntheticSource()
         let protected = [ProtectedSpan(range: self.range(of: "DEFGH", in: source), kind: .deterministicallyResolved)]
-        let safe = self.proposal(range: self.range(of: "B", in: source), expected: "B", replacement: "B,", claimed: .punctuation)
+        // "J," at the very end of the document, not "B," mid-run: inserting
+        // punctuation directly between two letters with nothing else nearby
+        // is exactly the intra-token shape `AutonomousPermissionGate` (V1.16)
+        // now blocks (P-B); at the document's end there is no letter on the
+        // right to complete that shape, so this stays a genuinely safe edit.
+        let safe = self.proposal(range: self.range(of: "J", in: source), expected: "J", replacement: "J,", claimed: .punctuation)
         let result = self.validate([safe], source: source, protectedSpans: protected)
         precondition(result.outcomes[0].disposition == .autonomouslyAccepted(.punctuationOnly))
-        precondition(result.resultingText == "AB,CDEFGHIJ", result.resultingText)
+        precondition(result.resultingText == "ABCDEFGHIJ,", result.resultingText)
     }
 
     private static func testEditEntirelyInsideProtectedSpanIsBlocked() {
@@ -249,15 +258,22 @@ enum IntelligenceSafetyAuthorityTests {
         let source = self.syntheticSource()
         let spanRange = self.range(of: "DEFGH", in: source)
         let protected = [ProtectedSpan(range: spanRange, kind: .deterministicallyResolved)]
+        // A whitespace SPLIT (empty -> non-empty), not a punctuation insertion
+        // between two letters: the latter is exactly the intra-token shape
+        // `AutonomousPermissionGate` (V1.16) now blocks (P-B), and splitting a
+        // token is deliberately never blocked (merge-only, W-A1) -- this keeps
+        // the edit itself genuinely safe so the test still isolates the span-
+        // boundary question ("touching" a span from outside is not
+        // intersecting it) from gate policy.
         let insertion = self.proposal(
             range: NSRange(location: spanRange.location, length: 0),
             expected: "",
-            replacement: ",",
-            claimed: .punctuation
+            replacement: " ",
+            claimed: .whitespace
         )
         let result = self.validate([insertion], source: source, protectedSpans: protected)
-        precondition(result.outcomes[0].disposition == .autonomouslyAccepted(.punctuationOnly))
-        precondition(result.resultingText == "ABC,DEFGHIJ", result.resultingText)
+        precondition(result.outcomes[0].disposition == .autonomouslyAccepted(.whitespaceOnly))
+        precondition(result.resultingText == "ABC DEFGHIJ", result.resultingText)
     }
 
     private static func testZeroLengthInsertionImmediatelyAfterProtectedSpanIsAllowed() {
@@ -267,12 +283,12 @@ enum IntelligenceSafetyAuthorityTests {
         let insertion = self.proposal(
             range: NSRange(location: spanRange.location + spanRange.length, length: 0),
             expected: "",
-            replacement: ",",
-            claimed: .punctuation
+            replacement: " ",
+            claimed: .whitespace
         )
         let result = self.validate([insertion], source: source, protectedSpans: protected)
-        precondition(result.outcomes[0].disposition == .autonomouslyAccepted(.punctuationOnly))
-        precondition(result.resultingText == "ABCDEFGH,IJ", result.resultingText)
+        precondition(result.outcomes[0].disposition == .autonomouslyAccepted(.whitespaceOnly))
+        precondition(result.resultingText == "ABCDEFGH IJ", result.resultingText)
     }
 
     private static func testZeroLengthInsertionStrictlyInsideProtectedSpanIsBlocked() {
@@ -298,12 +314,18 @@ enum IntelligenceSafetyAuthorityTests {
         ]
         let hitsFirst = self.proposal(range: self.range(of: "A", in: source), expected: "A", replacement: "a", claimed: .capitalization)
         let hitsSecond = self.proposal(range: self.range(of: "J", in: source), expected: "J", replacement: "j", claimed: .capitalization)
-        let hitsNeither = self.proposal(range: self.range(of: "F", in: source), expected: "F", replacement: "f", claimed: .capitalization)
+        // A whitespace split, not a capitalization edit: `syntheticSource()`
+        // is one continuous run of letters, so ANY lowering edit within it is
+        // (correctly) an acronym-shaped, `AutonomousPermissionGate`-blocked
+        // token (V1.16, C-A2) -- irrelevant to what this test isolates (that a
+        // protected span never affects a region outside itself), so the
+        // "hits neither" probe uses an edit shape the gate never touches.
+        let hitsNeither = self.proposal(range: self.range(of: "F", in: source), expected: "F", replacement: "F ", claimed: .whitespace)
         let result = self.validate([hitsFirst, hitsSecond, hitsNeither], source: source, protectedSpans: protected)
         precondition(result.outcomes[0].disposition == .rejected(.intersectsResolvedSpan))
         precondition(result.outcomes[1].disposition == .rejected(.intersectsResolvedSpan))
-        precondition(result.outcomes[2].disposition == .autonomouslyAccepted(.capitalizationOnly))
-        precondition(result.resultingText == "ABCDEfGHIJ", result.resultingText)
+        precondition(result.outcomes[2].disposition == .autonomouslyAccepted(.whitespaceOnly))
+        precondition(result.resultingText == "ABCDEF GHIJ", result.resultingText)
     }
 
     private static func testOverlappingProtectedSpansMostRestrictiveWins() {
@@ -515,13 +537,20 @@ enum IntelligenceSafetyAuthorityTests {
     }
 
     private static func testAdjacentProposalsAreIndependentNotOverlapping() {
-        let source = "ab cd"
+        // Two spaces, not one: `removeSpace` below deletes only ONE of them,
+        // leaving the other -- a genuine collapse-of-repeated-whitespace, not
+        // a merge of "ab" and "cd" into one word. Deleting the ONLY space
+        // between two words is exactly what `AutonomousPermissionGate`
+        // (V1.16, W-A1) now blocks; that is not what this test isolates (that
+        // non-overlapping proposals are judged independently), so the fixture
+        // avoids it rather than repurposing the test to prove a rejection.
+        let source = "ab  cd"
         let capitalize = self.proposal(id: "a", range: self.range(of: "ab", in: source), expected: "ab", replacement: "AB", claimed: .capitalization)
-        let removeSpace = self.proposal(id: "b", range: self.range(of: " ", in: source), expected: " ", replacement: "", claimed: .whitespace)
+        let removeSpace = self.proposal(id: "b", range: NSRange(location: 2, length: 1), expected: " ", replacement: "", claimed: .whitespace)
         let result = self.validate([capitalize, removeSpace], source: source)
         precondition(result.outcomes[0].disposition == .autonomouslyAccepted(.capitalizationOnly))
         precondition(result.outcomes[1].disposition == .autonomouslyAccepted(.whitespaceOnly))
-        precondition(result.resultingText == "ABcd", result.resultingText)
+        precondition(result.resultingText == "AB cd", result.resultingText)
     }
 
     private static func testDuplicateProposalIDsDoNotGrantSpecialTreatment() {
@@ -589,6 +618,47 @@ enum IntelligenceSafetyAuthorityTests {
         let result = self.validate([edit], source: source)
         precondition(result.outcomes[0].disposition == .autonomouslyAccepted(.whitespaceOnly))
         precondition(result.resultingText == "the accused shall appear", result.resultingText)
+    }
+
+    // MARK: - AutonomousPermissionGate integration (V1.16)
+
+    private static func testAutonomousPermissionGateDowngradesWordMergeToReviewOnly() {
+        // A well-formed, plausibly-correct-looking edit -- not malformed,
+        // not overlapping, not touching any protected span -- is still never
+        // applied: end to end through validate(), with no spans at all, a
+        // structural invariant alone downgrades it.
+        let source = "the accused Ram Das denied it"
+        // The space between "Ram" and "Das" specifically.
+        let ramDasSpace = self.proposal(range: NSRange(location: (source as NSString).range(of: "Ram Das").location + 3, length: 1), expected: " ", replacement: "", claimed: .whitespace)
+        let result = self.validate([ramDasSpace], source: source)
+        precondition(result.outcomes[0].disposition == .reviewOnly(.wordBoundaryMerged), "\(result.outcomes[0].disposition)")
+        precondition(result.resultingText == source, "a gate-blocked edit is never applied")
+    }
+
+    private static func testAutonomousPermissionGateNeverConsultedForUnsupportedCategory() {
+        // A lexical change is rejected on its own terms (.other), never
+        // reaching -- and therefore never needing -- the gate at all.
+        let source = "charged under IPC for the offence."
+        let edit = self.proposal(range: self.range(of: "IPC", in: source), expected: "IPC", replacement: "CrPC", claimed: .other)
+        let result = self.validate([edit], source: source)
+        precondition(result.outcomes[0].disposition == .rejected(.unsupportedEditCategory))
+    }
+
+    private static func testAutonomousPermissionGateAndProtectedSpansAreIndependentLayers() {
+        // A protected-span rejection takes precedence regardless of what the
+        // gate would have said; conversely, with no protected span at all
+        // the gate alone still withholds autonomous acceptance -- proving
+        // the two layers are independent, neither redundant.
+        let source = "charged under IPC for the offence."
+        let ipcRange = self.range(of: "IPC", in: source)
+        let lowering = self.proposal(range: ipcRange, expected: "IPC", replacement: "ipc", claimed: .capitalization)
+
+        let withResolvedSpan = self.validate([lowering], source: source, protectedSpans: [ProtectedSpan(range: ipcRange, kind: .deterministicallyResolved)])
+        precondition(withResolvedSpan.outcomes[0].disposition == .rejected(.intersectsResolvedSpan), "the span check runs first and is unaffected by the gate")
+
+        let withNoSpans = self.validate([lowering], source: source)
+        precondition(withNoSpans.outcomes[0].disposition == .reviewOnly(.acronymCapitalizationLowered), "\(withNoSpans.outcomes[0].disposition)")
+        precondition(withNoSpans.resultingText == source)
     }
 
     private static func testMultipleSafeEditsAppliedTogetherProduceCorrectFinalText() {

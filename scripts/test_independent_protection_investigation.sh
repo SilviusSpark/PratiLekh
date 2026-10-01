@@ -11,6 +11,14 @@ task_test_dir=$(mktemp -d /tmp/pratilekh-independent-protection-investigation.XX
 #   scripts/test_independent_protection_investigation.sh
 # It needs the LegalLanguage sources (real normalization), the Safety sources
 # (real classifier/Authority) and the V1.11 derivation.
+#
+# ARCHIVED PRE-V1.16 MEASUREMENT: this script's pinned `precondition`s were
+# measured against the classifier/Authority as it existed before V1.16 added
+# AutonomousPermissionGate. Since that gate shipped, this script's pinned
+# numbers (e.g. digitEscaped) no longer match -- expected, not a regression;
+# see Evaluation/Intelligence/V1_16_AUTONOMOUS_PERMISSION_GATE.md section 6.
+# Do not repin this script's expectations against current behavior; the
+# current, authoritative measurement is scripts/test_autonomous_permission_gate.sh.
 
 task_sources="
 Sources/Fluid/LegalLanguage/Packs/LanguagePack.swift
@@ -36,6 +44,7 @@ Sources/Fluid/LegalLanguage/LegalLanguageCoordinator.swift
 Sources/Fluid/LegalLanguage/Packs/BuiltInPacks.swift
 Sources/Fluid/LegalLanguage/LegalDictationProcessor.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceProposal.swift
+Sources/Fluid/Intelligence/Safety/AutonomousPermissionGate.swift
 Sources/Fluid/Intelligence/Safety/ProtectedSpan.swift
 Sources/Fluid/Intelligence/Safety/IntelligenceEditClassifier.swift
 Sources/Fluid/Intelligence/Safety/ProposalDisposition.swift

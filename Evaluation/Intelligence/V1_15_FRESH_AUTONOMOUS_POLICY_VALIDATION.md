@@ -11,6 +11,17 @@ harness (`AutonomousEditPolicyInvestigation.swift`): a third tier and its pins.
 unchanged**: its SHA-256 (`b20b0011…6aafe`) is identical to the value V1.14 pinned,
 verified before and after this milestone.
 
+> **Measurement superseded by V1.16 (`V1_16_AUTONOMOUS_PERMISSION_GATE.md`).** Same
+> script as V1.14 (`scripts/test_autonomous_edit_policy_investigation.sh`), same
+> caveat: this document's pinned `fresh.*` numbers were measured against the
+> classifier/Authority **as it existed before V1.16**'s gate was wired in. Re-running
+> the script's pinned `precondition`s against the current production Authority will
+> now fail as expected — see the V1.14 document's note for the full explanation. The
+> fresh corpus and every pinned number here are preserved unchanged; V1.16's
+> production-parity replay (`scripts/test_autonomous_permission_gate.sh`) reproduces
+> this document's `fresh.json` aggregate numbers exactly against the current,
+> gate-equipped Authority.
+
 ## 2. Fresh corpus construction and freeze evidence
 
 `Evaluation/References/autonomous-edit-policy/fresh.json` (128 entries: 51 legit, 67

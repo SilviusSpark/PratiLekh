@@ -29,6 +29,7 @@ enum IntelligenceEditCompositionTests {
         self.testParityWithDirectComponentComposition()
         self.testOutcomePartitionIsExhaustiveAndDisjoint()
         self.testDeterminism()
+        self.testAutonomousPermissionGateBlockFlowsThroughToReviewOnly()
 
         print("PASS: IntelligenceEditComposition deterministic composition suite")
     }
@@ -381,6 +382,19 @@ enum IntelligenceEditCompositionTests {
         let all = buckets.flatMap { $0 }
         precondition(Set(all).count == all.count, "no edit may appear in two buckets")
         precondition(all.count == result.edits.count, "every edit must appear in exactly one bucket")
+    }
+
+    // MARK: - AutonomousPermissionGate (V1.16) integration through composition
+
+    private static func testAutonomousPermissionGateBlockFlowsThroughToReviewOnly() {
+        // Composition adds no policy of its own (a governing invariant of
+        // this type); a gate-blocked edit must flow through exactly the way
+        // a protected-span-blocked one does: review-only, not applied, and
+        // no code change was needed in this type to make that true.
+        let source = "the accused Ram Das denied it"
+        let result = self.evaluate([self.edit("Ram Das", "RamDas")], source: source)
+        precondition(result.edits[0].disposition == .reviewOnly(.wordBoundaryMerged), "\(String(describing: result.edits[0].disposition))")
+        precondition(result.accepted.isEmpty && result.reviewOnly.map(\.id) == ["p1"])
     }
 
     private static func testDeterminism() {

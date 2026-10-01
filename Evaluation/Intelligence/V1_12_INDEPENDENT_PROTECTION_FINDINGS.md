@@ -4,6 +4,24 @@
 
 > **Follow-up (V1.13):** the numeric-token mechanism recommended here was implemented and validated on a fresh, frozen corpus — see `V1_13_NUMERIC_STRUCTURAL_PROTECTION.md`. This document is the record of the investigation.
 
+> **Measurement superseded by V1.16 (`V1_16_AUTONOMOUS_PERMISSION_GATE.md`).** This
+> document's pinned measurements (e.g. `strat.development.category.digitEscaped = 15`)
+> were taken by running `scripts/test_independent_protection_investigation.sh`'s
+> candidate detectors through the classifier/Authority **as it existed before V1.16** —
+> i.e. with no autonomous-permission gate. V1.16 added a production gate step to
+> `IntelligenceSafetyAuthority` that independently downgrades some of the same
+> structural hazards measured here to `.reviewOnly`. Running this script's pinned
+> `precondition`s against the current production Authority will now fail
+> (`digitEscaped` measures lower — fewer escapes, i.e. an improvement, not a
+> regression) because the script is comparing today's Authority against a number
+> pinned to yesterday's Authority. **This is expected and does not indicate a defect.**
+> The corpus, detectors, and pinned numbers below are preserved unchanged as the
+> historical record of the pre-V1.16 investigation; they are not repinned against
+> current behavior. For a measurement that *is* current, see the V1.16 document's
+> frozen-corpus production-parity replay (`Tests/AutonomousPermissionGateProductionParityTests.swift`,
+> run via `scripts/test_autonomous_permission_gate.sh`), which is the harness this
+> repository now treats as authoritative for the deployed Authority's behavior.
+
 Investigation and evaluation only. **No production recognizer was built**; nothing
 under `Sources/` changed, no `ProtectedSpan` of kind `.independentlyProtected` is
 produced by any production path, and no model was called. Everything below is

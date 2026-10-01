@@ -377,9 +377,17 @@ enum ProtectedSpanDerivationTests {
             ("stands", "Stands"), // outside every protected span
         ]
 
-        // Without derived spans (the pre-V1.11 gap): everything is accepted.
+        // Without derived spans (the pre-V1.11 gap): most of these are still
+        // accepted -- EXCEPT "PW-1"->"pw-1", which V1.16's
+        // AutonomousPermissionGate independently blocks (an acronym-shaped
+        // token, "PW", being lowered) with no protected span involved at
+        // all. This is the gate and V1.11's spans acting as independent,
+        // complementary layers: the gate alone already narrows the pre-V1.11
+        // gap for this one shape, though not for the others (a raise, never
+        // an acronym lowering, is never gate-blocked).
         let unprotected = self.compose(edits, outcome, spans: [])
-        precondition(unprotected.accepted.count == 5, "with no spans, even resolved normalization output is autonomously editable")
+        precondition(unprotected.accepted.count == 4, "with no spans, resolved normalization output other than an acronym-lowering identifier is still autonomously editable")
+        precondition(unprotected.edits[2].disposition == .reviewOnly(.acronymCapitalizationLowered), "\(String(describing: unprotected.edits[2].disposition))")
 
         // With derived spans: the existing intended protections apply.
         let protected = self.compose(edits, outcome, spans: derivedSpans.spans)

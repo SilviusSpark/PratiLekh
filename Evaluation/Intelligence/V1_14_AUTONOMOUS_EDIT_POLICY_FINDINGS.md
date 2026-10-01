@@ -8,6 +8,25 @@ was added. Everything below is deterministic, model/provider-independent, and
 measures the *remaining* gap after the existing V1.11 (derived normalization spans)
 and V1.13 (numeric structural protection) defenses — not the raw classifier alone.
 
+> **Measurement superseded by V1.16 (`V1_16_AUTONOMOUS_PERMISSION_GATE.md`).** V1.16
+> implemented the `core-merge-only+P-A` bundle this document recommended, as a new
+> `AutonomousPermissionGate` production step in `IntelligenceSafetyAuthority`. The
+> pinned measurements below (development-tier counts, invariant coverage matrix,
+> `still autonomous under core-merge-only+P-A`, etc.) were taken by running
+> `scripts/test_autonomous_edit_policy_investigation.sh`'s replay against the
+> classifier/Authority **as it existed before V1.16** — with no gate wired in.
+> Re-running that script's pinned `precondition`s against the current production
+> Authority will now fail (the gate demotes edits the pinned numbers assumed stayed
+> autonomous), which is **expected, not a regression.** The rules file
+> (`AutonomousEditInvariants.swift`), the frozen corpora, and every pinned number
+> below are preserved unchanged as the historical record of this investigation; they
+> are not repinned against current behavior. For a measurement that *is* current
+> against the deployed Authority, see V1.16's frozen-corpus production-parity replay
+> (`Tests/AutonomousPermissionGateProductionParityTests.swift`, run via
+> `scripts/test_autonomous_permission_gate.sh`), which reproduces this document's and
+> V1.15's published aggregate numbers exactly and is the harness this repository now
+> treats as authoritative for the deployed Authority's behavior.
+
 Artifacts:
 
 | Artifact | Role |
