@@ -134,7 +134,7 @@ struct OnboardingTryoutStepView: View {
 
     private var placeholderText: String {
         if self.isReady {
-            return "Click here to test FluidVoice"
+            return "Click here to test PratiLekh"
         }
         return self.isRunning ? "Listening..." : "Your dictation will appear here..."
     }
@@ -145,7 +145,7 @@ struct OnboardingTryoutStepView: View {
 
             Text(self.footerHint ?? "Feels slow or inaccurate? Go back and try another model for \(self.language.displayName).")
                 .font(self.theme.typography.captionStrong)
-                .foregroundStyle(Color.white.opacity(0.44))
+                .foregroundStyle(Color.secondary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
         }
@@ -192,8 +192,8 @@ struct OnboardingTryoutStepView: View {
         .padding(.bottom, 18)
         .background(
             shape
-                .fill(Color.white.opacity(0.040))
-                .overlay(shape.stroke(Color.white.opacity(0.11), lineWidth: 1))
+                .fill(Color.primary.opacity(0.040))
+                .overlay(shape.stroke(Color.primary.opacity(0.11), lineWidth: 1))
                 .overlay(
                     shape.stroke(
                         FluidOnboardingLandingColors.blue.opacity(self.isShortcutGlowActive ? 0.30 : 0.12),
@@ -218,14 +218,14 @@ struct OnboardingTryoutStepView: View {
         } label: {
             Text(title)
                 .font(self.theme.typography.captionStrong)
-                .foregroundStyle(.white.opacity(foregroundOpacity))
+                .foregroundStyle(Color.primary.opacity(foregroundOpacity))
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
                 .frame(width: 72, height: 32)
                 .background(
                     shape
-                        .fill(Color.white.opacity(fillOpacity))
-                        .overlay(shape.stroke(self.isChangeHovered && isEnabled ? FluidOnboardingLandingColors.blue.opacity(0.30) : Color.white.opacity(0.07), lineWidth: 1))
+                        .fill(Color.primary.opacity(fillOpacity))
+                        .overlay(shape.stroke(self.isChangeHovered && isEnabled ? FluidOnboardingLandingColors.blue.opacity(0.30) : Color.primary.opacity(0.07), lineWidth: 1))
                         .overlay(
                             shape
                                 .stroke(FluidOnboardingLandingColors.blue.opacity(ringOpacity), lineWidth: self.isChangeHovered && isEnabled ? 1.4 : 1)
@@ -236,7 +236,7 @@ struct OnboardingTryoutStepView: View {
                 .contentShape(shape)
         }
         .buttonStyle(.plain)
-        .focusable(false)
+        .focusable(true)
         .contentShape(shape)
         .disabled(!isEnabled)
         .onHover { isHovered in
@@ -255,7 +255,7 @@ struct OnboardingTryoutStepView: View {
     private var actionHintRow: some View {
         Text("Press once to start. Press again to stop.")
             .font(self.theme.typography.captionStrong)
-            .foregroundStyle(Color.white.opacity(0.62))
+            .foregroundStyle(Color.secondary)
             .multilineTextAlignment(.center)
             .lineLimit(1)
             .minimumScaleFactor(0.82)
@@ -270,7 +270,7 @@ struct OnboardingTryoutStepView: View {
             if !examples.isEmpty {
                 Text(self.promptText)
                     .font(self.theme.typography.captionStrong)
-                    .foregroundStyle(Color.white.opacity(0.58))
+                    .foregroundStyle(Color.secondary)
 
                 ForEach(examples, id: \.self) { example in
                     self.examplePill(example)
@@ -282,16 +282,16 @@ struct OnboardingTryoutStepView: View {
             ZStack(alignment: .topLeading) {
                 TextEditor(text: self.$finalText)
                     .font(self.theme.typography.bodyStrong)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .frame(height: 108)
                     .padding(10)
                     .background(
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(Color.white.opacity(self.isRunning ? 0.075 : 0.045))
+                            .fill(Color.primary.opacity(self.isRunning ? 0.075 : 0.045))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                                     .stroke(
-                                        self.isRunning ? FluidOnboardingLandingColors.blue.opacity(0.46) : Color.white.opacity(0.08),
+                                        self.isRunning ? FluidOnboardingLandingColors.blue.opacity(0.46) : Color.primary.opacity(0.08),
                                         lineWidth: self.isRunning ? 1.4 : 1
                                     )
                             )
@@ -302,7 +302,7 @@ struct OnboardingTryoutStepView: View {
                 if self.shouldShowPlaceholder {
                     Text(self.placeholderText)
                         .font(self.theme.typography.bodySmallStrong)
-                        .foregroundStyle(Color.white.opacity(0.38))
+                        .foregroundStyle(Color.primary.opacity(0.38))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 17)
@@ -319,8 +319,8 @@ struct OnboardingTryoutStepView: View {
             .fill(
                 LinearGradient(
                     colors: [
-                        Color.white.opacity(0.055),
-                        Color.white.opacity(0.020),
+                        Color.primary.opacity(0.055),
+                        Color.primary.opacity(0.020),
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -328,7 +328,7 @@ struct OnboardingTryoutStepView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                    .stroke(Color.primary.opacity(0.08), lineWidth: 1)
             )
             .frame(width: 88, height: 66)
     }
@@ -340,14 +340,14 @@ struct OnboardingTryoutStepView: View {
 
         return Text(text)
             .font(.system(size: 20, weight: .semibold))
-            .foregroundStyle(.white)
+            .foregroundStyle(.primary)
             .lineLimit(1)
             .minimumScaleFactor(0.62)
             .padding(.horizontal, 14)
             .frame(width: 112, height: 74)
             .background(
                 shape
-                    .fill(Color.white.opacity(isListening ? 0.115 : 0.075))
+                    .fill(Color.primary.opacity(isListening ? 0.115 : 0.075))
                     .overlay(
                         shape.stroke(
                             FluidOnboardingLandingColors.blue.opacity(isListening ? 0.86 : 0.48),
@@ -369,7 +369,7 @@ struct OnboardingTryoutStepView: View {
     private func examplePill(_ text: String) -> some View {
         Text(text)
             .font(self.theme.typography.captionStrong)
-            .foregroundStyle(Color.white.opacity(0.72))
+            .foregroundStyle(Color.secondary)
             .lineLimit(2)
             .minimumScaleFactor(0.82)
             .frame(maxWidth: .infinity, alignment: .leading)

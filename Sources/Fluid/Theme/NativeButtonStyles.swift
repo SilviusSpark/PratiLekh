@@ -199,74 +199,25 @@ struct GlassButtonStyle: ButtonStyle {
 // MARK: - Primary Accent Button
 
 struct PremiumButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.colorSchemeContrast) private var contrast
+    @Environment(\.theme) private var theme
     var isRecording: Bool = false
-    var height: CGFloat = 44
+    var height: CGFloat = 36
 
     func makeBody(configuration: Configuration) -> some View {
-        PrimaryButton(configuration: configuration, isRecording: self.isRecording, height: self.height)
-    }
-
-    private struct PrimaryButton: View {
-        @Environment(\.theme) private var theme
-        @State private var isHovered = false
-        let configuration: ButtonStyle.Configuration
-        let isRecording: Bool
-        let height: CGFloat
-
-        private var shape: RoundedRectangle {
-            RoundedRectangle(cornerRadius: self.theme.metrics.corners.lg, style: .continuous)
-        }
-
-        private var baseGradient: LinearGradient {
-            if self.isRecording {
-                return LinearGradient(
-                    colors: [
-                        Color(nsColor: .systemRed),
-                        Color(nsColor: .systemRed).opacity(0.8),
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            }
-
-            return LinearGradient(
-                colors: [
-                    self.theme.palette.accent.opacity(0.95),
-                    self.theme.palette.accent.opacity(0.75),
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
+        configuration.label
+            .font(self.theme.typography.bodyStrong)
+            .frame(maxWidth: .infinity)
+            .frame(height: self.height)
+            .foregroundStyle(self.isEnabled ? (self.isRecording ? Color.white : self.theme.palette.windowBackground) : self.theme.palette.secondaryText)
+            .background(
+                RoundedRectangle(cornerRadius: self.theme.metrics.corners.sm)
+                    .fill(self.isEnabled ? (self.isRecording ? Color(nsColor: .systemRed) : self.theme.palette.accent) : self.theme.palette.cardBackground)
+                    .overlay(RoundedRectangle(cornerRadius: self.theme.metrics.corners.sm)
+                        .stroke(self.isEnabled && self.contrast != .increased ? Color.clear : self.theme.palette.secondaryText, lineWidth: 1))
+                    .opacity(configuration.isPressed ? 0.85 : 1)
             )
-        }
-
-        var body: some View {
-            self.configuration.label
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity)
-                .frame(height: self.height)
-                .foregroundStyle(self.isRecording ? Color.white : self.theme.palette.primaryText)
-                .background(
-                    self.shape
-                        .fill(self.baseGradient)
-                        .overlay(
-                            self.shape.stroke(
-                                Color.white.opacity(self.isHovered ? 0.35 : 0.2),
-                                lineWidth: 1
-                            )
-                        )
-                )
-                .shadow(
-                    color: (self.isRecording ? Color(nsColor: .systemRed) : self.theme.palette.accent)
-                        .opacity(self.isHovered ? 0.45 : 0.25),
-                    radius: self.isHovered ? self.theme.metrics.elevatedCardShadow.radius : max(self.theme.metrics.cardShadow.radius - 2, 2),
-                    x: 0,
-                    y: self.isHovered ? self.theme.metrics.elevatedCardShadow.y : self.theme.metrics.cardShadow.y
-                )
-                .scaleEffect(FluidInteractionVisuals.scale(isPressed: self.configuration.isPressed, isHovered: self.isHovered))
-                .animation(FluidInteractionVisuals.hoverAnimation, value: self.isHovered)
-                .animation(FluidInteractionVisuals.pressedAnimation, value: self.configuration.isPressed)
-                .onHover { self.isHovered = $0 }
-        }
     }
 }
 

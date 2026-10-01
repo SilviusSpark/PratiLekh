@@ -6042,7 +6042,7 @@ private extension ASRService {
 
     static var streamingRecoveryMessage: String {
         "Speech recognition took too long to finish. This recording could not be transcribed. " +
-            "Wait for the model to recover, or restart FluidVoice before recording again."
+            "Wait for the model to recover, or restart PratiLekh before recording again."
     }
 
     func presentStreamingRecoveryError() {

@@ -1,0 +1,802 @@
+[
+  {
+    "file": "Sources/Fluid/AppSupportMigration.swift",
+    "line": 3,
+    "text": "/// One-time migration for the FluidVoice -> PratiLekh rebrand."
+  },
+  {
+    "file": "Sources/Fluid/AppSupportMigration.swift",
+    "line": 6,
+    "text": "/// audio history) lived under `~/Library/Application Support/FluidVoice`. Renaming"
+  },
+  {
+    "file": "Sources/Fluid/AppSupportMigration.swift",
+    "line": 10,
+    "text": "    static func migrateFluidVoiceDataIfNeeded() {"
+  },
+  {
+    "file": "Sources/Fluid/AppSupportMigration.swift",
+    "line": 19,
+    "text": "        let oldURL = base.appendingPathComponent(\"FluidVoice\", isDirectory: true)"
+  },
+  {
+    "file": "Sources/Fluid/UI/ChangelogView.swift",
+    "line": 11,
+    "text": "    private let repo = \"Fluid-oss\""
+  },
+  {
+    "file": "Sources/Fluid/UI/ChangelogView.swift",
+    "line": 101,
+    "text": "                Text(\"FluidVoice could not load GitHub release notes right now.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/ChangelogView.swift",
+    "line": 171,
+    "text": "        return \"FluidVoiceChangelogCache.\\(channel)\""
+  },
+  {
+    "file": "Sources/Fluid/UI/ChangelogView.swift",
+    "line": 313,
+    "text": "                lowercased.contains(\"github.com/altic-dev/fluidvoice/issues\") ||"
+  },
+  {
+    "file": "Sources/Fluid/UI/ChangelogView.swift",
+    "line": 314,
+    "text": "                lowercased.contains(\"github.com/altic-dev/fluid-oss/issues\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/ModelRepository.swift",
+    "line": 60,
+    "text": "    /// normal model list; Fluid Intelligence supplies task-scoped local models."
+  },
+  {
+    "file": "Sources/Fluid/UI/FeedbackView.swift",
+    "line": 38,
+    "text": "                            Text(\"Help us improve FluidVoice\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/FeedbackView.swift",
+    "line": 59,
+    "text": "                                Text(\"Your feedback helps us make FluidVoice even better\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/FeedbackView.swift",
+    "line": 74,
+    "text": "                                Text(\"Loving FluidVoice?\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/FeedbackView.swift",
+    "line": 87,
+    "text": "                                if let githubURL = URL(string: \"https://github.com/altic-dev/Fluid-oss\") {"
+  },
+  {
+    "file": "Sources/Fluid/UI/FeedbackView.swift",
+    "line": 106,
+    "text": "                                            Text(\"Support FluidVoice\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/FeedbackView.swift",
+    "line": 208,
+    "text": "            Text(\"Thank you for helping us improve FluidVoice.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/AnalyticsPrivacyView.swift",
+    "line": 35,
+    "text": "                    self.bullet(\"Beta builds also send one daily aggregate of ASR and Fluid Intelligence timing distributions, including macOS version. No individual timing samples are sent.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/AnalyticsPrivacyView.swift",
+    "line": 53,
+    "text": "                    self.bullet(\"Beta timing summaries help us compare ASR and Fluid Intelligence speed across Mac hardware and macOS versions.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/AnalyticsPrivacyView.swift",
+    "line": 93,
+    "text": "            text[githubRange].link = URL(string: \"https://github.com/altic-dev/FluidVoice\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/DictionaryTransferService.swift",
+    "line": 226,
+    "text": "            return \"The selected file is not a valid FluidVoice dictionary file.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/DictionaryTransferService.swift",
+    "line": 285,
+    "text": "        return \"FluidVoice_Dictionary_\\(formatter.string(from: date)).json\""
+  },
+  {
+    "file": "Sources/Fluid/Resources/parakeet_custom_vocabulary.default.json",
+    "line": 10,
+    "text": "      \"aliases\": [\"fluid voice\", \"fluid boys\"],"
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsSearch.swift",
+    "line": 172,
+    "text": "            terms: [\"Automatically start FluidVoice when you log in\", \"login startup boot open\"]"
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsSearch.swift",
+    "line": 370,
+    "text": "            terms: [\"timing speed tokens per second ASR cleanup Fluid Intelligence\"]"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/FluidIntelligenceLiveSection.swift",
+    "line": 44,
+    "text": "                    Text(\"Fluid Intelligence\").font(self.theme.typography.title).fontWeight(.semibold)"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/FluidIntelligenceLiveSection.swift",
+    "line": 106,
+    "text": "            FluidManagementSheet(title: \"Manage Fluid Intelligence\", subtitle: \"These settings apply to all Fluid Intelligence models.\", symbol: \"slider.horizontal.3\", close: { self.showsManagement = false }) {"
+  },
+  {
+    "file": "Sources/Fluid/Networking/ModelDownloader.swift",
+    "line": 723,
+    "text": "            .appendingPathComponent(\"FluidVoiceDownload-\\(UUID().uuidString)\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettingsView+AIConfiguration.swift",
+    "line": 237,
+    "text": "                    : \"Choose how FluidVoice cleans up your dictation.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 391,
+    "text": "                        Text(\"Show FluidVoice the right spelling, by voice or by typing.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 449,
+    "text": "            TextField(\"Type the correct text, e.g. FluidVoice\", text: self.$trainingReplacement)"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 570,
+    "text": "            Text(\"When FluidVoice hears\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 573,
+    "text": "            TextField(\"fluid voice, fluid boys\", text: self.$manualTriggerDraft)"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 607,
+    "text": "            Text(\"Teach FluidVoice your pronunciation\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 618,
+    "text": "                        : \"FluidVoice recognized \\(self.trainingTargetReference) 3 times in a row.\","
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 635,
+    "text": "                        text: \"Say \\(self.trainingTargetReference) naturally, then pause. FluidVoice records and listens again automatically.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 640,
+    "text": "                            ? \"Repeat 3 times to teach FluidVoice how your voice sounds.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 822,
+    "text": "                    Text(\"Words and phrases FluidVoice will correct automatically.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 936,
+    "text": "                    Text(\"FluidVoice automatically corrects these words and phrases.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 1288,
+    "text": "                            Text(\"Examples of what FluidVoice will type.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 1424,
+    "text": "                    detail: \"Add what you say and what FluidVoice should type.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 2508,
+    "text": "                    Text(\"Research Preview: Compares how your voice sounds instead of only the words FluidVoice hears. Results may vary.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 2723,
+    "text": "                ? \"Ready. FluidVoice learned how \\(target) sounds in your voice.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 2724,
+    "text": "                : \"Ready. FluidVoice got \\(target) right 3 times in a row.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/CustomDictionaryView.swift",
+    "line": 2728,
+    "text": "            : \"Keep trying until FluidVoice gets \\(target) right 3 times in a row.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettingsView+SpeechRecognition.swift",
+    "line": 184,
+    "text": "                                    .background(Capsule().fill(badge == \"FluidVoice Pick\" ? .cyan.opacity(0.2) : .orange.opacity(0.2)))"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettingsView+SpeechRecognition.swift",
+    "line": 185,
+    "text": "                                    .foregroundStyle(badge == \"FluidVoice Pick\" ? .cyan : .orange)"
+  },
+  {
+    "file": "Sources/Fluid/Services/ParakeetVocabularyStore.swift",
+    "line": 305,
+    "text": "              \"aliases\": [\"fluid voice\", \"fluid boys\"],"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AddProviderSheet.swift",
+    "line": 32,
+    "text": "                        Text(self.isEditing ? \"Add connection details to get started.\" : \"Your preferred models. Connected to FluidVoice.\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/PrivateAIIntegrationService.swift",
+    "line": 138,
+    "text": "            throw PrivateAIModelRemovalError(message: \"A model file is not in FluidVoice's model folder.\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/PrivateAIIntegrationService.swift",
+    "line": 228,
+    "text": "                    \"Could not remove inactive Fluid Intelligence backend: \\(Self.errorMessage(for: error))\","
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIEnhancementSettingsViewModel.swift",
+    "line": 690,
+    "text": "        let service = \"com.fluidvoice.provider-api-keys\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIEnhancementSettingsViewModel.swift",
+    "line": 732,
+    "text": "        var message = \"FluidVoice stores provider API keys securely in your macOS Keychain but does not currently have permission to access it.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIEnhancementSettingsViewModel.swift",
+    "line": 736,
+    "text": "        message += \"\\n\\nClick \\\"Always Allow\\\" when the Keychain prompt appears, or open Keychain Access > login > Passwords, locate the FluidVoice entry, and grant access.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIEnhancementSettingsViewModel.swift",
+    "line": 741,
+    "text": "        var message = \"FluidVoice could not save the API key to your macOS Keychain, so this provider was not verified.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIEnhancementSettingsViewModel.swift",
+    "line": 756,
+    "text": "        message += \"\\n\\nClick \\\"Always Allow\\\" when the Keychain prompt appears, or open Keychain Access > login > Passwords, locate the FluidVoice entry, and grant access.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIEnhancementSettingsViewModel.swift",
+    "line": 780,
+    "text": "            ? \"FluidVoice stores provider API keys securely in your macOS Keychain. Please grant access by choosing \\\"Always Allow\\\" when prompted.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIEnhancementSettingsViewModel.swift",
+    "line": 1913,
+    "text": "            self.appPromptBindingErrorMessage = \"Could not detect a target app. Focus another app window (outside FluidVoice) and try again.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/ASRService.swift",
+    "line": 467,
+    "text": "        // Calibrated conservatively against real FluidVoice captures. Requiring"
+  },
+  {
+    "file": "Sources/Fluid/Services/ASRService.swift",
+    "line": 4419,
+    "text": "        // never move or restart FluidVoice's selected microphone."
+  },
+  {
+    "file": "Sources/Fluid/Services/ASRService.swift",
+    "line": 4573,
+    "text": "    private let deviceListListenerQueue = DispatchQueue(label: \"com.fluidvoice.audio.topology-notifications\", qos: .userInitiated)"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIProvidersDesignPreview.swift",
+    "line": 114,
+    "text": "                    Text(\"Fluid Intelligence\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/AIProvidersDesignPreview.swift",
+    "line": 387,
+    "text": "                Text(panel == .manage ? \"Fluid Intelligence\" : \"Provider settings\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/PrivateAISettingsController.swift",
+    "line": 352,
+    "text": "            await PrivateAIIntegrationService.shared.unloadCachedRuntime(reason: \"Fluid Intelligence verification reset\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/PrivateAISettingsController.swift",
+    "line": 441,
+    "text": "                reason: \"Fluid Intelligence backend changed to \\(preference.displayName)\""
+  },
+  {
+    "file": "Sources/Fluid/UI/AISettings/PrivateAISettingsController.swift",
+    "line": 492,
+    "text": "                reason: \"Fluid Intelligence context changed\""
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 232,
+    "text": "                                description: \"Automatically start FluidVoice when you log in\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 243,
+    "text": "                                description: \"When off, FluidVoice starts silently in the menu bar at login. Opening the app yourself always shows the window.\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 255,
+    "text": "                                description: \"Keep FluidVoice in the menu bar only (hides Dock icon and Cmd+Tab entry)\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 458,
+    "text": "                                                repo: \"Fluid-oss\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 473,
+    "text": "                                                    : \"You're already running the latest version of FluidVoice.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 488,
+    "text": "                                    if let url = URL(string: \"https://github.com/altic-dev/Fluid-oss/releases\") {"
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 502,
+    "text": "                                    confirm.informativeText = \"This will restore a previous app version and relaunch FluidVoice.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 522,
+    "text": "                                                success.informativeText = \"Rolled back to \\(targetVersion). FluidVoice will relaunch shortly.\""
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 953,
+    "text": "                                        description: \"Automatically pause currently playing audio/video when transcription starts. Resumes only if FluidVoice paused it.\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 969,
+    "text": "                                            \"When off, FluidVoice still records the anonymous daily activity signal and, in beta builds, daily ASR and Fluid Intelligence timing summaries. \" +"
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 1129,
+    "text": "                                description: \"Show an alert when FluidVoice changes or loses its microphone.\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 1540,
+    "text": "                            description: \"Display transcription time, cleanup time, and Fluid Intelligence speed.\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 1591,
+    "text": "        guard let url = URL(string: \"https://github.com/altic-dev/Fluid-oss/issues/new/choose\") else { return }"
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 1614,
+    "text": "                message: \"Saved your FluidVoice backup to:\\n\\(url.path)\""
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 1702,
+    "text": "            This budget is below current audio usage. FluidVoice will delete the oldest saved audio first and keep transcript history."
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 1782,
+    "text": "                    repo: \"Fluid-oss\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 1824,
+    "text": "        guard let url = URL(string: \"https://github.com/altic-dev/Fluid-oss/releases\") else { return }"
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 2368,
+    "text": "            Text(\"FluidVoice tries microphones from top to bottom. Drag to reorder; unavailable devices keep their place.\")"
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 2555,
+    "text": "                message: \"This order applies only to FluidVoice and does not change your macOS input.\","
+  },
+  {
+    "file": "Sources/Fluid/UI/SettingsView.swift",
+    "line": 2992,
+    "text": "            text[githubRange].link = URL(string: \"https://github.com/altic-dev/FluidVoice\")"
+  },
+  {
+    "file": "Sources/Fluid/ContentView.swift",
+    "line": 343,
+    "text": "    private let accessibilityRestartFlagKey = \"FluidVoice_AccessibilityRestartPending\""
+  },
+  {
+    "file": "Sources/Fluid/ContentView.swift",
+    "line": 344,
+    "text": "    private let hasAutoRestartedForAccessibilityKey = \"FluidVoice_HasAutoRestartedForAccessibility\""
+  },
+  {
+    "file": "Sources/Fluid/ContentView.swift",
+    "line": 1290,
+    "text": "        guard let url = URL(string: \"https://github.com/altic-dev/Fluid-oss/issues/new/choose\") else { return }"
+  },
+  {
+    "file": "Sources/Fluid/ContentView.swift",
+    "line": 2933,
+    "text": "        // When FluidVoice itself is frontmost, the bound editor already receives `finalText`."
+  },
+  {
+    "file": "Sources/Fluid/ContentView.swift",
+    "line": 5140,
+    "text": "        let installedURL = URL(fileURLWithPath: \"/Applications/FluidVoice.app\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/MicrophonePreferenceCoordinator.swift",
+    "line": 194,
+    "text": "            \"Migrated FluidVoice microphone priority with '\\(selectedInput.name)' first\","
+  },
+  {
+    "file": "Sources/Fluid/Services/SimpleUpdater.swift",
+    "line": 249,
+    "text": "    // Restrict update transitions to FluidVoice's approved signing teams."
+  },
+  {
+    "file": "Sources/Fluid/Services/SimpleUpdater.swift",
+    "line": 481,
+    "text": "        panel.title = \"Installing FluidVoice \\(version)\""
+  },
+  {
+    "file": "Sources/Fluid/Services/SimpleUpdater.swift",
+    "line": 504,
+    "text": "        let title = NSTextField(labelWithString: \"Installing FluidVoice \\(version)\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/SimpleUpdater.swift",
+    "line": 509,
+    "text": "        let detail = NSTextField(wrappingLabelWithString: \"Downloading the update. FluidVoice will restart automatically.\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/ActiveAppMonitor.swift",
+    "line": 10,
+    "text": "    /// The currently active application (excluding FluidVoice itself)"
+  },
+  {
+    "file": "Sources/Fluid/AppDelegate.swift",
+    "line": 350,
+    "text": "        DebugLogger.shared.info(\"Checking repository: altic-dev/Fluid-oss\", source: \"AppDelegate\")"
+  },
+  {
+    "file": "Sources/Fluid/AppDelegate.swift",
+    "line": 352,
+    "text": "        DebugLogger.shared.debug(\"🔍 DEBUG: Repository: altic-dev/Fluid-oss\", source: \"AppDelegate\")"
+  },
+  {
+    "file": "Sources/Fluid/AppDelegate.swift",
+    "line": 364,
+    "text": "                    repo: \"Fluid-oss\","
+  },
+  {
+    "file": "Sources/Fluid/AppDelegate.swift",
+    "line": 407,
+    "text": "            DebugLogger.shared.info(\"Performing automatic update check for altic-dev/Fluid-oss\", source: \"AppDelegate\")"
+  },
+  {
+    "file": "Sources/Fluid/AppDelegate.swift",
+    "line": 413,
+    "text": "                    repo: \"Fluid-oss\","
+  },
+  {
+    "file": "Sources/Fluid/AppDelegate.swift",
+    "line": 463,
+    "text": "        alert.informativeText = \"FluidVoice \\(version) is now available. Would you like to install it now?\\n\\nThe app will restart automatically after installation.\""
+  },
+  {
+    "file": "Sources/Fluid/fluidApp.swift",
+    "line": 21,
+    "text": "        AppSupportMigration.migrateFluidVoiceDataIfNeeded()"
+  },
+  {
+    "file": "Sources/Fluid/Views/AutomaticDictionaryCorrectionOverlay.swift",
+    "line": 532,
+    "text": "            return \"FluidVoice will try this microphone first when you dictate.\""
+  },
+  {
+    "file": "Sources/Fluid/Views/AutomaticDictionaryCorrectionOverlay.swift",
+    "line": 535,
+    "text": "            return \"FluidVoice selected this microphone for capture.\""
+  },
+  {
+    "file": "Sources/Fluid/Views/AutomaticDictionaryCorrectionOverlay.swift",
+    "line": 537,
+    "text": "        return \"FluidVoice confirmed this microphone is capturing audio.\""
+  },
+  {
+    "file": "Sources/Fluid/Views/AutomaticDictionaryCorrectionOverlay.swift",
+    "line": 674,
+    "text": "            Text(\"Save only this correction, or teach FluidVoice other pronunciations.\")"
+  },
+  {
+    "file": "Sources/Fluid/Views/AutomaticDictionaryCorrectionOverlay.swift",
+    "line": 744,
+    "text": "                Text(\"Teach FluidVoice your pronunciation\")"
+  },
+  {
+    "file": "Sources/Fluid/Views/AutomaticDictionaryCorrectionOverlay.swift",
+    "line": 749,
+    "text": "                    Label(\"FluidVoice got it right 3 times in a row.\", systemImage: \"checkmark.circle.fill\")"
+  },
+  {
+    "file": "Sources/Fluid/Views/AutomaticDictionaryCorrectionOverlay.swift",
+    "line": 757,
+    "text": "                            text: \"Say the word, then pause. FluidVoice captures it and listens again.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 604,
+    "text": "        let openItem = NSMenuItem(title: \"Open Fluid Voice\", action: #selector(openMainWindow), keyEquivalent: \"\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 654,
+    "text": "            title: \"Quit Fluid Voice\","
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 816,
+    "text": "                    repo: \"Fluid-oss\","
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 828,
+    "text": "                        : \"You're already running the latest version of FluidVoice.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 856,
+    "text": "        confirm.informativeText = \"This will restore the backup and relaunch FluidVoice.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 868,
+    "text": "                success.informativeText = \"Rolled back to \\(availableVersion). FluidVoice will relaunch shortly.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 888,
+    "text": "        guard let url = URL(string: \"https://github.com/altic-dev/Fluid-oss/issues/new/choose\") else { return }"
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 897,
+    "text": "                    repo: \"Fluid-oss\","
+  },
+  {
+    "file": "Sources/Fluid/Services/MenuBarManager.swift",
+    "line": 939,
+    "text": "        guard let url = URL(string: \"https://github.com/altic-dev/Fluid-oss/releases\") else { return }"
+  },
+  {
+    "file": "Sources/Fluid/Services/TranscriptionSoundPlayer.swift",
+    "line": 8,
+    "text": "    private let playbackQueue = DispatchQueue(label: \"app.fluidvoice.transcription-sounds\", qos: .userInteractive)"
+  },
+  {
+    "file": "Sources/Fluid/Persistence/KeychainService.swift",
+    "line": 22,
+    "text": "/// Keys are stored as generic passwords scoped to the FluidVoice service."
+  },
+  {
+    "file": "Sources/Fluid/Persistence/KeychainService.swift",
+    "line": 36,
+    "text": "    private let service = \"com.fluidvoice.provider-api-keys\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/KeychainService.swift",
+    "line": 93,
+    "text": "    /// Refreshes the process cache after the user returns to FluidVoice, so"
+  },
+  {
+    "file": "Sources/Fluid/Services/BoundedAudioHardwareQueue.swift",
+    "line": 18,
+    "text": "                \"The microphone is not responding. Try again shortly. If it remains unavailable, quit and reopen FluidVoice.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/BoundedAudioHardwareQueue.swift",
+    "line": 20,
+    "text": "                \"The microphone could not be reset safely. Quit and reopen FluidVoice before recording again.\""
+  },
+  {
+    "file": "Sources/Fluid/Services/LocalAPI/LocalAPIServer.swift",
+    "line": 9,
+    "text": "    private let queue = DispatchQueue(label: \"fluidvoice.local-api\", qos: .utility)"
+  },
+  {
+    "file": "Sources/Fluid/Services/LocalAPI/LocalAPIAudioDecoder.swift",
+    "line": 62,
+    "text": "                .appendingPathComponent(\"fluidvoice-api-\\(UUID().uuidString)\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/AppleSpeechAnalyzerProvider.swift",
+    "line": 35,
+    "text": "    private let _cacheQueue = DispatchQueue(label: \"com.fluidvoice.speechanalyzer.cache\")"
+  },
+  {
+    "file": "Sources/Fluid/Services/LocalAPI/HistoryAPIController.swift",
+    "line": 35,
+    "text": "            return LocalAPI.error(\"History is unavailable. Retry from History in FluidVoice.\", status: 503)"
+  },
+  {
+    "file": "Sources/Fluid/Persistence/DictationAudioHistoryStore.swift",
+    "line": 215,
+    "text": "        \"FluidVoice_Audio_\\(Self.fileTimestampFormatter.string(from: date)).zip\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/DictationAudioHistoryStore.swift",
+    "line": 219,
+    "text": "        \"FluidVoice_Pair_\\(Self.fileTimestampFormatter.string(from: entry.timestamp))_\\(entry.id.uuidString.prefix(8)).zip\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/DictationAudioHistoryStore.swift",
+    "line": 239,
+    "text": "            .appendingPathComponent(\"fluidvoice-audio-\\(UUID().uuidString)\", isDirectory: true)"
+  },
+  {
+    "file": "Sources/Fluid/Services/DirectCoreAudioInput.swift",
+    "line": 402,
+    "text": "        label: \"com.fluidvoice.audio.direct-input-consumer\","
+  },
+  {
+    "file": "Sources/Fluid/Services/DirectCoreAudioInput.swift",
+    "line": 663,
+    "text": "        label: \"com.fluidvoice.audio.direct-lifecycle\","
+  },
+  {
+    "file": "Sources/Fluid/Services/DirectCoreAudioInput.swift",
+    "line": 667,
+    "text": "        label: \"com.fluidvoice.audio.direct-format-listeners\","
+  },
+  {
+    "file": "Sources/Fluid/Services/DirectCoreAudioInput.swift",
+    "line": 737,
+    "text": "            queue: DispatchQueue(label: \"com.fluidvoice.audio.device-snapshot\", qos: .userInitiated),"
+  },
+  {
+    "file": "Sources/Fluid/Services/DirectCoreAudioInput.swift",
+    "line": 741,
+    "text": "            queue: DispatchQueue(label: \"com.fluidvoice.audio.capture-device-snapshot\", qos: .userInitiated),"
+  },
+  {
+    "file": "Sources/Fluid/Persistence/BackupService.swift",
+    "line": 151,
+    "text": "            return \"The selected backup file is not a valid FluidVoice backup.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/BackupService.swift",
+    "line": 220,
+    "text": "        return \"FluidVoice_Backup_\\(formatter.string(from: date)).json\""
+  },
+  {
+    "file": "Sources/Fluid/Services/AudioEngineRetirementDrain.swift",
+    "line": 31,
+    "text": "    init(label: String = \"app.fluidvoice.audio-engine-retirement\") {"
+  },
+  {
+    "file": "Sources/Fluid/Persistence/TranscriptionHistoryStore.swift",
+    "line": 574,
+    "text": "                self.persistenceError = \"History could not be saved. Keep FluidVoice open and retry. \\(error.localizedDescription)\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/TranscriptionHistoryStore.swift",
+    "line": 606,
+    "text": "            self.persistenceError = \"History could not be saved. Keep FluidVoice open and retry. \\(error.localizedDescription)\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore.swift",
+    "line": 36,
+    "text": "        \"FluidVoice reflects the actual macOS login item state. Unsigned or development builds may fail to enable this.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore.swift",
+    "line": 1422,
+    "text": "    /// Show the main window when macOS launches FluidVoice at login (default: ON, matching"
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore.swift",
+    "line": 4539,
+    "text": "    /// Only resumes if FluidVoice was the one that paused it."
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore.swift",
+    "line": 4551,
+    "text": "    /// For example: [\"fluid voice\", \"fluid boys\"] -> \"FluidVoice\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore.swift",
+    "line": 5081,
+    "text": "        /// Optional badge text for the card (e.g., \"FluidVoice Pick\")"
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore.swift",
+    "line": 5084,
+    "text": "            case .parakeetTDT: return \"FluidVoice Pick\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore.swift",
+    "line": 5085,
+    "text": "            case .parakeetTDTv2: return \"FluidVoice Pick\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 81,
+    "text": "                    ? \"macOS did not enable FluidVoice in Login Items. Check System Settings > General > Login Items.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 82,
+    "text": "                    : \"macOS still shows FluidVoice in Login Items. Check System Settings > General > Login Items.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 129,
+    "text": "            return \"FluidVoice could not \\(action) launch at startup. This build may not be signed correctly for macOS Login Items.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 135,
+    "text": "            return \"macOS needs approval before FluidVoice can \\(action) launch at startup. Check System Settings > General > Login Items.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 138,
+    "text": "        return \"FluidVoice could not \\(action) launch at startup. macOS reported: \\(nsError.localizedDescription)\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 182,
+    "text": "                domain: \"FluidVoiceLaunchAtStartup\","
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 193,
+    "text": "                domain: \"FluidVoiceLaunchAtStartup\","
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 220,
+    "text": "            return \"FluidVoice reflects the actual macOS login item state.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 222,
+    "text": "            return \"FluidVoice reflects the actual macOS login item state. Unsigned or development builds may fail to enable this.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/SettingsStore+LaunchAtStartup.swift",
+    "line": 224,
+    "text": "            return \"macOS requires approval for FluidVoice in Login Items before launch at startup becomes active.\""
+  },
+  {
+    "file": "Sources/Fluid/Persistence/VoiceEngineLanguageCatalog.swift",
+    "line": 52,
+    "text": "            return \"Optimized for FluidVoice\""
+  }
+]

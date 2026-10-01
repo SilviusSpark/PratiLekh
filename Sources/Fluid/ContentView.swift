@@ -295,6 +295,7 @@ struct ContentView: View {
     @State private var pendingModifierOnly = false
     @State private var shortcutRecordingMessage: String? = nil
     @State private var shortcutCaptureMonitor: Any?
+    @FocusState private var focusedSidebarItem: SidebarItem?
     @FocusState private var isTranscriptionFocused: Bool
 
     @State private var selectedSidebarItem: SidebarItem?
@@ -399,7 +400,13 @@ struct ContentView: View {
             }
         )
 
-        let tracked = layout.withMouseTracking(self.mouseTracker)
+        #if DEBUG
+        let reviewLayout = ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_FIXTURES"] == "1"
+            ? AnyView(PratiLekhReviewStates()) : layout
+        #else
+        let reviewLayout = layout
+        #endif
+        let tracked = reviewLayout.withMouseTracking(self.mouseTracker)
         let env = tracked.environmentObject(self.mouseTracker)
         let nav = env.onChange(of: self.menuBarManager.requestedNavigationDestination) { _, destination in
             self.handleMenuBarNavigation(destination)
@@ -653,6 +660,14 @@ struct ContentView: View {
         self.menuBarManager.initializeMenuBar()
         self.scheduleDelayedAudioInitialization()
         self.configureNotchCallbacks()
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_OVERLAY_STATE"] != nil {
+            BottomOverlayWindowController.shared.show(
+                audioPublisher: Empty<CGFloat, Never>().eraseToAnyPublisher(),
+                mode: .dictation
+            )
+        }
+        #endif
         self.startAccessibilityPolling()
         self.initializeHotkeyManagerIfNeeded()
 
@@ -1304,47 +1319,50 @@ struct ContentView: View {
     }
 
     private var appSidebarView: some View {
-        List(selection: self.$selectedSidebarItem) {
-            Section {
+        VStack(spacing: 0) {
+            HStack(spacing: 10) {
+                PratiLekhMark().stroke(self.theme.palette.accent, style: StrokeStyle(lineWidth: 1.6, lineCap: .round, lineJoin: .round))
+                    .frame(width: 28, height: 28).accessibilityHidden(true)
+                Text("PratiLekh").font(self.theme.typography.sectionTitle)
+            }
+            .foregroundStyle(self.theme.palette.primaryText)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 4) {
+                self.sidebarSectionHeader("Configure")
+
                 self.sidebarNavigationLink(.voiceEngine, title: "Voice Engine", systemImage: "waveform")
                 self.sidebarNavigationLink(.aiEnhancements, title: "AI Providers", systemImage: "cpu")
                 self.sidebarNavigationLink(.cleanupStyles, title: "Cleanup Styles", systemImage: "wand.and.stars")
                 self.sidebarNavigationLink(.customDictionary, title: "Custom Dictionary", systemImage: "text.book.closed.fill")
-            } header: {
-                self.sidebarSectionHeader("Configure")
-            }
 
-            Section {
+                self.sidebarSectionHeader("Use")
+
                 self.sidebarNavigationLink(.commandMode, title: "Command Mode", systemImage: "terminal.fill")
                 self.sidebarNavigationLink(.meetingTools, title: "File Transcription", systemImage: "doc.text.fill")
-            } header: {
-                self.sidebarSectionHeader("Use")
-            }
 
-            Section {
+                self.sidebarSectionHeader("Activity")
+
                 self.sidebarNavigationLink(.history, title: "History", systemImage: "clock.arrow.circlepath")
                 self.sidebarNavigationLink(.stats, title: "Stats", systemImage: "chart.bar.fill")
-            } header: {
-                self.sidebarSectionHeader("Activity")
-            }
 
-            Section {
-                self.sidebarNavigationLink(.welcome, title: "Getting Started", systemImage: "house.fill")
-                self.sidebarNavigationLink(.changelog, title: "Change logs", systemImage: "doc.text.magnifyingglass")
-                self.sidebarNavigationLink(.feedback, title: "Feedback", systemImage: "envelope.fill")
-            } header: {
                 self.sidebarSectionHeader("Help")
+
+                self.sidebarNavigationLink(.welcome, title: "Getting Started", systemImage: "house.fill")
+                self.sidebarNavigationLink(.changelog, title: "What’s New", systemImage: "doc.text.magnifyingglass")
+                self.sidebarNavigationLink(.feedback, title: "Feedback", systemImage: "envelope.fill")
+
             }
+            .padding(.horizontal, 12)
+            .padding(.bottom, 12)
         }
-        .listStyle(.sidebar)
-        .accentColor(self.theme.palette.accent)
-        .animation(nil, value: self.selectedSidebarItem)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 0) {
                 self.helpEntryButton
                 self.settingsEntryButton
             }
         }
+        .background(self.theme.palette.sidebarBackground)
     }
 
     private var settingsSidebarView: some View {
@@ -1374,8 +1392,8 @@ struct ContentView: View {
                 reduceMotion: self.accessibilityReduceMotion
             ))
             .onHover { self.isSettingsBackHovered = $0 }
-            .help("Back to FluidVoice")
-            .accessibilityLabel("Back to FluidVoice")
+            .help("Back to PratiLekh")
+            .accessibilityLabel("Back to PratiLekh")
 
             SettingsSearchField(text: Binding(
                 get: { self.settingsSearchQuery },
@@ -1403,11 +1421,11 @@ struct ContentView: View {
                         HStack(spacing: self.theme.metrics.spacing.sm) {
                             Image(systemName: section.systemImage)
                                 .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(isSelected ? Color.white.opacity(0.9) : Color.secondary)
+                                .foregroundStyle(self.theme.palette.secondaryText)
                                 .frame(width: 18)
 
                             Text(section.title)
-                                .foregroundStyle(isSelected ? Color.white : Color.primary)
+                                .foregroundStyle(self.theme.palette.primaryText)
                         }
                         .font(self.theme.typography.sidebarItem)
                     }
@@ -1530,9 +1548,9 @@ struct ContentView: View {
             reduceMotion: self.accessibilityReduceMotion
         ))
         .onHover { self.isHelpEntryHovered = $0 }
-        .help("Open FluidVoice Help")
+        .help("Open upstream documentation")
         .accessibilityLabel("Help")
-        .accessibilityHint("Opens FluidVoice documentation in your default browser")
+        .accessibilityHint("Opens upstream documentation in your default browser")
     }
 
     private var modeTransitionAnimation: Animation {
@@ -1557,26 +1575,47 @@ struct ContentView: View {
 
     private func sidebarNavigationLink(_ item: SidebarItem, title: String, systemImage: String) -> some View {
         let isSelected = self.selectedSidebarItem == item
-        return NavigationLink(value: item) {
+        return Button {
+            self.navigateToApp(item)
+            self.focusedSidebarItem = item
+        } label: {
             HStack(spacing: self.theme.metrics.spacing.sm) {
                 Image(nsImage: SidebarSymbolCache.image(named: systemImage))
                     .renderingMode(.template)
                     .resizable()
                     .scaledToFit()
-                    .foregroundStyle(isSelected ? Color.white.opacity(0.9) : Color.secondary)
+                    .foregroundStyle(self.theme.palette.secondaryText)
                     .frame(width: 16, height: 16)
                     .accessibilityHidden(true)
 
                 Text(title)
-                    .foregroundStyle(isSelected ? Color.white : Color.primary)
+                    .foregroundStyle(self.theme.palette.primaryText)
             }
             .font(self.theme.typography.sidebarItem)
-            .padding(.vertical, self.theme.metrics.spacing.xs / 2)
+            .frame(maxWidth: .infinity, minHeight: 36, alignment: .leading)
+            .padding(.horizontal, 8)
         }
-        .sidebarOptionHover(
-            isSelected: isSelected,
-            reduceMotion: self.accessibilityReduceMotion
-        )
+        .buttonStyle(.plain)
+        .focusable()
+        .focused(self.$focusedSidebarItem, equals: item)
+        .onKeyPress(keys: [.downArrow], phases: .down) { press in
+            guard press.modifiers.isDisjoint(with: [.shift, .control, .option, .command]) else { return .ignored }
+            self.moveSidebarFocus(from: item, by: 1); return .handled
+        }
+        .onKeyPress(keys: [.upArrow], phases: .down) { press in
+            guard press.modifiers.isDisjoint(with: [.shift, .control, .option, .command]) else { return .ignored }
+            self.moveSidebarFocus(from: item, by: -1); return .handled
+        }
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .background(isSelected ? self.theme.palette.accent.opacity(0.14) : Color.clear, in: RoundedRectangle(cornerRadius: 6))
+
+    }
+
+    private func moveSidebarFocus(from item: SidebarItem, by offset: Int) {
+        let items: [SidebarItem] = [.voiceEngine, .aiEnhancements, .cleanupStyles, .customDictionary,
+                                   .commandMode, .meetingTools, .history, .stats, .welcome, .changelog, .feedback]
+        guard let index = items.firstIndex(of: item) else { return }
+        self.focusedSidebarItem = items[(index + offset + items.count) % items.count]
     }
 
     private var themePreferenceButton: some View {
@@ -1605,7 +1644,7 @@ struct ContentView: View {
 
     private var detailView: some View {
         ZStack {
-            Color(nsColor: .windowBackgroundColor)
+            self.theme.palette.windowBackground
                 .ignoresSafeArea()
 
             // Preserve the app destination so Back never waits on expensive detail initialization.
@@ -1631,6 +1670,14 @@ struct ContentView: View {
     }
 
     private var appDetailContent: AnyView {
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_SCREEN"] == "recording" {
+            return AnyView(MilestoneTwoReviewView())
+        }
+        if ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_SCREEN"] == "history" {
+            return AnyView(TranscriptionHistoryView())
+        }
+        #endif
         switch self.selectedSidebarItem ?? .welcome {
         case .welcome:
             return AnyView(self.welcomeView)
@@ -1813,8 +1860,8 @@ struct ContentView: View {
                     self.instructionStep(number: "2", text: "Choose **Allow** in the system dialog")
                 } else if self.asr.micStatus == .denied {
                     self.instructionStep(number: "1", text: "Click **Open Settings** above")
-                    self.instructionStep(number: "2", text: "Find **FluidVoice** in the microphone list")
-                    self.instructionStep(number: "3", text: "Toggle **FluidVoice ON** to allow access")
+                    self.instructionStep(number: "2", text: "Find **PratiLekh** in the microphone list")
+                    self.instructionStep(number: "3", text: "Toggle **PratiLekh ON** to allow access")
                 }
             }
             .padding(.leading, 4)
@@ -2552,6 +2599,8 @@ struct ContentView: View {
     // MARK: - Stop and Process Transcription
 
     private func stopAndProcessTranscription(route: DictationOutputRoute = .normal) async {
+        NotchContentState.shared.isTranscribing = true
+        defer { NotchContentState.shared.isTranscribing = false }
         let pipelineID = UUID().uuidString
         await DebugLogger.$pipelineID.withValue(pipelineID) {
             await self.processStoppedTranscription(route: route, pipelineID: pipelineID)
@@ -2608,6 +2657,7 @@ struct ContentView: View {
             },
             onFinalTranscriptionStarted: stopOverlay.onFinalTranscriptionStarted
         )
+        NotchContentState.shared.isTranscribing = false
         self.appBench("asr_stop_return elapsedMs=\(Int(((ProcessInfo.processInfo.systemUptime - asrStopStartedAt) * 1000).rounded()))")
         let audioSnapshot = self.asr.consumeLastCompletedAudioSnapshot()
         let transcriptionDurationMilliseconds = self.asr.consumeLastFinalTranscriptionDurationMs()
@@ -3939,6 +3989,7 @@ struct ContentView: View {
 
     /// Capture app context at start to avoid mismatches if the user switches apps mid-session
     private func startRecording() {
+        NotchContentState.shared.recordingWasCancelled = false
         let model = SettingsStore.shared.selectedSpeechModel
         DebugLogger.shared.info(
             "ContentView: startRecording() for model=\(model.displayName), supportsStreaming=\(model.supportsStreaming)",
@@ -4170,6 +4221,11 @@ struct ContentView: View {
         NotchContentState.shared.onOpenPreferencesRequested = {
             self.menuBarManager.openPreferencesFromUI()
         }
+        NotchContentState.shared.onStopRecordingRequested = {
+            guard self.asr.isRunning, !NotchContentState.shared.isTranscribing else { return }
+            let route = self.currentDictationOutputRouteForHotkeyStop()
+            Task { await self.stopAndProcessTranscription(route: route) }
+        }
         NotchContentState.shared.onCancelRequested = {
             _ = self.handleCancelShortcut()
         }
@@ -4399,6 +4455,7 @@ struct ContentView: View {
         }
 
         if self.asr.isRunningOrStarting {
+            NotchContentState.shared.recordingWasCancelled = true
             DebugLogger.shared.debug("Cancel shortcut: cancelling ASR recording", source: "ContentView")
             let isOnboardingTryout = self.isOnboardingVoicePlaygroundStepActive
             Task {
@@ -5249,7 +5306,7 @@ private struct SidebarOptionHoverModifier: ViewModifier {
 
     private var backgroundColor: Color {
         if self.isSelected {
-            return self.theme.palette.accent
+            return self.theme.palette.accent.opacity(0.14)
         }
         return Color.primary.opacity(self.isHovered ? 0.08 : 0)
     }

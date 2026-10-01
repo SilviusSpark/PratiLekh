@@ -47,14 +47,36 @@ struct WelcomeView: View {
                             .font(self.theme.typography.titleIcon)
                             .foregroundStyle(self.theme.palette.accent)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text((self.asr.isAsrReady || self.asr.modelsExistOnDisk) ? "Getting Started" : "Welcome to FluidVoice")
+                            Text("Welcome to PratiLekh")
                                 .font(self.theme.typography.title)
-                            Text("Talk anywhere. FluidVoice types for you.")
+                            Text("Dictate evidence. Draft with clarity.")
                                 .font(self.theme.typography.bodySmall)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     .padding(.bottom, 4)
+
+                    if !(self.asr.micStatus == .authorized && self.accessibilityEnabled && (self.asr.isAsrReady || self.asr.modelsExistOnDisk)) {
+                    Button {
+                        if self.asr.micStatus != .authorized {
+                            if self.asr.micStatus == .notDetermined { self.asr.requestMicAccess() } else { self.asr.openSystemSettingsForMic() }
+                        } else if !self.accessibilityEnabled {
+                            self.openAccessibilitySettings()
+                        } else if !(self.asr.isAsrReady || self.asr.modelsExistOnDisk) {
+                            self.selectedSidebarItem = .voiceEngine
+                        } else {
+                            proxy.scrollTo(self.playgroundSectionID, anchor: .top)
+                            self.isTranscriptionFocused.wrappedValue = true
+                        }
+                    } label: {
+                        Text(self.asr.micStatus != .authorized ? "Set up microphone"
+                            : !self.accessibilityEnabled ? "Enable text insertion"
+                            : !(self.asr.isAsrReady || self.asr.modelsExistOnDisk) ? "Choose speech model"
+                            : "Try dictation")
+                    }
+                    .buttonStyle(PremiumButtonStyle())
+                    .frame(maxWidth: 236)
+                    }
 
                     // Quick Setup Checklist
                     ThemedCard(style: .prominent) {
@@ -80,13 +102,13 @@ struct WelcomeView: View {
                                 SetupStepView(
                                     step: 1,
                                     // Consider model step complete if ready OR downloaded (even if not loaded)
-                                    title: (self.asr.isAsrReady || self.asr.modelsExistOnDisk) ? "Voice Model Ready" : "Download Voice Model",
+                                    title: "Speech model",
                                     description: self.asr.isAsrReady
                                         ? "Speech recognition model is loaded and ready"
                                         : (
                                             self.asr.modelsExistOnDisk
                                                 ? "Model downloaded, will load when needed"
-                                                : "Download the AI model for offline voice transcription (~500MB)"
+                                                : "Choose an on-device speech model for your dictation language"
                                         ),
                                     status: (self.asr.isAsrReady || self.asr.modelsExistOnDisk) ? .completed : .pending,
                                     action: {
@@ -98,10 +120,10 @@ struct WelcomeView: View {
 
                                 SetupStepView(
                                     step: 2,
-                                    title: self.asr.micStatus == .authorized ? "Microphone Permission Granted" : "Grant Microphone Permission",
+                                    title: "Microphone",
                                     description: self.asr.micStatus == .authorized
-                                        ? "FluidVoice has access to your microphone"
-                                        : "Allow FluidVoice to access your microphone for voice input",
+                                        ? "PratiLekh has access to your microphone"
+                                        : "Allow PratiLekh to access your microphone for voice input",
                                     status: self.asr.micStatus == .authorized ? .completed : .pending,
                                     action: {
                                         if self.asr.micStatus == .notDetermined {
@@ -116,7 +138,7 @@ struct WelcomeView: View {
 
                                 SetupStepView(
                                     step: 3,
-                                    title: self.accessibilityEnabled ? "Accessibility Access Enabled" : "Enable Accessibility Access",
+                                    title: "Text insertion",
                                     description: self.accessibilityEnabled
                                         ? "Accessibility permission granted for typing into apps"
                                         : "Drag \(self.appDisplayName) into the Accessibility apps list as shown",
@@ -130,37 +152,24 @@ struct WelcomeView: View {
 
                                 SetupStepView(
                                     step: 4,
-                                    title: self.isAIEnhancementReady ? "AI Enhancement Configured" : "Set Up AI Enhancement (Optional)",
-                                    description: self.isAIEnhancementReady
-                                        ? "AI-powered text enhancement is ready to use"
-                                        : "Configure API keys for AI-powered text enhancement",
-                                    status: self.isAIEnhancementReady ? .completed : .pending,
-                                    action: {
-                                        self.selectedSidebarItem = .aiEnhancements
-                                    },
-                                    actionButtonTitle: "AI Providers"
-                                )
-
-                                SetupStepView(
-                                    step: 5,
-                                    title: self.playgroundUsed ? "Setup Tested Successfully" : "Test Your Setup",
+                                    title: "Practice dictation",
                                     description: self.playgroundUsed
                                         ? "You've successfully tested voice transcription"
                                         : "Try the playground below to test your complete setup",
                                     status: self.playgroundUsed ? .completed : .pending,
                                     action: {
-                                        withAnimation(.easeInOut(duration: 0.25)) {
+                                        withAnimation(self.reduceMotion ? nil : .easeInOut(duration: 0.25)) {
                                             proxy.scrollTo(self.playgroundSectionID, anchor: .top)
                                         }
                                         self.isTranscriptionFocused.wrappedValue = true
                                     },
-                                    actionButtonTitle: "Go to Playground",
+                                    actionButtonTitle: "Go to practice",
                                     showActionButton: !self.playgroundUsed
                                 )
                                 .id("playground-step-\(self.playgroundUsed)")
                             }
                         }
-                        .padding(14)
+                        .padding(8)
                     }
 
                     // Test Playground
@@ -169,7 +178,7 @@ struct WelcomeView: View {
                             HStack {
                                 Label {
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("Test Playground")
+                                        Text("Practice dictation")
                                             .font(self.theme.typography.sectionTitle)
                                         Text("Click record, speak, and see your transcription")
                                             .font(self.theme.typography.caption)
@@ -182,16 +191,7 @@ struct WelcomeView: View {
 
                                 Spacer()
 
-                                if self.asr.isRunning {
-                                    HStack(spacing: 6) {
-                                        Circle()
-                                            .fill(.red)
-                                            .frame(width: 6, height: 6)
-                                        Text("Recording...")
-                                            .font(self.theme.typography.captionStrong)
-                                            .foregroundStyle(.red)
-                                    }
-                                } else if !self.asr.finalText.isEmpty {
+                                if !self.asr.isRunning, !self.asr.finalText.isEmpty {
                                     Text("\(self.asr.finalText.count) characters")
                                         .font(self.theme.typography.caption)
                                         .foregroundStyle(.secondary)
@@ -199,33 +199,14 @@ struct WelcomeView: View {
                             }
 
                             VStack(alignment: .leading, spacing: 14) {
-                                // Recording Control — centered button
-                                HStack {
-                                    Spacer()
-                                    Button {
-                                        if self.asr.isRunning {
-                                            Task {
-                                                await self.stopAndProcessTranscription()
-                                            }
-                                        } else {
-                                            self.startRecording()
-                                            self.playgroundUsed = true
-                                            SettingsStore.shared.playgroundUsed = true
-                                        }
-                                    } label: {
-                                        HStack(spacing: 8) {
-                                            Image(systemName: self.asr.isRunning ? "stop.fill" : "mic.fill")
-                                            Text(self.asr.isRunning ? "Stop Recording" : "Start Recording")
-                                        }
-                                        .frame(maxWidth: 220)
+                                RecordingControls(
+                                    stop: self.stopAndProcessTranscription,
+                                    start: {
+                                        self.startRecording()
+                                        self.playgroundUsed = true
+                                        SettingsStore.shared.playgroundUsed = true
                                     }
-                                    .fluidButton(.primary, size: .large, isRecording: self.asr.isRunning)
-                                    .buttonHoverEffect()
-                                    .scaleEffect(!self.reduceMotion && self.asr.isRunning ? 1.02 : 1.0)
-                                    .animation(self.reduceMotion ? nil : .spring(response: 0.3), value: self.asr.isRunning)
-                                    .disabled(!self.asr.isAsrReady && !self.asr.isRunning)
-                                    Spacer()
-                                }
+                                )
 
                                 // Text Area
                                 VStack(alignment: .leading, spacing: 8) {
@@ -233,7 +214,9 @@ struct WelcomeView: View {
                                         get: { self.asr.finalText },
                                         set: { self.asr.finalText = $0 }
                                     ))
-                                    .font(self.theme.typography.body)
+                                    .font(.system(size: 16))
+                                    .lineSpacing(4)
+                                    .accessibilityLabel("Practice dictation text")
                                     .focused(self.isTranscriptionFocused)
                                     .frame(height: 120)
                                     .padding(10)
@@ -303,7 +286,7 @@ struct WelcomeView: View {
                     }
                     .id(self.playgroundSectionID)
                 }
-                .padding(16)
+                .padding(24)
             }
         }
         .onAppear {
@@ -424,20 +407,20 @@ struct OnboardingFlowView: View {
             case .aiEnhancement:
                 return "Set Up AI Enhancement"
             case .playground:
-                return "Try FluidVoice"
+                return "Try PratiLekh"
             }
         }
 
         var subtitle: String {
             switch self {
             case .landing:
-                return "Talk anywhere. FluidVoice types for you."
+                return "Dictate evidence. Draft with clarity."
             case .language:
                 return "Pick the language you speak most."
             case .voiceModel:
                 return "Choose the best local engine for your language."
             case .permissions:
-                return "Allow FluidVoice to listen and type into other apps."
+                return "Allow PratiLekh to listen and type into other apps."
             case .aiEnhancement:
                 return "Optional: Configure AI post-processing or skip this step."
             case .playground:
@@ -644,7 +627,7 @@ struct OnboardingFlowView: View {
                     .ignoresSafeArea()
 
                 Rectangle()
-                    .fill(self.theme.materials.window)
+                    .fill(self.theme.palette.windowBackground)
                     .opacity(0.75)
                     .ignoresSafeArea()
             }
@@ -737,7 +720,7 @@ struct OnboardingFlowView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Welcome to FluidVoice")
+            Text("Welcome to PratiLekh")
                 .font(self.theme.typography.title)
                 .foregroundStyle(self.theme.palette.primaryText)
 
@@ -787,12 +770,12 @@ struct OnboardingFlowView: View {
                 VStack(alignment: .center, spacing: self.theme.metrics.onboardingSurface.landing.sectionSpacing) {
                     FluidOnboardingLandingHero(
                         eyebrow: "",
-                        title: "Just speak.",
-                        accentTitle: "We'll handle the rest.",
-                        firstDetail: "Accurate. Fast. Private. Free.",
-                        secondDetail: "Built for creators, thinkers, and builders."
+                        title: "Welcome to PratiLekh",
+                        accentTitle: "Dictate evidence. Draft with clarity.",
+                        firstDetail: "Set up your microphone, text insertion, and speech model.",
+                        secondDetail: "Then practise dictation before working in your document."
                     ) {
-                        FluidOnboardingLandingPrimaryButton(title: "Next") {
+                        FluidOnboardingLandingPrimaryButton(title: "Choose your language") {
                             self.goNext()
                         }
                         .frame(
@@ -801,10 +784,10 @@ struct OnboardingFlowView: View {
                         )
                     }
                 }
-                .frame(width: landing.contentWidth, alignment: .center)
+                .frame(width: min(landing.contentWidth, max(0, proxy.size.width - 48)), alignment: .center)
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: proxy.size.height, alignment: .center)
-                .offset(y: -78)
+
                 .padding(.horizontal, 24)
                 .padding(.vertical, 24)
 
@@ -882,14 +865,14 @@ struct OnboardingFlowView: View {
 
                             Text("What language will\nyou speak most?")
                                 .font(.system(size: 28, weight: .semibold))
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.primary)
                                 .multilineTextAlignment(.center)
                                 .lineSpacing(4)
                                 .padding(.bottom, 18)
 
                             Text("We'll show the best voice engines for it.")
                                 .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.62))
+                                .foregroundStyle(Color.secondary)
                                 .padding(.bottom, 26)
 
                             LazyVGrid(
@@ -915,13 +898,14 @@ struct OnboardingFlowView: View {
 
                             Text("You can change this later in Voice Engine settings.")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.44))
+                                .foregroundStyle(Color.secondary)
                                 .padding(.top, 18)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.top, 30)
-                        .padding(.bottom, 12)
+                        .padding(.bottom, 32)
                     }
+                    .frame(minHeight: 0, maxHeight: .infinity)
 
                     self.cinematicFooter(
                         continueTitle: "Continue",
@@ -955,7 +939,7 @@ struct OnboardingFlowView: View {
             : (isHovered ? 0.10 : 0.04)
         let borderColor = isSelected
             ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 1 : 0.92)
-            : (isHovered ? FluidOnboardingLandingColors.blue.opacity(0.58) : Color.white.opacity(0.10))
+            : (isHovered ? FluidOnboardingLandingColors.blue.opacity(0.58) : Color.primary.opacity(0.10))
         let borderWidth: CGFloat = isSelected
             ? (isHovered ? 1.8 : 1.4)
             : (isHovered ? 1.2 : 1)
@@ -972,12 +956,12 @@ struct OnboardingFlowView: View {
             HStack(spacing: 10) {
                 Image(systemName: "globe")
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(isSelected ? FluidOnboardingLandingColors.blue : Color.white.opacity(0.72))
+                    .foregroundStyle(isSelected ? FluidOnboardingLandingColors.blue : Color.secondary)
                     .frame(width: 22)
 
                 Text(language.popularDisplayName)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.76)
 
@@ -993,7 +977,7 @@ struct OnboardingFlowView: View {
             .frame(width: 166, height: 58)
             .background(
                 shape
-                    .fill(Color.white.opacity(cardFillOpacity))
+                    .fill(Color.primary.opacity(cardFillOpacity))
                     .overlay(
                         shape.stroke(
                             borderColor,
@@ -1005,7 +989,7 @@ struct OnboardingFlowView: View {
             .contentShape(shape)
         }
         .buttonStyle(.plain)
-        .focusable(false)
+        .focusable(true)
         .onHover { isHovered in
             if isHovered {
                 self.setHoveredLanguage(language.id)
@@ -1033,7 +1017,7 @@ struct OnboardingFlowView: View {
             : (isHovered ? 0.10 : 0.04)
         let borderColor = isSelected
             ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 1 : 0.92)
-            : (isHovered ? FluidOnboardingLandingColors.blue.opacity(0.58) : Color.white.opacity(self.isShowingAllLanguages ? 0.16 : 0.10))
+            : (isHovered ? FluidOnboardingLandingColors.blue.opacity(0.58) : Color.primary.opacity(self.isShowingAllLanguages ? 0.16 : 0.10))
         let shadowColor = isSelected
             ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.36 : 0.18)
             : FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.18 : 0)
@@ -1044,12 +1028,12 @@ struct OnboardingFlowView: View {
             HStack(spacing: 10) {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(isSelected ? FluidOnboardingLandingColors.blue : Color.white.opacity(self.isShowingAllLanguages ? 0.78 : 0.72))
+                    .foregroundStyle(isSelected ? FluidOnboardingLandingColors.blue : Color.primary.opacity(self.isShowingAllLanguages ? 0.78 : 0.72))
                     .frame(width: 22)
 
                 Text(isSelected ? self.selectedOnboardingLanguage.displayName : "Other")
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.70)
 
@@ -1057,13 +1041,13 @@ struct OnboardingFlowView: View {
 
                 Image(systemName: self.isShowingAllLanguages ? "chevron.up" : "chevron.down")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Color.white.opacity(0.46))
+                    .foregroundStyle(Color.secondary)
             }
             .padding(.horizontal, 15)
             .frame(width: 166, height: 58)
             .background(
                 shape
-                    .fill(Color.white.opacity(fillOpacity))
+                    .fill(Color.primary.opacity(fillOpacity))
                     .overlay(
                         shape.stroke(
                             borderColor,
@@ -1075,7 +1059,7 @@ struct OnboardingFlowView: View {
             .contentShape(shape)
         }
         .buttonStyle(.plain)
-        .focusable(false)
+        .focusable(true)
         .onHover { isHovered in
             self.setHoveredLanguage(isHovered ? "other" : nil)
         }
@@ -1088,17 +1072,17 @@ struct OnboardingFlowView: View {
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.white.opacity(0.48))
+                    .foregroundStyle(Color.secondary)
 
                 TextField(
                     "",
                     text: self.$languageSearchText,
                     prompt: Text("Search supported languages")
-                        .foregroundStyle(Color.white.opacity(0.42))
+                        .foregroundStyle(Color.secondary)
                 )
                 .textFieldStyle(.plain)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
                 .focused(self.$isLanguageSearchFocused)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -1110,10 +1094,10 @@ struct OnboardingFlowView: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(Color.white.opacity(0.07))
+                    .fill(Color.primary.opacity(0.07))
                     .overlay(
                         RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .stroke(Color.white.opacity(0.10), lineWidth: 1)
+                            .stroke(Color.primary.opacity(0.10), lineWidth: 1)
                     )
             )
 
@@ -1128,10 +1112,10 @@ struct OnboardingFlowView: View {
             .frame(width: 530, height: 156)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color.white.opacity(0.045))
+                    .fill(Color.primary.opacity(0.045))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                            .stroke(Color.primary.opacity(0.08), lineWidth: 1)
                     )
             )
         }
@@ -1146,7 +1130,7 @@ struct OnboardingFlowView: View {
             HStack(spacing: 10) {
                 Text(language.displayName)
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
 
                 Spacer()
 
@@ -1160,12 +1144,12 @@ struct OnboardingFlowView: View {
             .frame(height: 34)
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.14) : Color.white.opacity(0.045))
+                    .fill(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.14) : Color.primary.opacity(0.045))
             )
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .focusable(false)
+        .focusable(true)
     }
 
     private func cinematicFooter(
@@ -1210,7 +1194,8 @@ struct OnboardingFlowView: View {
             .keyboardShortcut(.defaultAction)
         }
         .padding(.horizontal, 30)
-        .padding(.bottom, 24)
+        .padding(.vertical, 16)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private func cinematicFooterButton(
@@ -1337,12 +1322,12 @@ struct OnboardingFlowView: View {
 
                     ScrollView(.vertical, showsIndicators: self.isShowingOtherModelRoutes) {
                         VStack(spacing: 0) {
-                            FluidOnboardingCompactAppIconMark(size: 66)
-                                .padding(.bottom, 22)
+                            FluidOnboardingCompactAppIconMark(size: 52)
+                                .padding(.bottom, 12)
 
-                            Text("Choose your\nvoice engine")
-                                .font(.system(size: 28, weight: .semibold))
-                                .foregroundStyle(.white)
+                            Text("Choose your voice engine")
+                                .font(.system(size: 26, weight: .semibold))
+                                .foregroundStyle(.primary)
                                 .multilineTextAlignment(.center)
                                 .lineSpacing(4)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -1350,7 +1335,7 @@ struct OnboardingFlowView: View {
 
                             Text(self.recommendedModelReasonText)
                                 .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.62))
+                                .foregroundStyle(Color.secondary)
                                 .multilineTextAlignment(.center)
                                 .padding(.bottom, 14)
 
@@ -1371,7 +1356,7 @@ struct OnboardingFlowView: View {
                                 if defaultRoutes.count == 1, let route = defaultRoutes.first {
                                     self.onboardingRouteCard(for: route)
                                 } else if !defaultRoutes.isEmpty {
-                                    HStack(spacing: 16) {
+                                    HStack(alignment: .top, spacing: 16) {
                                         ForEach(defaultRoutes) { route in
                                             self.onboardingRouteCard(for: route)
                                         }
@@ -1406,7 +1391,7 @@ struct OnboardingFlowView: View {
                             if self.isModelPreparationInProgress {
                                 Label("Initial preparation can take a while to get your Mac ready for near-instant transcription.", systemImage: "clock.arrow.circlepath")
                                     .font(self.theme.typography.captionStrong)
-                                    .foregroundStyle(Color.white.opacity(0.58))
+                                    .foregroundStyle(Color.secondary)
                                     .labelStyle(.titleAndIcon)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.86)
@@ -1414,21 +1399,22 @@ struct OnboardingFlowView: View {
                                     .padding(.vertical, 5)
                                     .background(
                                         Capsule()
-                                            .fill(Color.white.opacity(0.06))
-                                            .overlay(Capsule().stroke(Color.white.opacity(0.10), lineWidth: 1))
+                                            .fill(Color.primary.opacity(0.06))
+                                            .overlay(Capsule().stroke(Color.primary.opacity(0.10), lineWidth: 1))
                                     )
                                     .padding(.top, 14)
                             }
 
                             Text("You can switch models later in Voice Engine settings.")
                                 .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.44))
+                                .foregroundStyle(Color.secondary)
                                 .padding(.top, self.isModelPreparationInProgress ? 8 : 18)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.top, 30)
-                        .padding(.bottom, 12)
+                        .padding(.top, 16)
+                        .padding(.bottom, 32)
                     }
+                    .frame(minHeight: 0, maxHeight: .infinity)
 
                     self.cinematicFooter(
                         continueTitle: "Continue",
@@ -1466,16 +1452,16 @@ struct OnboardingFlowView: View {
                             FluidOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
-                            Text("Let FluidVoice\nlisten and type")
+                            Text("Let PratiLekh\nlisten and type")
                                 .font(.system(size: 28, weight: .semibold))
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.primary)
                                 .multilineTextAlignment(.center)
                                 .lineSpacing(4)
                                 .padding(.bottom, 16)
 
                             Text("Two quick permissions make dictation work anywhere.")
                                 .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.62))
+                                .foregroundStyle(Color.secondary)
                                 .padding(.bottom, 28)
 
                             VStack(spacing: 14) {
@@ -1483,7 +1469,7 @@ struct OnboardingFlowView: View {
                                     stepNumber: 1,
                                     title: self.isMicrophoneReady ? "Microphone access allowed" : "Allow microphone",
                                     subtitle: self.isMicrophoneReady
-                                        ? "Choose the microphone you want FluidVoice to use."
+                                        ? "Choose the microphone you want PratiLekh to use."
                                         : "macOS will ask once. Click Allow to start dictating.",
                                     systemImage: "mic.fill",
                                     isReady: self.isMicrophoneReady,
@@ -1516,9 +1502,9 @@ struct OnboardingFlowView: View {
                                 }
 
                                 if !self.isAccessibilityReady {
-                                    Text("Already enabled it? FluidVoice will update when macOS confirms access.")
+                                    Text("Already enabled it? PratiLekh will update when macOS confirms access.")
                                         .font(.system(size: 12, weight: .medium))
-                                        .foregroundStyle(Color.white.opacity(0.42))
+                                        .foregroundStyle(Color.secondary)
                                         .padding(.top, 2)
                                 }
                             }
@@ -1613,9 +1599,9 @@ struct OnboardingFlowView: View {
                             FluidOnboardingCompactAppIconMark(size: 66)
                                 .padding(.bottom, 22)
 
-                            Text("FluidVoice is ready.")
+                            Text("PratiLekh is ready.")
                                 .font(.system(size: 28, weight: .semibold))
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.primary)
                                 .multilineTextAlignment(.center)
                                 .lineLimit(2)
                                 .minimumScaleFactor(0.74)
@@ -1624,7 +1610,7 @@ struct OnboardingFlowView: View {
 
                             Text("Now let's try it out.")
                                 .font(.system(size: 15, weight: .medium))
-                                .foregroundStyle(Color.white.opacity(0.62))
+                                .foregroundStyle(Color.secondary)
                                 .padding(.bottom, 28)
 
                             OnboardingTryoutStepView(
@@ -1732,18 +1718,18 @@ struct OnboardingFlowView: View {
                     .font(.system(size: 8, weight: .bold))
             }
             .font(.system(size: 11, weight: .semibold))
-            .foregroundStyle(Color.white.opacity(0.62))
+            .foregroundStyle(Color.secondary)
             .padding(.horizontal, 10)
             .frame(height: 24)
             .background(
                 Capsule()
-                    .fill(Color.white.opacity(0.025))
-                    .overlay(Capsule().stroke(Color.white.opacity(0.07), lineWidth: 1))
+                    .fill(Color.primary.opacity(0.025))
+                    .overlay(Capsule().stroke(Color.primary.opacity(0.07), lineWidth: 1))
             )
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
-        .focusable(false)
+        .focusable(true)
         .accessibilityLabel(self.isShowingOtherModelRoutes ? "Hide other models" : "Show other models")
     }
 
@@ -1861,15 +1847,13 @@ struct OnboardingFlowView: View {
         let areModelActionsBlocked = self.asr.isRunning || self.uninstallingModelRouteID != nil || self.preparingModelRouteID != nil || isPreparing || self.isModelPreparationInProgress
         let isBuiltInAppleModel = model == .appleSpeech || model == .appleSpeechAnalyzer
         let shape = RoundedRectangle(cornerRadius: 14, style: .continuous)
-        let cardFill = isHovered
-            ? Color(red: 0.042, green: 0.052, blue: 0.074)
-            : Color(red: 0.030, green: 0.038, blue: 0.056)
+        let cardFill = self.theme.palette.cardBackground
 
         return VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top, spacing: 10) {
                 Text(self.onboardingModelTitle(for: model))
                     .font(self.theme.typography.sectionTitle)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .lineLimit(2)
                     .minimumScaleFactor(0.82)
                     .fixedSize(horizontal: false, vertical: true)
@@ -1878,7 +1862,7 @@ struct OnboardingFlowView: View {
 
                 Image(systemName: "info.circle")
                     .font(self.theme.typography.sectionTitle)
-                    .foregroundStyle(Color.white.opacity(0.58))
+                    .foregroundStyle(Color.secondary)
                     .frame(width: 24, height: 24)
                     .contentShape(Circle())
                     .help(self.onboardingModelTooltip(for: route))
@@ -1886,30 +1870,30 @@ struct OnboardingFlowView: View {
             }
             .frame(height: 38, alignment: .top)
 
-            self.onboardingModelMetadataRow(badgeText: route.badgeText)
+            self.onboardingModelMetadataRow(badgeText: nil)
 
-            self.onboardingModelFeaturePanel(for: model)
-
-            Spacer(minLength: 0)
+            Text(model == .appleSpeech ? "Apple Speech may use Apple’s servers" : "On-device speech recognition")
+                .font(self.theme.typography.body)
+                .foregroundStyle(self.theme.palette.secondaryText)
 
             Divider()
-                .overlay(Color.white.opacity(0.10))
+                .overlay(Color.primary.opacity(0.10))
 
             HStack(spacing: 10) {
                 Image(systemName: "internaldrive")
                     .font(self.theme.typography.sectionTitle)
-                    .foregroundStyle(Color.white.opacity(0.62))
+                    .foregroundStyle(Color.secondary)
                     .frame(width: 22)
 
                 Text("Download size")
                     .font(self.theme.typography.bodySmallStrong)
-                    .foregroundStyle(Color.white.opacity(0.62))
+                    .foregroundStyle(Color.secondary)
 
                 Spacer()
 
                 Text(model.downloadSize)
                     .font(self.theme.typography.bodySmallStrong)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.80)
             }
@@ -1932,6 +1916,16 @@ struct OnboardingFlowView: View {
                     }
                 }
                 .frame(height: 42, alignment: .center)
+            } else if isReady {
+                Label("Active model", systemImage: "checkmark.circle.fill")
+                    .font(self.theme.typography.bodyStrong)
+                    .foregroundStyle(self.theme.palette.accent)
+                if !isBuiltInAppleModel {
+                    Divider()
+                    Button("Delete model", role: .destructive) { self.uninstallOnboardingRoute(route) }
+                        .buttonStyle(.borderless)
+                        .disabled(areModelActionsBlocked)
+                }
             } else if isDownloaded, isBuiltInAppleModel {
                 self.onboardingModelActionButton(
                     id: "\(route.id)-activate",
@@ -1944,28 +1938,22 @@ struct OnboardingFlowView: View {
                     self.prepareOnboardingRoute(route)
                 }
             } else if isDownloaded {
-                HStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: 8) {
                     self.onboardingModelActionButton(
                         id: "\(route.id)-activate",
                         title: self.onboardingModelActionButtonTitle(isPreparing: false, isDownloaded: true, isReady: isReady),
                         systemImage: isReady ? "checkmark" : "bolt.fill",
                         tone: .primary,
-                        width: 124,
+                        width: nil,
                         isDisabled: areModelActionsBlocked || isReady
                     ) {
                         self.prepareOnboardingRoute(route)
                     }
 
-                    self.onboardingModelActionButton(
-                        id: "\(route.id)-uninstall",
-                        title: "Delete",
-                        systemImage: "trash",
-                        tone: .destructive,
-                        width: 124,
-                        isDisabled: areModelActionsBlocked
-                    ) {
-                        self.uninstallOnboardingRoute(route)
-                    }
+                    Divider()
+                    Button("Delete model", role: .destructive) { self.uninstallOnboardingRoute(route) }
+                        .buttonStyle(.borderless)
+                        .disabled(areModelActionsBlocked)
                 }
             } else {
                 self.onboardingModelActionButton(
@@ -1981,7 +1969,7 @@ struct OnboardingFlowView: View {
             }
         }
         .padding(16)
-        .frame(width: 292, height: 292, alignment: .topLeading)
+        .frame(width: 292, alignment: .topLeading)
         .background(
             shape
                 .fill(cardFill)
@@ -1989,12 +1977,12 @@ struct OnboardingFlowView: View {
                     shape.stroke(
                         isSelected
                             ? FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.92 : 0.78)
-                            : (isHovered ? Color.white.opacity(0.20) : Color.white.opacity(0.10)),
+                            : (isHovered ? Color.primary.opacity(0.20) : Color.primary.opacity(0.10)),
                         lineWidth: isSelected ? 1.4 : 1
                     )
                 )
         )
-        .shadow(color: Color.black.opacity(0.34), radius: isHovered ? 20 : 14, x: 0, y: isHovered ? 12 : 8)
+
         .contentShape(shape)
         .onTapGesture {
             guard !areModelActionsBlocked else { return }
@@ -2039,7 +2027,7 @@ struct OnboardingFlowView: View {
 
                     Text("Cancelling...")
                         .font(self.theme.typography.captionStrong)
-                        .foregroundStyle(Color.white.opacity(0.62))
+                        .foregroundStyle(Color.secondary)
                 }
             } else if self.asr.isDownloadingModel,
                       self.asr.modelPreparationPhase == .downloading,
@@ -2051,7 +2039,7 @@ struct OnboardingFlowView: View {
                 HStack(spacing: 6) {
                     Text(self.asr.modelPreparationStatusText)
                         .font(self.theme.typography.captionStrong)
-                        .foregroundStyle(Color.white.opacity(0.56))
+                        .foregroundStyle(Color.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                 }
@@ -2067,7 +2055,7 @@ struct OnboardingFlowView: View {
                             : self.asr.modelPreparationStatusText
                     )
                     .font(self.theme.typography.captionStrong)
-                    .foregroundStyle(Color.white.opacity(0.62))
+                    .foregroundStyle(Color.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                 }
@@ -2107,7 +2095,7 @@ struct OnboardingFlowView: View {
 
                 Text(label)
                     .font(self.theme.typography.captionStrong)
-                    .foregroundStyle(Color.white.opacity(0.66))
+                    .foregroundStyle(Color.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.82)
             }
@@ -2116,7 +2104,7 @@ struct OnboardingFlowView: View {
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(Color.white.opacity(0.075))
+                        .fill(Color.primary.opacity(0.075))
 
                     Capsule()
                         .fill(
@@ -2132,7 +2120,7 @@ struct OnboardingFlowView: View {
                                 .fill(
                                     LinearGradient(
                                         colors: [
-                                            Color.white.opacity(0.24),
+                                            Color.primary.opacity(0.24),
                                             Color.clear,
                                         ],
                                         startPoint: .top,
@@ -2146,7 +2134,7 @@ struct OnboardingFlowView: View {
 
             Text("\(Int(fillPercent * 100))%")
                 .font(self.theme.typography.bodySmallStrong)
-                .foregroundStyle(fillPercent > 0 ? color : Color.white.opacity(0.48))
+                .foregroundStyle(fillPercent > 0 ? color : Color.secondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.82)
                 .contentTransition(.numericText())
@@ -2189,26 +2177,26 @@ struct OnboardingFlowView: View {
         action: @escaping () -> Void,
         onHover: @escaping (Bool) -> Void
     ) -> some View {
-        let shape = Capsule()
+        let shape = RoundedRectangle(cornerRadius: 6)
         let accentColor: Color = configuration.tone == .destructive ? .red : FluidOnboardingLandingColors.blue
         let isFilledTone = configuration.tone == .primary || configuration.tone == .destructive
         let fillColor: Color = {
             switch configuration.tone {
             case .primary, .destructive:
-                return accentColor.opacity(configuration.isEnabled ? 1 : 0.34)
+                return configuration.isEnabled ? accentColor : self.theme.palette.cardBackground
             case .secondary:
-                return Color.white.opacity(configuration.isEnabled ? (configuration.isHovered ? 0.11 : 0.07) : 0.045)
+                return Color.primary.opacity(configuration.isEnabled ? (configuration.isHovered ? 0.11 : 0.07) : 0.045)
             }
         }()
         let borderColor: Color = {
             switch configuration.tone {
             case .primary, .destructive:
-                return Color.white.opacity(configuration.isHovered && configuration.isEnabled ? 0.30 : 0)
+                return Color.primary.opacity(configuration.isHovered && configuration.isEnabled ? 0.30 : 0)
             case .secondary:
-                return configuration.isHovered && configuration.isEnabled ? FluidOnboardingLandingColors.blue.opacity(0.30) : Color.white.opacity(0.07)
+                return configuration.isHovered && configuration.isEnabled ? FluidOnboardingLandingColors.blue.opacity(0.30) : Color.primary.opacity(0.07)
             }
         }()
-        let foregroundOpacity: Double = configuration.isEnabled ? (isFilledTone ? 1.0 : (configuration.isHovered ? 0.94 : 0.78)) : 0.42
+        let foregroundOpacity: Double = 1
         let shadowOpacity: Double = {
             guard configuration.isEnabled else { return 0 }
             switch configuration.tone {
@@ -2234,25 +2222,25 @@ struct OnboardingFlowView: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.72)
             }
-            .foregroundStyle(.white.opacity(foregroundOpacity))
+            .foregroundStyle((configuration.isEnabled ? (isFilledTone ? self.theme.palette.windowBackground : self.theme.palette.primaryText) : self.theme.palette.secondaryText).opacity(foregroundOpacity))
             .frame(width: configuration.width, height: configuration.height)
             .frame(maxWidth: configuration.width == nil ? .infinity : nil)
             .background(
                 shape
                     .fill(fillColor)
-                    .overlay(shape.fill(Color.white.opacity(isFilledTone && configuration.isHovered && configuration.isEnabled ? 0.10 : 0)))
+                    .overlay(shape.fill(Color.primary.opacity(isFilledTone && configuration.isHovered && configuration.isEnabled ? 0.10 : 0)))
                     .overlay(shape.stroke(borderColor, lineWidth: configuration.isHovered && configuration.isEnabled ? 1.2 : 1))
                     .overlay(
                         shape
                             .stroke(accentColor.opacity(ringOpacity), lineWidth: configuration.isHovered && configuration.isEnabled ? 1.4 : 1)
                             .padding(-2)
                     )
-                    .shadow(color: accentColor.opacity(shadowOpacity), radius: configuration.isHovered && configuration.isEnabled ? 16 : 9, x: 0, y: configuration.isHovered && configuration.isEnabled ? 6 : 3)
+                    .shadow(color: accentColor.opacity(shadowOpacity), radius: 0, x: 0, y: 0)
             )
             .contentShape(shape)
         }
         .buttonStyle(.plain)
-        .focusable(false)
+        .focusable(true)
         .contentShape(shape)
         .disabled(!configuration.isEnabled)
         .onHover { isHovered in
@@ -2266,7 +2254,7 @@ struct OnboardingFlowView: View {
     }
 
     private func onboardingModelTitle(for model: SettingsStore.SpeechModel) -> String {
-        model.humanReadableName
+        model.displayName
     }
 
     private func onboardingModelSubtitle(for model: SettingsStore.SpeechModel) -> String {
@@ -2329,7 +2317,7 @@ struct OnboardingFlowView: View {
                 HStack(spacing: 8) {
                     Text(title)
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
 
                     Text(resolvedStatusTitle)
                         .font(.system(size: 10, weight: .bold))
@@ -2344,7 +2332,7 @@ struct OnboardingFlowView: View {
 
                 Text(subtitle)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.white.opacity(0.55))
+                    .foregroundStyle(Color.secondary)
                     .lineLimit(2)
             }
 
@@ -2376,7 +2364,7 @@ struct OnboardingFlowView: View {
         .frame(height: 88)
         .background(
             shape
-                .fill(Color.white.opacity(isReady ? 0.045 : 0.070))
+                .fill(Color.primary.opacity(isReady ? 0.045 : 0.070))
                 .overlay(
                     shape.stroke(
                         isReady ? Color.green.opacity(0.18) : FluidOnboardingLandingColors.blue.opacity(0.26),
@@ -2721,6 +2709,7 @@ private extension OnboardingFlowView {
 }
 
 private struct OnboardingMicrophoneSetupPanel: View {
+    @Environment(\.theme) private var theme
     let devices: [AudioDevice.Device]
     let selectedUID: String
     let level: CGFloat
@@ -2731,7 +2720,7 @@ private struct OnboardingMicrophoneSetupPanel: View {
         if let errorMessage, errorMessage.isEmpty == false {
             return ("Microphone unavailable", Color.orange)
         }
-        return ("Input level", Color.white.opacity(0.52))
+        return ("Input level", Color.secondary)
     }
 
     var body: some View {
@@ -2742,7 +2731,7 @@ private struct OnboardingMicrophoneSetupPanel: View {
             HStack(spacing: 14) {
                 Text("Select your microphone")
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.white.opacity(0.58))
+                    .foregroundStyle(Color.secondary)
 
                 Spacer(minLength: 12)
 
@@ -2765,15 +2754,15 @@ private struct OnboardingMicrophoneSetupPanel: View {
                     .labelsHidden()
                     .pickerStyle(.menu)
                     .frame(width: 248)
-                    .tint(.white)
-                    .accessibilityHint("Moves the selected microphone to first in FluidVoice priority")
+                    .tint(self.theme.palette.accent)
+                    .accessibilityHint("Moves the selected microphone to first in PratiLekh priority")
                 }
             }
             .padding(.horizontal, 18)
             .frame(height: 62)
 
             Rectangle()
-                .fill(Color.white.opacity(0.08))
+                .fill(Color.primary.opacity(0.08))
                 .frame(height: 1)
                 .padding(.horizontal, 18)
 
@@ -2794,7 +2783,7 @@ private struct OnboardingMicrophoneSetupPanel: View {
                             .fill(
                                 index < activeBarCount
                                     ? FluidOnboardingLandingColors.blue.opacity(0.92)
-                                    : Color.white.opacity(0.14)
+                                    : Color.primary.opacity(0.14)
                             )
                             .frame(width: 5, height: 15)
 
@@ -2813,8 +2802,53 @@ private struct OnboardingMicrophoneSetupPanel: View {
         }
         .background(
             shape
-                .fill(Color.white.opacity(0.040))
-                .overlay(shape.stroke(Color.white.opacity(0.10), lineWidth: 1))
+                .fill(Color.primary.opacity(0.040))
+                .overlay(shape.stroke(Color.primary.opacity(0.10), lineWidth: 1))
         )
     }
 }
+
+#if DEBUG
+/// Synthetic review surface. Never requests permissions, loads models, or sends text.
+struct PratiLekhReviewStates: View {
+    @Environment(\.theme) private var theme
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("UI review fixture — synthetic states").font(.title2.bold())
+                Text("Preview evidence, not a live permission or model operation.").foregroundStyle(.secondary)
+                SetupStepView(
+                    step: 1,
+                    title: "Microphone permission denied",
+                    description: "Allow PratiLekh in System Settings → Privacy & Security → Microphone.",
+                    status: .pending,
+                    action: {},
+                    actionButtonTitle: "Open Settings"
+                )
+                SetupStepView(
+                    step: 2,
+                    title: "Loading speech model",
+                    description: "Preparing on-device recognition…",
+                    status: .inProgress,
+                    action: {},
+                    showActionButton: false
+                )
+                OnboardingMicrophoneSetupPanel(
+                    devices: [],
+                    selectedUID: "",
+                    level: 0,
+                    errorMessage: "Microphone access denied.",
+                    onSelect: { _ in }
+                )
+                Label("Voice model setup failed. Check your connection and try again.", systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(self.theme.palette.primaryText)
+                HStack {
+                    Button("Continue") {}.buttonStyle(PremiumButtonStyle()).disabled(true)
+                    Button("Try again") {}.buttonStyle(PremiumButtonStyle())
+                }
+                Text("हिन्दी में स्पष्ट और पठनीय दस्तावेज़ — 12 अक्टूबर, फ़ाइल 27।").font(.body)
+            }.padding(24)
+        }.background(self.theme.palette.windowBackground)
+    }
+}
+#endif

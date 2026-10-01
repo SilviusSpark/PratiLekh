@@ -35,7 +35,10 @@ struct AdaptiveAppTheme<Content: View>: View {
         let activeScheme = preferredScheme ?? self.colorScheme
 
         self.content
-            .appTheme(AppTheme.adaptive(accent: self.accent, colorScheme: activeScheme))
+            .appTheme(AppTheme.adaptive(
+                accent: self.settings.accentColorOption == .cyan ? FluidBrandColors.blue : self.accent,
+                colorScheme: activeScheme
+            ))
             .preferredColorScheme(preferredScheme)
     }
 }

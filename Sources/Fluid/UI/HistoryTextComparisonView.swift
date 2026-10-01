@@ -18,7 +18,7 @@ struct HistoryTextComparisonView: View {
                             .lineLimit(1).help(message)
                     }
                     Spacer()
-                    Toggle("Show changes", isOn: self.$showChanges).toggleStyle(.switch).controlSize(.small)
+                    Toggle("Show changes", isOn: self.$showChanges).toggleStyle(.switch).tint(self.theme.palette.accent).controlSize(.small)
                         .fixedSize()
                 }
                 .font(self.theme.typography.caption)
@@ -63,13 +63,13 @@ struct HistoryTextComparisonView: View {
                     .accessibilityLabel(isOriginal ? "Copy raw text" : "Copy final text")
             }
             self.text(content, isOriginal: isOriginal)
-                .font(self.theme.typography.body).lineSpacing(5)
+                .font(.system(size: 16)).lineSpacing(5)
                 .foregroundStyle(isOriginal ? self.theme.palette.secondaryText : self.theme.palette.primaryText)
                 .textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(20)
-        .background(self.theme.palette.cardBackground, in: RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(self.theme.palette.cardBorder.opacity(0.5)))
+        .padding(16)
+        .background(self.theme.palette.cardBackground, in: RoundedRectangle(cornerRadius: 10))
+        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(self.theme.palette.cardBorder.opacity(0.5)))
     }
 
     private func text(_ content: String, isOriginal: Bool) -> Text {
@@ -79,8 +79,8 @@ struct HistoryTextComparisonView: View {
         for run in runs {
             var part = AttributedString(run.text)
             if run.changed {
-                part.foregroundColor = isOriginal ? .red : .green
-                part.backgroundColor = (isOriginal ? Color.red : Color.green).opacity(0.1)
+                part.foregroundColor = isOriginal ? Color(nsColor: .systemRed) : self.theme.palette.accent
+                part.backgroundColor = (isOriginal ? Color(nsColor: .systemRed) : self.theme.palette.accent).opacity(0.1)
                 if isOriginal {
                     part.strikethroughStyle = .single
                 } else {

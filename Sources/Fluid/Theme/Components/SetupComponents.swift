@@ -25,11 +25,18 @@ struct SetupStepView: View {
     }
 
     var body: some View {
-        Button(action: {
-            if self.status != .completed, self.showActionButton {
-                self.action()
-            }
-        }) {
+        if self.status == .completed || !self.showActionButton {
+            self.rowContent
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(self.title)
+                .accessibilityValue(self.status == .completed ? "Complete" : "")
+        } else {
+            Button(action: self.action) { self.rowContent }
+                .buttonStyle(.plain)
+        }
+    }
+
+    private var rowContent: some View {
             HStack(alignment: .center, spacing: 10) {
                 // Status indicator
                 ZStack {
@@ -60,25 +67,20 @@ struct SetupStepView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(self.title)
                         .font(.body.weight(.medium))
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(self.theme.palette.primaryText)
 
-                    Text(self.description)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                    if self.status != .completed {
+                        Text(self.description)
+                            .font(.caption)
+                            .foregroundStyle(self.theme.palette.secondaryText)
+                            .lineLimit(2)
+                    }
                 }
 
                 Spacer()
 
                 // Action button or status badge
-                if self.status == .completed {
-                    Label("Done", systemImage: "checkmark")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.fluidGreen, in: Capsule())
-                } else if self.showActionButton {
+                if self.status != .completed && self.showActionButton {
                     HStack(spacing: 3) {
                         Text(self.actionButtonTitle)
                             .font(.caption.weight(.medium))
@@ -91,32 +93,29 @@ struct SetupStepView: View {
                     .background(self.theme.palette.accent.opacity(0.12), in: Capsule())
                 }
             }
-            .padding(10)
+            .padding(.horizontal, 8)
+            .padding(.vertical, self.status == .completed ? 4 : 8)
             .background(
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(self.status == .completed
-                        ? Color.fluidGreen.opacity(0.06)
+                        ? self.theme.palette.accent.opacity(0.06)
                         : self.theme.palette.cardBackground.opacity(0.5))
                     .overlay(
                         RoundedRectangle(cornerRadius: 8, style: .continuous)
                             .stroke(
                                 self.status == .completed
-                                    ? Color.fluidGreen.opacity(0.25)
+                                    ? self.theme.palette.accent.opacity(0.25)
                                     : self.theme.palette.cardBorder.opacity(0.2),
                                 lineWidth: 1
                             )
                     )
             )
-        }
-        .buttonStyle(.plain)
-        .disabled(self.status == .completed || !self.showActionButton)
-        .opacity(self.status == .completed ? 0.9 : 1.0)
     }
 
     private var statusColor: Color {
         switch self.status {
-        case .completed: return Color.fluidGreen
-        case .inProgress: return .blue
+        case .completed: return self.theme.palette.accent
+        case .inProgress: return self.theme.palette.accent
         case .pending: return .secondary
         }
     }
@@ -148,7 +147,7 @@ struct InstructionStep: View {
 
                 Text(self.description)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(self.theme.palette.secondaryText)
                     .lineLimit(2)
             }
         }

@@ -19,6 +19,7 @@ struct OnboardingAIEnhancementStepView: View {
     let onUseAIProvider: () -> Void
     let onFinishSetup: () -> Void
 
+    @Environment(\.theme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ObservedObject private var settings = SettingsStore.shared
 
@@ -69,8 +70,8 @@ struct OnboardingAIEnhancementStepView: View {
         static let headerLeadingInset: CGFloat = 50
         static let columnSpacing: CGFloat = 12
         static let rowSpacing: CGFloat = 8
-        static let rowHeight: CGFloat = 102
-        static let innerTextHeight: CGFloat = 86
+        static let rowHeight: CGFloat = 80
+        static let innerTextHeight: CGFloat = 64
         static let iconSize: CGFloat = 40
         static let arrowSize: CGFloat = 32
         static let rawCornerRadius: CGFloat = 14
@@ -78,21 +79,17 @@ struct OnboardingAIEnhancementStepView: View {
         static let heroHeight: CGFloat = 154
     }
 
+    // Illustrative formatting only: every substantive word and number is retained.
     private static let examples = [
         EnhancementExample(
-            id: "message-format",
-            raw: "Hey John, Newline, how are you doing today?",
-            polished: "Hey John,\nHow are you doing today?"
+            id: "punctuation",
+            raw: "The hearing is on 12 October at 10 am please bring file 27",
+            polished: "The hearing is on 12 October at 10 am. Please bring file 27."
         ),
         EnhancementExample(
-            id: "correction",
-            raw: "Hey, can we meet at five thirty tomorrow morning? Sorry, can you make it three thirty p.m. today?",
-            polished: "Hey, can we meet at 3:30 PM today?"
-        ),
-        EnhancementExample(
-            id: "list",
-            raw: "Make a grocery list. First one is banana, second one is apple, third one is orange.",
-            polished: "Grocery list:\n- banana\n- apple\n- orange"
+            id: "paragraph",
+            raw: "We received 3 documents today the next review is on 14 October",
+            polished: "We received 3 documents today.\n\nThe next review is on 14 October."
         ),
     ]
 
@@ -105,7 +102,7 @@ struct OnboardingAIEnhancementStepView: View {
     }
 
     private var privateAIProviderName: String {
-        let displayName = PrivateAIProviderFeature.displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let displayName = "Local AI"
         if displayName.isEmpty || displayName == "Private AI Provider" {
             return "Built-in AI"
         }
@@ -158,7 +155,7 @@ struct OnboardingAIEnhancementStepView: View {
             return "Download"
         }
         if self.isPrivateAIAvailable, !self.shouldShowTryout {
-            return "Test FluidVoice"
+            return "Test PratiLekh"
         }
         if self.isPrivateAIAvailable, self.shouldShowTryout {
             return "Using"
@@ -232,9 +229,13 @@ struct OnboardingAIEnhancementStepView: View {
                                 self.introSection(scrollProxy: scrollProxy, containerWidth: proxy.size.width)
                             }
                             .frame(maxWidth: .infinity)
+                            .padding(.bottom, 48)
                         }
+                        .frame(minHeight: 0, maxHeight: .infinity)
+                        .clipped()
 
                         self.footer
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .onDisappear {
@@ -280,9 +281,9 @@ struct OnboardingAIEnhancementStepView: View {
                 FluidOnboardingCompactAppIconMark(size: 52)
                     .padding(.bottom, 18)
 
-                Text("One more thing...")
+                Text("Optional AI formatting")
                     .font(.system(size: 32, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .minimumScaleFactor(0.74)
@@ -291,14 +292,14 @@ struct OnboardingAIEnhancementStepView: View {
 
                 Text(self.setupSubtitleText)
                     .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(Color.white.opacity(0.64))
+                    .foregroundStyle(Color.secondary)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.82)
                     .frame(maxWidth: 700)
                     .padding(.horizontal, 32)
             }
-            .frame(height: ExampleGridMetrics.heroHeight, alignment: .top)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.bottom, 20)
 
             self.examplesPanel
@@ -307,7 +308,7 @@ struct OnboardingAIEnhancementStepView: View {
 
             Text(self.setupQuestionText)
                 .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.92))
+                .foregroundStyle(.primary)
                 .padding(.bottom, 12)
 
             self.setupChoiceCard(scrollProxy: scrollProxy)
@@ -316,20 +317,20 @@ struct OnboardingAIEnhancementStepView: View {
 
             Text(self.setupFootnoteText)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.white.opacity(0.46))
+                .foregroundStyle(Color.secondary)
         }
         .frame(maxWidth: .infinity)
     }
 
     private var setupSubtitleText: String {
         if self.hasPrivateAIProvider {
-            return "FluidVoice can polish raw dictation locally with an optional built-in AI engine."
+            return "Optional built-in AI processes text on this Mac. Cloud providers send your text off-device when enabled."
         }
-        return "Optional: connect your own AI provider to polish dictation."
+        return "Optional: connect your own AI provider to format dictation. Cloud providers send your text off-device when enabled; a local endpoint processes it on its host."
     }
 
     private var setupQuestionText: String {
-        self.hasPrivateAIProvider ? "Want FluidVoice to polish your dictation?" : "Want AI polishing?"
+        self.hasPrivateAIProvider ? "Want PratiLekh to polish your dictation?" : "Want AI formatting?"
     }
 
     private var setupFootnoteText: String {
@@ -348,21 +349,21 @@ struct OnboardingAIEnhancementStepView: View {
                 VStack(spacing: 8) {
                     Text("Let's polish your text.")
                         .font(.system(size: 32, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
                         .multilineTextAlignment(.center)
                         .lineLimit(1)
                         .minimumScaleFactor(0.74)
 
                     Text("Choose an example, press \(self.shortcutDisplay), then dictate it naturally.")
                         .font(.system(size: 15, weight: .medium))
-                        .foregroundStyle(Color.white.opacity(0.62))
+                        .foregroundStyle(Color.secondary)
                         .multilineTextAlignment(.center)
                         .lineLimit(2)
                         .minimumScaleFactor(0.82)
                 }
                 .padding(.horizontal, 32)
             }
-            .frame(height: ExampleGridMetrics.heroHeight, alignment: .top)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.bottom, 22)
 
             self.playgroundExamplesPanel
@@ -371,7 +372,7 @@ struct OnboardingAIEnhancementStepView: View {
 
             Text(self.isTestReady ? "Looks good. Finish setup when you're ready." : "The polished result will appear on the selected row.")
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.white.opacity(0.46))
+                .foregroundStyle(Color.secondary)
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
                 .minimumScaleFactor(0.82)
@@ -387,7 +388,7 @@ struct OnboardingAIEnhancementStepView: View {
         HStack(spacing: ExampleGridMetrics.columnSpacing) {
             Text(leftTitle)
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(Color.white.opacity(0.48))
+                .foregroundStyle(Color.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)
 
             Color.clear
@@ -403,7 +404,10 @@ struct OnboardingAIEnhancementStepView: View {
 
     private var examplesPanel: some View {
         VStack(spacing: ExampleGridMetrics.rowSpacing) {
-            self.exampleGridHeader(leftTitle: "Raw dictation (before)", rightTitle: "Polished (after)")
+            Text("Illustrative examples — output may vary")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            self.exampleGridHeader(leftTitle: "Dictated text", rightTitle: "Formatted text")
 
             ForEach(Self.examples) { example in
                 self.exampleRow(example)
@@ -429,7 +433,7 @@ struct OnboardingAIEnhancementStepView: View {
 
                 Text(example.raw)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.white.opacity(0.52))
+                    .foregroundStyle(Color.secondary)
                     .lineLimit(4)
                     .minimumScaleFactor(0.80)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -438,7 +442,7 @@ struct OnboardingAIEnhancementStepView: View {
                     .frame(height: ExampleGridMetrics.innerTextHeight, alignment: .center)
                     .background(
                         RoundedRectangle(cornerRadius: ExampleGridMetrics.innerCornerRadius, style: .continuous)
-                            .fill(Color.white.opacity(0.040))
+                            .fill(Color.primary.opacity(0.040))
                     )
             }
             .padding(.horizontal, 9)
@@ -447,10 +451,10 @@ struct OnboardingAIEnhancementStepView: View {
             .frame(maxWidth: .infinity)
             .background(
                 RoundedRectangle(cornerRadius: ExampleGridMetrics.rawCornerRadius, style: .continuous)
-                    .fill(Color.white.opacity(0.038))
+                    .fill(Color.primary.opacity(0.038))
                     .overlay(
                         RoundedRectangle(cornerRadius: ExampleGridMetrics.rawCornerRadius, style: .continuous)
-                            .stroke(Color.white.opacity(0.070), lineWidth: 1)
+                            .stroke(Color.primary.opacity(0.070), lineWidth: 1)
                     )
             )
             .matchedGeometryEffect(
@@ -462,14 +466,14 @@ struct OnboardingAIEnhancementStepView: View {
 
             Image(systemName: "arrow.right")
                 .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(.white.opacity(0.80))
+                .foregroundStyle(.secondary)
                 .frame(width: ExampleGridMetrics.arrowSize, height: ExampleGridMetrics.arrowSize)
                 .background(
                     Circle()
-                        .fill(Color.white.opacity(0.065))
+                        .fill(Color.primary.opacity(0.065))
                         .overlay(
                             Circle()
-                                .stroke(Color.white.opacity(0.10), lineWidth: 1)
+                                .stroke(Color.primary.opacity(0.10), lineWidth: 1)
                         )
                 )
                 .matchedGeometryEffect(
@@ -505,7 +509,7 @@ struct OnboardingAIEnhancementStepView: View {
         return ZStack(alignment: .topLeading) {
             Text(example.polished)
                 .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(Color.white.opacity(0.84))
+                .foregroundStyle(Color.secondary)
                 .lineLimit(5)
                 .minimumScaleFactor(0.80)
                 .padding(.horizontal, 16)
@@ -555,7 +559,7 @@ struct OnboardingAIEnhancementStepView: View {
 
                     Text(example.raw)
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.white.opacity(isSelected ? 0.76 : 0.52))
+                        .foregroundStyle(Color.primary.opacity(isSelected ? 0.76 : 0.52))
                         .lineLimit(4)
                         .minimumScaleFactor(0.80)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -564,7 +568,7 @@ struct OnboardingAIEnhancementStepView: View {
                         .frame(height: ExampleGridMetrics.innerTextHeight, alignment: .center)
                         .background(
                             RoundedRectangle(cornerRadius: ExampleGridMetrics.innerCornerRadius, style: .continuous)
-                                .fill(Color.white.opacity(isSelected ? 0.062 : 0.040))
+                                .fill(Color.primary.opacity(isSelected ? 0.062 : 0.040))
                         )
                 }
                 .padding(.horizontal, 9)
@@ -573,10 +577,10 @@ struct OnboardingAIEnhancementStepView: View {
                 .frame(maxWidth: .infinity)
                 .background(
                     rawShape
-                        .fill(Color.white.opacity(isSelected ? 0.054 : 0.038))
+                        .fill(Color.primary.opacity(isSelected ? 0.054 : 0.038))
                         .overlay(
                             rawShape
-                                .stroke(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.48) : Color.white.opacity(0.070), lineWidth: isSelected ? 1.2 : 1)
+                                .stroke(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.48) : Color.primary.opacity(0.070), lineWidth: isSelected ? 1.2 : 1)
                         )
                         .shadow(color: FluidOnboardingLandingColors.blue.opacity(allowsDecorativeShadow && isSelected ? 0.13 : 0), radius: rawShadowRadius, x: 0, y: 4)
                 )
@@ -589,20 +593,20 @@ struct OnboardingAIEnhancementStepView: View {
                 isSource: self.shouldShowTryout
             )
             .buttonStyle(.plain)
-            .focusable(false)
+            .focusable(true)
             .contentShape(rawShape)
             .disabled(self.isPrivateAIBusy)
 
             Image(systemName: isSelected && self.isRunning ? "waveform" : "arrow.right")
                 .font(.system(size: 13, weight: .bold))
-                .foregroundStyle(.white.opacity(0.80))
+                .foregroundStyle(.secondary)
                 .frame(width: ExampleGridMetrics.arrowSize, height: ExampleGridMetrics.arrowSize)
                 .background(
                     Circle()
-                        .fill(isListening ? FluidOnboardingLandingColors.blue.opacity(0.22) : Color.white.opacity(isSelected ? 0.10 : 0.065))
+                        .fill(isListening ? FluidOnboardingLandingColors.blue.opacity(0.22) : Color.primary.opacity(isSelected ? 0.10 : 0.065))
                         .overlay(
                             Circle()
-                                .stroke(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.28) : Color.white.opacity(0.10), lineWidth: 1)
+                                .stroke(isSelected ? FluidOnboardingLandingColors.blue.opacity(0.28) : Color.primary.opacity(0.10), lineWidth: 1)
                         )
                         .shadow(color: FluidOnboardingLandingColors.blue.opacity(allowsDecorativeShadow && isListening ? 0.30 : 0), radius: arrowShadowRadius, x: 0, y: 0)
                 )
@@ -617,7 +621,7 @@ struct OnboardingAIEnhancementStepView: View {
                 if hasOutput {
                     Text(outputText)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color.white.opacity(0.86))
+                        .foregroundStyle(Color.secondary)
                         .lineLimit(5)
                         .minimumScaleFactor(0.80)
                         .padding(.leading, 16)
@@ -631,7 +635,7 @@ struct OnboardingAIEnhancementStepView: View {
 
                         Text("Listening...")
                             .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Color.white.opacity(0.74))
+                            .foregroundStyle(Color.secondary)
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
@@ -639,13 +643,13 @@ struct OnboardingAIEnhancementStepView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Dictate here.")
                             .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Color.white.opacity(0.36))
+                            .foregroundStyle(Color.primary.opacity(0.36))
                             .lineLimit(1)
                             .minimumScaleFactor(0.82)
 
                         Text("Press \(self.shortcutDisplay) and speak this example.")
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(Color.white.opacity(0.28))
+                            .foregroundStyle(Color.primary.opacity(0.28))
                             .lineLimit(1)
                             .minimumScaleFactor(0.78)
                     }
@@ -659,11 +663,11 @@ struct OnboardingAIEnhancementStepView: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(Color.white.opacity(0.42))
+                            .foregroundStyle(Color.secondary)
                             .frame(width: 28, height: 28)
                     }
                     .buttonStyle(.plain)
-                    .focusable(false)
+                    .focusable(true)
                     .contentShape(Circle())
                     .padding(.top, 5)
                     .padding(.trailing, 6)
@@ -713,13 +717,13 @@ struct OnboardingAIEnhancementStepView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("AI provider")
                     .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.78)
 
-                Label("Connect your own provider to polish dictation.", systemImage: "sparkles")
+                Label("Connect your own provider to format dictation.", systemImage: "sparkles")
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(Color.white.opacity(0.74))
+                    .foregroundStyle(Color.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.78)
 
@@ -754,7 +758,7 @@ struct OnboardingAIEnhancementStepView: View {
         .padding(.vertical, 16)
         .background(
             shape
-                .fill(Color.white.opacity(isHovered ? 0.070 : 0.052))
+                .fill(Color.primary.opacity(isHovered ? 0.070 : 0.052))
                 .overlay(shape.stroke(FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.42 : 0.26), lineWidth: 1))
                 .shadow(color: FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.18 : 0.08), radius: isHovered ? 18 : 10, x: 0, y: 5)
         )
@@ -773,7 +777,7 @@ struct OnboardingAIEnhancementStepView: View {
                     HStack(spacing: 8) {
                         Text(self.privateAIProviderName)
                             .font(.system(size: 22, weight: .semibold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.primary)
                             .lineLimit(1)
                             .minimumScaleFactor(0.78)
 
@@ -790,12 +794,12 @@ struct OnboardingAIEnhancementStepView: View {
 
                     Text("Powered by \(self.privateAIModelDisplayName)")
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(Color.white.opacity(0.42))
+                        .foregroundStyle(Color.secondary)
                         .lineLimit(1)
 
                     Label("Trained on 100K+ dictation data points to polish your words.", systemImage: "sparkles")
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color.white.opacity(0.74))
+                        .foregroundStyle(Color.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.78)
                 }
@@ -850,7 +854,7 @@ struct OnboardingAIEnhancementStepView: View {
         .padding(.vertical, 16)
         .background(
             shape
-                .fill(Color.white.opacity(isHovered ? 0.070 : 0.052))
+                .fill(Color.primary.opacity(isHovered ? 0.070 : 0.052))
                 .overlay(shape.stroke(FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.42 : 0.26), lineWidth: 1))
                 .shadow(color: FluidOnboardingLandingColors.blue.opacity(isHovered ? 0.18 : 0.08), radius: isHovered ? 18 : 10, x: 0, y: 5)
         )
@@ -864,7 +868,7 @@ struct OnboardingAIEnhancementStepView: View {
             HStack(spacing: 8) {
                 Text(self.privateAISetupStatusText ?? "Downloading. This can take a few minutes.")
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color.white.opacity(0.66))
+                    .foregroundStyle(Color.secondary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.78)
 
@@ -873,7 +877,7 @@ struct OnboardingAIEnhancementStepView: View {
                 if let byteText = self.privateAIDownloadByteText {
                     Text(byteText)
                         .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(Color.white.opacity(0.42))
+                        .foregroundStyle(Color.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.74)
                 }
@@ -922,7 +926,7 @@ struct OnboardingAIEnhancementStepView: View {
 
             Text(text)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color.white.opacity(0.58))
+                .foregroundStyle(Color.secondary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.76)
         }
@@ -958,34 +962,11 @@ struct OnboardingAIEnhancementStepView: View {
                         .keyboardShortcut(.defaultAction)
                 }
             } else {
-                HStack(spacing: 12) {
-                    self.providerChoiceButton
-
-                    self.skipButton
-                }
+                self.skipButton
             }
         }
         .padding(.horizontal, 30)
         .padding(.bottom, 24)
-    }
-
-    private var providerChoiceButton: some View {
-        self.pillButton(
-            PillButtonConfiguration(
-                id: "ai-provider",
-                title: self.hasPrivateAIProvider ? "Use my own AI provider" : "Set up AI provider",
-                systemImage: "arrow.up.right",
-                tone: .secondary,
-                width: 280,
-                height: 48,
-                fontSize: 15,
-                isEnabled: self.canNavigateOrMutate
-            ),
-            action: {
-                self.cancelPrivateAIAction()
-                self.onUseAIProvider()
-            }
-        )
     }
 
     private var skipButton: some View {
@@ -1051,29 +1032,29 @@ struct OnboardingAIEnhancementStepView: View {
     ) -> some View {
         let isDisabled = !configuration.isEnabled
         let isHovered = self.hoveredButtonID == configuration.id && !isDisabled
-        let shape = Capsule()
+        let shape = RoundedRectangle(cornerRadius: 6)
         let accentColor = configuration.tone == .destructive ? Color.red : FluidOnboardingLandingColors.blue
         let isPrimary = configuration.tone == .primary
         let isDestructive = configuration.tone == .destructive
         let fillColor: Color = {
             if isPrimary {
-                return accentColor.opacity(isDisabled ? 0.34 : 1)
+                return isDisabled ? self.theme.palette.cardBackground : accentColor
             }
             if isDestructive {
                 return Color.red.opacity(isDisabled ? 0.045 : (isHovered ? 0.24 : 0.16))
             }
-            return Color.white.opacity(isDisabled ? 0.045 : (isHovered ? 0.11 : 0.07))
+            return Color.primary.opacity(isDisabled ? 0.045 : (isHovered ? 0.11 : 0.07))
         }()
         let borderColor: Color = {
             if isPrimary {
-                return Color.white.opacity(isHovered ? 0.30 : 0)
+                return Color.primary.opacity(isHovered ? 0.30 : 0)
             }
             if isDestructive {
                 return Color.red.opacity(isHovered ? 0.48 : 0.24)
             }
-            return isHovered ? accentColor.opacity(0.30) : Color.white.opacity(0.07)
+            return isHovered ? accentColor.opacity(0.30) : Color.primary.opacity(0.07)
         }()
-        let foregroundOpacity = isDisabled ? 0.42 : (isPrimary ? 1.0 : (isHovered ? 0.94 : 0.78))
+        let foregroundOpacity = 1.0
         let shadowOpacity = isDisabled ? 0 : (isPrimary ? (isHovered ? 0.56 : 0.26) : (isHovered ? 0.12 : 0))
 
         return Button(action: action) {
@@ -1088,24 +1069,24 @@ struct OnboardingAIEnhancementStepView: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.72)
             }
-            .foregroundStyle(.white.opacity(foregroundOpacity))
+            .foregroundStyle((isDisabled ? self.theme.palette.secondaryText : (isPrimary ? self.theme.palette.windowBackground : self.theme.palette.primaryText)).opacity(foregroundOpacity))
             .frame(width: configuration.width, height: configuration.height)
             .background(
                 shape
                     .fill(fillColor)
-                    .overlay(shape.fill(Color.white.opacity(isPrimary && isHovered ? 0.10 : 0)))
+                    .overlay(shape.fill(Color.primary.opacity(isPrimary && isHovered ? 0.10 : 0)))
                     .overlay(shape.stroke(borderColor, lineWidth: isHovered ? 1.2 : 1))
                     .overlay(
                         shape
                             .stroke(accentColor.opacity(isHovered ? 0.50 : 0), lineWidth: isHovered ? 1.4 : 1)
                             .padding(-2)
                     )
-                    .shadow(color: accentColor.opacity(shadowOpacity), radius: isHovered ? 16 : 9, x: 0, y: isHovered ? 6 : 3)
+                    .shadow(color: accentColor.opacity(shadowOpacity), radius: 0, x: 0, y: 0)
             )
             .contentShape(shape)
         }
         .buttonStyle(.plain)
-        .focusable(false)
+        .focusable(true)
         .contentShape(shape)
         .disabled(isDisabled)
         .onHover { isHovered in

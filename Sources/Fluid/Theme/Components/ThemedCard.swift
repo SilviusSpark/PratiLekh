@@ -33,7 +33,7 @@ struct ThemedCard<Content: View>: View {
 
         self.content
             .padding(self.padding ?? self.theme.metrics.cardSurface.defaultPadding)
-            .background(configuration.material, in: shape)
+
             .background(
                 shape
                     .fill(configuration.background)
@@ -47,14 +47,14 @@ struct ThemedCard<Content: View>: View {
                     )
                     .shadow(
                         color: configuration.shadow.color.opacity(
-                            self.isHovered && self.hoverEffect ? min(configuration.shadow.opacity + configuration.hoverShadowBoost, 1.0) : configuration.shadow.opacity
+                            self.isHovered && self.hoverEffect ? configuration.shadow.opacity : configuration.shadow.opacity
                         ),
                         radius: configuration.shadow.radius,
                         x: configuration.shadow.x,
                         y: self.isHovered && self.hoverEffect ? configuration.shadow.y + 1 : configuration.shadow.y
                     )
             )
-            .scaleEffect(self.isHovered && self.hoverEffect ? 1.01 : 1.0)
+
             .onHover { hovering in
                 guard self.hoverEffect else { return }
                 self.isHovered = hovering

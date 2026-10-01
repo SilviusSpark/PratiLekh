@@ -43,30 +43,30 @@ struct FluidOnboardingLandingHero<Actions: View>: View {
 
             VStack(spacing: 4) {
                 Text(self.title)
-                    .font(.system(size: 52, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 32, weight: .semibold))
+                    .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
                     .minimumScaleFactor(0.82)
 
                 Text(self.accentTitle)
-                    .font(.system(size: 50, weight: .semibold))
+                    .font(.system(size: 22, weight: .semibold))
                     .italic()
                     .foregroundStyle(FluidOnboardingLandingColors.blue)
                     .multilineTextAlignment(.center)
                     .minimumScaleFactor(0.76)
             }
-            .lineLimit(1)
-            .shadow(color: .black.opacity(0.34), radius: 10, x: 0, y: 5)
+            .fixedSize(horizontal: false, vertical: true)
+
             .padding(.bottom, 28)
 
             VStack(spacing: 8) {
                 Text(self.firstDetail)
                 Text(self.secondDetail)
             }
-            .font(.system(size: 22, weight: .medium))
-            .foregroundStyle(Color.white.opacity(0.70))
+            .font(.system(size: 14, weight: .regular))
+            .foregroundStyle(Color.secondary)
             .multilineTextAlignment(.center)
-            .lineLimit(1)
+            .fixedSize(horizontal: false, vertical: true)
             .minimumScaleFactor(0.82)
             .padding(.bottom, 42)
 
@@ -78,39 +78,10 @@ struct FluidOnboardingLandingHero<Actions: View>: View {
 }
 
 struct FluidOnboardingLandingBackdrop: View {
+    @Environment(\.theme) private var theme
     let glowCenter: UnitPoint
-
-    init(glowCenter: UnitPoint = UnitPoint(x: 0.5, y: 0.18)) {
-        self.glowCenter = glowCenter
-    }
-
-    var body: some View {
-        ZStack {
-            Color(red: 0.012, green: 0.019, blue: 0.031)
-
-            RadialGradient(
-                colors: [
-                    FluidOnboardingLandingColors.blue.opacity(0.18),
-                    Color(red: 0.014, green: 0.032, blue: 0.068).opacity(0.30),
-                    .clear,
-                ],
-                center: self.glowCenter,
-                startRadius: 0,
-                endRadius: 620
-            )
-
-            RadialGradient(
-                colors: [
-                    Color.white.opacity(0.026),
-                    .clear,
-                ],
-                center: .center,
-                startRadius: 0,
-                endRadius: 520
-            )
-        }
-        .ignoresSafeArea()
-    }
+    init(glowCenter: UnitPoint = UnitPoint(x: 0.5, y: 0.18)) { self.glowCenter = glowCenter }
+    var body: some View { self.theme.palette.windowBackground.ignoresSafeArea() }
 }
 
 struct FluidOnboardingCompactProgress: View {
@@ -123,7 +94,7 @@ struct FluidOnboardingCompactProgress: View {
 
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Color.white.opacity(0.08))
+                    .fill(Color.primary.opacity(0.08))
 
                 Capsule()
                     .fill(FluidOnboardingLandingColors.blue)
@@ -150,10 +121,9 @@ struct FluidOnboardingCompactAppIconMark: View {
         Image(nsImage: Self.appIconImage)
             .resizable()
             .interpolation(.high)
-            .aspectRatio(contentMode: .fit)
+            .scaledToFit()
             .frame(width: self.size, height: self.size)
-            .shadow(color: FluidOnboardingLandingColors.blue.opacity(0.45), radius: 24, x: 0, y: 0)
-            .shadow(color: Color.black.opacity(0.42), radius: 14, x: 0, y: 9)
+
             .accessibilityHidden(true)
     }
 }
@@ -235,165 +205,26 @@ struct FluidOnboardingLandingHoverTracker: NSViewRepresentable {
     }
 }
 
-struct FluidOnboardingLandingPrimaryButton: NSViewRepresentable {
-    static let size = CGSize(width: 236, height: 56)
-
+struct FluidOnboardingLandingPrimaryButton: View {
+    static let size = CGSize(width: 236, height: 44)
     let title: String
     let action: () -> Void
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator(action: self.action)
-    }
-
-    func makeNSView(context: Context) -> NSButton {
-        let button = LandingPrimaryNSButton()
-        button.target = context.coordinator
-        button.action = #selector(Coordinator.performAction)
-        button.setButtonType(.momentaryPushIn)
-        button.isBordered = false
-        button.wantsLayer = true
-        button.focusRingType = .none
-        button.keyEquivalent = "\r"
-        button.keyEquivalentModifierMask = []
-        button.setAccessibilityLabel(self.title)
-        button.update(title: self.title, isHighlighted: false)
-        return button
-    }
-
-    func updateNSView(_ button: NSButton, context: Context) {
-        context.coordinator.action = self.action
-
-        guard let button = button as? LandingPrimaryNSButton else {
-            button.title = self.title
-            button.setAccessibilityLabel(self.title)
-            return
-        }
-
-        button.setAccessibilityLabel(self.title)
-        button.update(title: self.title, isHighlighted: button.isHighlighted)
-    }
-
-    final class Coordinator: NSObject {
-        var action: () -> Void
-
-        init(action: @escaping () -> Void) {
-            self.action = action
-        }
-
-        @objc func performAction() {
-            self.action()
-        }
-    }
-}
-
-private final class LandingPrimaryNSButton: NSButton {
-    private static let normalColor = NSColor(srgbRed: 0.16, green: 0.49, blue: 1.0, alpha: 1.0)
-    private static let highlightedColor = NSColor(srgbRed: 0.10, green: 0.40, blue: 0.92, alpha: 1.0)
-    private static let hoverColor = NSColor(srgbRed: 0.20, green: 0.54, blue: 1.0, alpha: 1.0)
-    private var trackingArea: NSTrackingArea?
-    private var isHovering = false
-
-    override var isHighlighted: Bool {
-        didSet {
-            self.update(title: self.title, isHighlighted: self.isHighlighted)
-        }
-    }
-
-    override var intrinsicContentSize: NSSize {
-        FluidOnboardingLandingPrimaryButton.size
-    }
-
-    override func hitTest(_ point: NSPoint) -> NSView? {
-        guard self.isEnabled, !self.isHidden, self.alphaValue > 0, self.bounds.contains(point) else {
-            return nil
-        }
-
-        return self
-    }
-
-    override func layout() {
-        super.layout()
-        self.layer?.cornerRadius = self.bounds.height / 2
-    }
-
-    override func updateTrackingAreas() {
-        super.updateTrackingAreas()
-
-        if let trackingArea {
-            self.removeTrackingArea(trackingArea)
-        }
-
-        let options: NSTrackingArea.Options = [.activeInKeyWindow, .mouseEnteredAndExited, .inVisibleRect]
-        let trackingArea = NSTrackingArea(rect: .zero, options: options, owner: self)
-        self.addTrackingArea(trackingArea)
-        self.trackingArea = trackingArea
-    }
-
-    override func mouseEntered(with event: NSEvent) {
-        super.mouseEntered(with: event)
-        self.isHovering = true
-        self.update(title: self.title, isHighlighted: self.isHighlighted)
-    }
-
-    override func mouseExited(with event: NSEvent) {
-        super.mouseExited(with: event)
-        self.isHovering = false
-        self.update(title: self.title, isHighlighted: self.isHighlighted)
-    }
-
-    func update(title: String, isHighlighted: Bool) {
-        self.title = title
-        self.attributedTitle = NSAttributedString(
-            string: title,
-            attributes: [
-                .font: NSFont.systemFont(ofSize: 18, weight: .semibold),
-                .foregroundColor: NSColor.white,
-            ]
-        )
-        self.alignment = .center
-        self.layer?.masksToBounds = false
-        self.layer?.backgroundColor = self.backgroundColor(isHighlighted: isHighlighted).cgColor
-        self.layer?.cornerRadius = self.bounds.height > 0 ? self.bounds.height / 2 : 28
-        self.layer?.shadowColor = Self.normalColor.withAlphaComponent(0.34).cgColor
-        self.layer?.shadowOpacity = isHighlighted ? 0.20 : 0.34
-        self.layer?.shadowRadius = isHighlighted ? 8 : 14
-        self.layer?.shadowOffset = NSSize(width: 0, height: isHighlighted ? 4 : 7)
-    }
-
-    private func backgroundColor(isHighlighted: Bool) -> NSColor {
-        if isHighlighted {
-            return Self.highlightedColor
-        }
-
-        return self.isHovering ? Self.hoverColor : Self.normalColor
+    var body: some View {
+        Button(self.title, action: self.action)
+            .buttonStyle(PremiumButtonStyle(height: 44))
+            .frame(width: Self.size.width)
+            .controlSize(.large)
+            .keyboardShortcut(.defaultAction)
     }
 }
 
 private struct FluidOnboardingAppIconMark: View {
-    private static let appIconImage: NSImage = NSApplication.shared.applicationIconImage
-        ?? NSWorkspace.shared.icon(forFile: Bundle.main.bundlePath)
-
+    @Environment(\.theme) private var theme
     var body: some View {
-        ZStack {
-            Circle()
-                .fill(FluidOnboardingLandingColors.blue.opacity(0.28))
-                .blur(radius: 42)
-                .frame(width: 188, height: 188)
-                .offset(y: -16)
-
-            FluidOnboardingPortalGlow()
-                .offset(y: 58)
-
-            Image(nsImage: Self.appIconImage)
-                .resizable()
-                .interpolation(.high)
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 116, height: 116)
-                .shadow(color: Color.black.opacity(0.56), radius: 20, x: 0, y: 15)
-                .shadow(color: FluidOnboardingLandingColors.blue.opacity(0.58), radius: 36, x: 0, y: 0)
-        }
-        .frame(width: 360, height: 176)
-        .accessibilityHidden(true)
+        PratiLekhMark().stroke(self.theme.palette.accent, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+            .frame(width: 64, height: 64)
+            .accessibilityHidden(true)
     }
 }
 
@@ -404,7 +235,7 @@ private struct FluidOnboardingPortalGlow: View {
                 .fill(
                     RadialGradient(
                         colors: [
-                            Color.white.opacity(0.74),
+                            Color.secondary,
                             FluidOnboardingLandingColors.blue.opacity(0.64),
                             FluidOnboardingLandingColors.blue.opacity(0.05),
                             .clear,

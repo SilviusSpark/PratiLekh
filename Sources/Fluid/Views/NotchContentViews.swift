@@ -101,6 +101,9 @@ class NotchContentState: ObservableObject {
     @Published var mode: OverlayMode = .dictation
     @Published var promptPickerMode: SettingsStore.PromptMode = .dictate
     @Published var isProcessing: Bool = false // AI processing state
+    // Presentation only: these flags never determine the processing route.
+    @Published var isTranscribing: Bool = false
+    @Published var recordingWasCancelled: Bool = false
     @Published var isAIProcessingFailureVisible: Bool = false
     @Published private(set) var aiProcessingFailureMessage: String = "AI Enhancement failed"
     @Published private(set) var canRetryAIProcessingFailure: Bool = true
@@ -266,6 +269,7 @@ class NotchContentState: ObservableObject {
     var onOpenPreferencesRequested: (() -> Void)?
     /// Called when the user requests cancelling the current recording or overlay session.
     var onCancelRequested: (() -> Void)?
+    var onStopRecordingRequested: (() -> Void)?
 
     /// Set recording state (for waveform visibility in expanded view)
     func setRecordingInExpandedMode(_ recording: Bool) {
@@ -681,7 +685,7 @@ struct NotchExpandedView: View {
         if let appIcon = self.contentState.targetAppIcon ?? self.activeAppMonitor.activeAppIcon {
             Image(nsImage: appIcon)
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .scaledToFit()
                 .frame(width: 18, height: 18)
                 .clipShape(RoundedRectangle(cornerRadius: 3))
         }
@@ -1251,7 +1255,7 @@ struct NotchCompactLeadingView: View {
             if let appIcon = self.contentState.targetAppIcon ?? self.activeAppMonitor.activeAppIcon {
                 Image(nsImage: appIcon)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
                     .frame(width: 16, height: 16)
                     .clipShape(RoundedRectangle(cornerRadius: 3))
             } else {

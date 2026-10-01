@@ -1,11 +1,16 @@
+import AppKit
 import SwiftUI
 
 /// Shared product accents. Onboarding and feature surfaces use the same source of truth.
 enum FluidBrandColors {
-    static let blue = Color(red: 0.10, green: 0.46, blue: 1.0)
+    static let blue = Color(nsColor: NSColor(name: nil) { appearance in
+        appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            ? NSColor(srgbRed: 0.482, green: 0.796, blue: 0.710, alpha: 1)
+            : NSColor(srgbRed: 0.078, green: 0.420, blue: 0.369, alpha: 1)
+    })
 }
 
-/// Central theme definition for the Fluid app. All colors, spacings and materials
+/// Central theme definition for PratiLekh. All colors, spacings and materials
 /// should be defined here to keep styling consistent and easy to evolve.
 struct AppTheme {
     struct Palette {
@@ -48,9 +53,9 @@ struct AppTheme {
         let chromeCaption: Font
 
         static let standard = Typography(
-            displayTitle: .system(size: 42, weight: .semibold),
+            displayTitle: .system(size: 32, weight: .semibold),
             statement: .system(size: 17, weight: .regular),
-            title: .system(size: 22, weight: .bold),
+            title: .system(size: 26, weight: .semibold),
             titleIcon: .system(size: 22, weight: .regular),
             sectionTitle: .system(size: 15, weight: .semibold),
             body: .system(size: 14, weight: .regular),
@@ -63,7 +68,7 @@ struct AppTheme {
             tiny: .system(size: 11, weight: .regular),
             tinyStrong: .system(size: 11, weight: .bold),
             badge: .system(size: 11, weight: .semibold),
-            metricTiny: .system(size: 11, weight: .bold, design: .rounded),
+            metricTiny: .system(size: 11, weight: .bold),
             codeCaption: .system(size: 12, weight: .medium, design: .monospaced),
             sidebarItem: .system(size: 14, weight: .regular),
             sidebarSection: .system(size: 12, weight: .medium),
@@ -84,9 +89,9 @@ struct AppTheme {
                 xs: 4,
                 sm: 8,
                 md: 12,
-                lg: 16,
-                xl: 20,
-                xxl: 28
+                lg: 10,
+                xl: 24,
+                xxl: 32
             )
         }
 
@@ -99,7 +104,7 @@ struct AppTheme {
             static let standard = CornerRadius(
                 sm: 6,
                 md: 10,
-                lg: 16,
+                lg: 10,
                 pill: 999
             )
         }
@@ -168,7 +173,7 @@ struct AppTheme {
             let subtle: Variant
 
             static let defaults = CardSurface(
-                defaultPadding: 14,
+                defaultPadding: 20,
                 standard: Variant(
                     borderOpacity: 0.28,
                     hoverBorderOpacity: 0.5,
@@ -233,7 +238,7 @@ struct AppTheme {
                     heroIconFrame: 68,
                     tileSpacing: 12,
                     sectionSpacing: 16,
-                    heroCornerRadius: 18
+                    heroCornerRadius: 10
                 )
             )
         }
@@ -288,25 +293,25 @@ struct AppTheme {
         }
     }
 
-    /// Light theme using system colors so macOS accessibility contrast settings stay in control.
+    /// Warm paper surfaces with readable ink and a deep teal accent.
     static func light(accent: Color) -> AppTheme {
         AppTheme(
             palette: Palette(
-                windowBackground: Color(nsColor: .windowBackgroundColor),
-                contentBackground: Color(nsColor: .controlBackgroundColor),
-                sidebarBackground: Color(nsColor: .windowBackgroundColor),
-                cardBackground: Color(nsColor: .controlBackgroundColor),
-                elevatedCardBackground: Color(nsColor: .windowBackgroundColor),
-                toolbarBackground: Color(nsColor: .windowBackgroundColor),
+                windowBackground: Color(red: 0.9608, green: 0.9529, blue: 0.9333),
+                contentBackground: Color(red: 1.0000, green: 0.9961, blue: 0.9804),
+                sidebarBackground: Color(red: 0.9255, green: 0.9176, blue: 0.8902),
+                cardBackground: Color(red: 1.0000, green: 0.9961, blue: 0.9804),
+                elevatedCardBackground: Color(red: 1.0000, green: 1.0000, blue: 1.0000),
+                toolbarBackground: Color(red: 0.9608, green: 0.9529, blue: 0.9333),
 
-                cardBorder: Color.black.opacity(0.12),
-                separator: Color(nsColor: .separatorColor),
-                primaryText: Color(nsColor: .labelColor),
-                secondaryText: Color(nsColor: .secondaryLabelColor),
-                tertiaryText: Color(nsColor: .tertiaryLabelColor),
+                cardBorder: Color(red: 0.8353, green: 0.8549, blue: 0.8235),
+                separator: Color(red: 0.8353, green: 0.8549, blue: 0.8235),
+                primaryText: Color(red: 0.1255, green: 0.1608, blue: 0.1451),
+                secondaryText: Color(red: 0.3490, green: 0.3961, blue: 0.3686),
+                tertiaryText: Color(red: 0.3490, green: 0.3961, blue: 0.3686),
                 accent: accent,
                 warning: Color(nsColor: .systemOrange),
-                success: accent
+                success: Color(nsColor: .systemGreen)
             ),
             typography: .standard,
             metrics: Metrics(
@@ -317,8 +322,8 @@ struct AppTheme {
                 cardSurface: .defaults,
                 onboardingSurface: .standard,
                 window: .standard,
-                cardShadow: .subtle(color: .black, opacity: 0.18),
-                elevatedCardShadow: .subtle(color: .black, opacity: 0.22)
+                cardShadow: .subtle(color: .black, opacity: 0),
+                elevatedCardShadow: .subtle(color: .black, opacity: 0)
             ),
             materials: Materials(
                 window: .thinMaterial,
@@ -331,25 +336,25 @@ struct AppTheme {
         )
     }
 
-    /// Default dark-forward theme tuned for macOS Sonoma / Sequoia aesthetics.
+    /// Dark ink surfaces with a lighter teal accent.
     static func dark(accent: Color) -> AppTheme {
         AppTheme(
             palette: Palette(
-                windowBackground: Color(red: 0.07, green: 0.07, blue: 0.07),
-                contentBackground: Color(red: 0.09, green: 0.09, blue: 0.09),
-                sidebarBackground: Color(red: 0.06, green: 0.06, blue: 0.06),
-                cardBackground: Color(red: 0.08, green: 0.08, blue: 0.08),
-                elevatedCardBackground: Color(red: 0.11, green: 0.11, blue: 0.11),
-                toolbarBackground: Color(red: 0.06, green: 0.06, blue: 0.06),
+                windowBackground: Color(red: 0.0980, green: 0.1137, blue: 0.1098),
+                contentBackground: Color(red: 0.1333, green: 0.1569, blue: 0.1490),
+                sidebarBackground: Color(red: 0.0824, green: 0.1020, blue: 0.0941),
+                cardBackground: Color(red: 0.1333, green: 0.1569, blue: 0.1490),
+                elevatedCardBackground: Color(red: 0.1686, green: 0.2000, blue: 0.1882),
+                toolbarBackground: Color(red: 0.0980, green: 0.1137, blue: 0.1098),
 
-                cardBorder: Color.white.opacity(0.10),
-                separator: Color.white.opacity(0.16),
-                primaryText: Color(nsColor: .labelColor),
-                secondaryText: Color(nsColor: .secondaryLabelColor),
-                tertiaryText: Color(nsColor: .tertiaryLabelColor),
+                cardBorder: Color(red: 0.2549, green: 0.3020, blue: 0.2745),
+                separator: Color(red: 0.2549, green: 0.3020, blue: 0.2745),
+                primaryText: Color(red: 0.9373, green: 0.9490, blue: 0.9216),
+                secondaryText: Color(red: 0.6784, green: 0.7255, blue: 0.6941),
+                tertiaryText: Color(red: 0.6784, green: 0.7255, blue: 0.6941),
                 accent: accent,
                 warning: Color(nsColor: .systemOrange),
-                success: accent
+                success: Color(nsColor: .systemGreen)
             ),
             typography: .standard,
             metrics: Metrics(
@@ -360,8 +365,8 @@ struct AppTheme {
                 cardSurface: .defaults,
                 onboardingSurface: .standard,
                 window: .standard,
-                cardShadow: .subtle(color: .black, opacity: 0.70),
-                elevatedCardShadow: .subtle(color: .black, opacity: 0.80)
+                cardShadow: .subtle(color: .black, opacity: 0),
+                elevatedCardShadow: .subtle(color: .black, opacity: 0)
             ),
             materials: Materials(
                 window: .thinMaterial,
@@ -374,8 +379,8 @@ struct AppTheme {
         )
     }
 
-    static let light = AppTheme.light(accent: .fluidGreen)
-    static let dark = AppTheme.dark(accent: .fluidGreen)
+    static let light = AppTheme.light(accent: FluidBrandColors.blue)
+    static let dark = AppTheme.dark(accent: FluidBrandColors.blue)
 }
 
 // MARK: - Helpers

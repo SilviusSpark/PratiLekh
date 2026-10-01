@@ -447,7 +447,13 @@ final class BottomOverlayWindowController {
         panel.hidesOnDeactivate = false
         panel.animationBehavior = .none
 
+        #if DEBUG
+        let contentView = BottomOverlayView(reviewState: RecordingPresentationState(
+            rawValue: ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_OVERLAY_STATE"] ?? ""
+        ))
+        #else
         let contentView = BottomOverlayView()
+        #endif
         let hostingView = BottomOverlayHostingView(rootView: contentView)
 
         // Let SwiftUI determine the size
@@ -1381,6 +1387,13 @@ final class BottomOverlayActionsMenuController {
 }
 
 private struct BottomOverlayModeMenuView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    private var theme: AppTheme {
+        AppTheme.adaptive(
+            accent: self.settings.accentColorOption == .cyan ? FluidBrandColors.blue : self.settings.accentColor,
+            colorScheme: self.settings.themePreference.preferredColorScheme ?? self.colorScheme
+        )
+    }
     @ObservedObject private var contentState = NotchContentState.shared
     @ObservedObject private var settings = SettingsStore.shared
 
@@ -1405,18 +1418,18 @@ private struct BottomOverlayModeMenuView: View {
         let isHovered = self.hoveredRowID == rowID
         let fillColor: Color
         if isSelected {
-            fillColor = Color.white.opacity(0.28)
+            fillColor = self.theme.palette.primaryText.opacity(0.28)
         } else if isHovered {
-            fillColor = Color.white.opacity(0.20)
+            fillColor = self.theme.palette.primaryText.opacity(0.20)
         } else {
             fillColor = Color.clear
         }
 
         let strokeColor: Color
         if isSelected {
-            strokeColor = Color.white.opacity(0.38)
+            strokeColor = self.theme.palette.primaryText.opacity(0.38)
         } else if isHovered {
-            strokeColor = Color.white.opacity(0.24)
+            strokeColor = self.theme.palette.primaryText.opacity(0.24)
         } else {
             strokeColor = Color.clear
         }
@@ -1446,10 +1459,10 @@ private struct BottomOverlayModeMenuView: View {
                 if !shortcut.isEmpty {
                     Text(shortcut)
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.7))
+                        .foregroundStyle(self.theme.palette.primaryText.opacity(0.7))
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
-                        .background(Color.white.opacity(0.08))
+                        .background(self.theme.palette.primaryText.opacity(0.08))
                         .clipShape(Capsule())
                 }
                 if isSelected {
@@ -1479,14 +1492,14 @@ private struct BottomOverlayModeMenuView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(Color.black)
+        .background(self.theme.palette.cardBackground)
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                .stroke(self.theme.palette.primaryText.opacity(0.12), lineWidth: 1)
         )
         .frame(maxWidth: self.maxWidth)
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(self.settings.themePreference.preferredColorScheme)
         .onHover { hovering in
             self.onHoverChanged(hovering)
         }
@@ -1494,6 +1507,13 @@ private struct BottomOverlayModeMenuView: View {
 }
 
 private struct BottomOverlayPromptMenuView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    private var theme: AppTheme {
+        AppTheme.adaptive(
+            accent: self.settings.accentColorOption == .cyan ? FluidBrandColors.blue : self.settings.accentColor,
+            colorScheme: self.settings.themePreference.preferredColorScheme ?? self.colorScheme
+        )
+    }
     @ObservedObject private var settings = SettingsStore.shared
     @ObservedObject private var contentState = NotchContentState.shared
 
@@ -1507,18 +1527,18 @@ private struct BottomOverlayPromptMenuView: View {
         let isHovered = self.hoveredRowID == rowID
         let fillColor: Color
         if isSelected {
-            fillColor = Color.white.opacity(0.28)
+            fillColor = self.theme.palette.primaryText.opacity(0.28)
         } else if isHovered {
-            fillColor = Color.white.opacity(0.20)
+            fillColor = self.theme.palette.primaryText.opacity(0.20)
         } else {
             fillColor = Color.clear
         }
 
         let strokeColor: Color
         if isSelected {
-            strokeColor = Color.white.opacity(0.38)
+            strokeColor = self.theme.palette.primaryText.opacity(0.38)
         } else if isHovered {
-            strokeColor = Color.white.opacity(0.24)
+            strokeColor = self.theme.palette.primaryText.opacity(0.24)
         } else {
             strokeColor = Color.clear
         }
@@ -1561,7 +1581,7 @@ private struct BottomOverlayPromptMenuView: View {
         if let shortcut = self.shortcutDisplay(for: selection) {
             Text(shortcut)
                 .font(.system(size: 9, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.58))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.58))
                 .lineLimit(1)
                 .truncationMode(.middle)
                 .frame(maxWidth: 82)
@@ -1569,11 +1589,11 @@ private struct BottomOverlayPromptMenuView: View {
                 .padding(.vertical, 2)
                 .background(
                     RoundedRectangle(cornerRadius: 5, style: .continuous)
-                        .fill(Color.white.opacity(0.08))
+                        .fill(self.theme.palette.primaryText.opacity(0.08))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 5, style: .continuous)
-                        .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                        .stroke(self.theme.palette.primaryText.opacity(0.12), lineWidth: 1)
                 )
         }
     }
@@ -1596,7 +1616,7 @@ private struct BottomOverlayPromptMenuView: View {
                 Spacer(minLength: 12)
                 Text("No cleanup")
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.45))
                 if isSelected {
                     Image(systemName: "checkmark")
                         .font(.system(size: 10, weight: .semibold))
@@ -1665,7 +1685,7 @@ private struct BottomOverlayPromptMenuView: View {
                 Spacer(minLength: 12)
                 Text("Fluid-1")
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.45))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.45))
                 if isSelected {
                     Image(systemName: "checkmark")
                         .font(.system(size: 10, weight: .semibold))
@@ -1727,9 +1747,9 @@ private struct BottomOverlayPromptMenuView: View {
 
         VStack(alignment: .leading, spacing: 0) {
             if self.promptMode.normalized == .dictate {
-                Text("ON-DEVICE")
+                Text("FORMATTING")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.4))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.4))
                     .padding(.horizontal, 8)
                     .padding(.top, 4)
                     .padding(.bottom, 3)
@@ -1748,7 +1768,7 @@ private struct BottomOverlayPromptMenuView: View {
 
             Text("EXTERNAL")
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.4))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.4))
                 .padding(.horizontal, 8)
                 .padding(.top, self.promptMode.normalized == .dictate ? 0 : 4)
                 .padding(.bottom, 3)
@@ -1763,14 +1783,14 @@ private struct BottomOverlayPromptMenuView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(Color.black)
+        .background(self.theme.palette.cardBackground)
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                .stroke(self.theme.palette.primaryText.opacity(0.12), lineWidth: 1)
         )
         .frame(width: min(self.maxWidth, 250), alignment: .leading)
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(self.settings.themePreference.preferredColorScheme)
         .onHover { hovering in
             self.onHoverChanged(hovering)
         }
@@ -1785,6 +1805,13 @@ private struct BottomOverlayPromptMenuView: View {
 }
 
 private struct BottomOverlayActionsMenuView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    private var theme: AppTheme {
+        AppTheme.adaptive(
+            accent: self.settings.accentColorOption == .cyan ? FluidBrandColors.blue : self.settings.accentColor,
+            colorScheme: self.settings.themePreference.preferredColorScheme ?? self.colorScheme
+        )
+    }
     @ObservedObject private var contentState = NotchContentState.shared
     @ObservedObject private var historyStore = TranscriptionHistoryStore.shared
     @ObservedObject private var settings = SettingsStore.shared
@@ -1834,18 +1861,18 @@ private struct BottomOverlayActionsMenuView: View {
         let isHovered = self.hoveredRowID == rowID
         let fillColor: Color
         if isSelected {
-            fillColor = Color.white.opacity(0.28)
+            fillColor = self.theme.palette.primaryText.opacity(0.28)
         } else if isHovered {
-            fillColor = Color.white.opacity(0.20)
+            fillColor = self.theme.palette.primaryText.opacity(0.20)
         } else {
             fillColor = Color.clear
         }
 
         let strokeColor: Color
         if isSelected {
-            strokeColor = Color.white.opacity(0.38)
+            strokeColor = self.theme.palette.primaryText.opacity(0.38)
         } else if isHovered {
-            strokeColor = Color.white.opacity(0.24)
+            strokeColor = self.theme.palette.primaryText.opacity(0.24)
         } else {
             strokeColor = Color.clear
         }
@@ -1908,7 +1935,7 @@ private struct BottomOverlayActionsMenuView: View {
                 if !shortcut.isEmpty {
                     Text(shortcut)
                         .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.7))
+                        .foregroundStyle(self.theme.palette.primaryText.opacity(0.7))
                 }
                 if isSelected {
                     Image(systemName: "checkmark")
@@ -1929,7 +1956,7 @@ private struct BottomOverlayActionsMenuView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("MODE")
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.4))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.4))
                 .padding(.horizontal, 8)
                 .padding(.top, 4)
                 .padding(.bottom, 3)
@@ -1943,7 +1970,7 @@ private struct BottomOverlayActionsMenuView: View {
 
             Text("ACTIONS")
                 .font(.system(size: 10, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.4))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.4))
                 .padding(.horizontal, 8)
                 .padding(.bottom, 3)
 
@@ -1985,14 +2012,14 @@ private struct BottomOverlayActionsMenuView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(Color.black)
+        .background(self.theme.palette.cardBackground)
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                .stroke(self.theme.palette.primaryText.opacity(0.12), lineWidth: 1)
         )
         .frame(maxWidth: self.maxWidth)
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(self.settings.themePreference.preferredColorScheme)
         .onHover { hovering in
             self.onHoverChanged(hovering)
         }
@@ -2129,13 +2156,24 @@ private struct DynamicPreviewHeightPreferenceKey: PreferenceKey {
 // MARK: - Bottom Overlay SwiftUI View
 
 struct BottomOverlayView: View {
+    #if DEBUG
+    var reviewState: RecordingPresentationState? = nil
+    #endif
+
+    @Environment(\.colorScheme) private var colorScheme
+    private var theme: AppTheme {
+        AppTheme.adaptive(
+            accent: self.settings.accentColorOption == .cyan ? FluidBrandColors.blue : self.settings.accentColor,
+            colorScheme: self.settings.themePreference.preferredColorScheme ?? self.colorScheme
+        )
+    }
     @ObservedObject private var contentState = NotchContentState.shared
     @ObservedObject private var appServices = AppServices.shared
     @ObservedObject private var activeAppMonitor = ActiveAppMonitor.shared
     @ObservedObject private var historyStore = TranscriptionHistoryStore.shared
     @ObservedObject private var settings = SettingsStore.shared
-    @Environment(\.theme) private var theme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorSchemeContrast) private var contrast
     @State private var isHoveringModeChip = false
     @State private var isHoveringPromptChip = false
     @State private var isHoveringActionsChip = false
@@ -2194,8 +2232,8 @@ struct BottomOverlayView: View {
                     barSpacing: 2.5,
                     minBarHeight: 4,
                     maxBarHeight: 28,
-                    containerWidth: 100,
-                    overlayWidth: 100,
+                    containerWidth: 140,
+                    overlayWidth: 140,
                     overlayHeight: 46,
                     previewBoxHeight: 0,
                     usesFixedCanvas: false,
@@ -2279,24 +2317,47 @@ struct BottomOverlayView: View {
         }
     }
 
+    private var overlaySize: SettingsStore.OverlaySize {
+        #if DEBUG
+        if let value = ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_OVERLAY_SIZE"],
+           self.reviewState != nil, let size = SettingsStore.OverlaySize(rawValue: value) {
+            return size
+        }
+        #endif
+        return self.settings.overlaySize
+    }
+
     private var layout: LayoutConstants {
-        LayoutConstants.get(for: self.settings.overlaySize)
+        LayoutConstants.get(for: self.overlaySize)
     }
 
     private var isCompactControls: Bool {
-        self.settings.overlaySize == .medium
+        self.overlaySize == .medium
     }
 
     private var waveformHorizontalOffset: CGFloat {
-        self.settings.overlaySize == .medium ? -28 : 0
+        self.overlaySize == .medium ? -28 : 0
     }
 
     private var isPillSize: Bool {
-        self.settings.overlaySize == .pill
+        self.overlaySize == .pill
+    }
+
+    private var recordingState: RecordingPresentationState {
+        #if DEBUG
+        if let reviewState { return reviewState }
+        #endif
+        if self.contentState.isAIProcessingFailureVisible || self.appServices.asr.showError { return .error }
+        if self.contentState.isTranscribing { return .transcribing }
+        if self.contentState.isProcessing { return .processing }
+        if self.appServices.asr.isRunningOrStarting { return .listening }
+        if self.contentState.recordingWasCancelled { return .cancelled }
+        if self.appServices.asr.isAsrReady { return .ready }
+        return self.appServices.asr.isLoadingModel || self.appServices.asr.isDownloadingModel ? .loading : .unavailable
     }
 
     private var modeColor: Color {
-        self.contentState.mode.notchColor
+        self.contentState.mode == .dictation ? self.theme.palette.accent : self.contentState.mode.notchColor
     }
 
     private var modeLabel: String {
@@ -2313,7 +2374,7 @@ struct BottomOverlayView: View {
 
     private var processingLabel: String {
         switch self.contentState.mode {
-        case .dictation: return "Refining..."
+        case .dictation: return self.contentState.isTranscribing ? "Transcribing" : "Processing text"
         case .edit, .rewrite, .write: return "Thinking..."
         case .command: return "Working..."
         }
@@ -2509,7 +2570,7 @@ struct BottomOverlayView: View {
 
     private var overlayFrameHeight: CGFloat? {
         guard self.layout.usesFixedCanvas else { return nil }
-        return self.shouldReservePreviewArea ? self.layout.overlayHeight : nil
+        return self.shouldReservePreviewArea ? self.layout.overlayHeight + 60 : nil
     }
 
     private var previewMaxWidth: CGFloat {
@@ -2522,7 +2583,7 @@ struct BottomOverlayView: View {
 
     private var dynamicPreviewBaseMinHeight: CGFloat {
         guard self.shouldReservePreviewArea else { return 0 }
-        let verticalPadding = self.settings.overlaySize == .small
+        let verticalPadding = self.overlaySize == .small
             ? max(2, self.transcriptionVerticalPadding - 1)
             : self.transcriptionVerticalPadding
         return self.estimatedPreviewLineHeight + verticalPadding * 2
@@ -2571,7 +2632,7 @@ struct BottomOverlayView: View {
         let trimmed = previewText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return self.shouldShowProcessingStatus ? 1 : 0 }
 
-        if self.settings.overlaySize == .small {
+        if self.overlaySize == .small {
             return 1
         }
 
@@ -2597,6 +2658,11 @@ struct BottomOverlayView: View {
     }
 
     private var transcriptionPreviewText: String {
+        #if DEBUG
+        if self.reviewState == .listening {
+            return "The hearing is on 12 October at 10 am. कृपया फ़ाइल २७ साथ लाएँ।"
+        }
+        #endif
         let preview = self.contentState.cachedPreviewText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !self.contentState.isProcessing else { return self.contentState.cachedPreviewText }
         guard Self.transientOverlayStatusTexts.contains(preview) else { return self.contentState.cachedPreviewText }
@@ -2620,11 +2686,11 @@ struct BottomOverlayView: View {
     }
 
     private var overlayBorderLineWidth: CGFloat {
-        self.settings.overlaySize == .large ? 0.8 : 1
+        self.overlaySize == .large ? 0.8 : 1
     }
 
     private var overlayBorderTopOpacity: Double {
-        switch self.settings.overlaySize {
+        switch self.overlaySize {
         case .pill: return 0.22 // a touch crisper so the smaller pill reads clearly
         case .large: return 0.10
         default: return 0.15
@@ -2632,7 +2698,7 @@ struct BottomOverlayView: View {
     }
 
     private var overlayBorderBottomOpacity: Double {
-        switch self.settings.overlaySize {
+        switch self.overlaySize {
         case .pill: return 0.10
         case .large: return 0.05
         default: return 0.08
@@ -2640,14 +2706,14 @@ struct BottomOverlayView: View {
     }
 
     private var overlayAnimatedOffsetY: CGFloat {
-        if self.contentState.isBottomOverlayDismissing {
+        if !self.reduceMotion, self.contentState.isBottomOverlayDismissing {
             return self.contentState.bottomOverlayDismissOffsetY
         }
         return 0
     }
 
     private var overlayAnimatedScale: CGFloat {
-        self.contentState.isBottomOverlayDismissing ? 0.985 : 1.0
+        !self.reduceMotion && self.contentState.isBottomOverlayDismissing ? 0.985 : 1.0
     }
 
     private var overlayAnimatedOpacity: Double {
@@ -2657,16 +2723,16 @@ struct BottomOverlayView: View {
     private func chipBackground(isHovered: Bool, disabled: Bool) -> some View {
         let fillColor: Color
         if disabled {
-            fillColor = Color.black.opacity(0.95)
+            fillColor = self.theme.palette.cardBackground
         } else if isHovered {
-            fillColor = Color(red: 0.13, green: 0.13, blue: 0.16)
+            fillColor = self.theme.palette.accent.opacity(0.08)
         } else {
-            fillColor = Color.black
+            fillColor = self.theme.palette.cardBackground
         }
 
         let topStrokeOpacity: Double = disabled ? 0.10 : (isHovered ? 0.36 : 0.14)
         let bottomStrokeOpacity: Double = disabled ? 0.06 : (isHovered ? 0.22 : 0.08)
-        let hoverShadowColor: Color = (isHovered && !disabled) ? Color.white.opacity(0.16) : .clear
+        let hoverShadowColor: Color = (isHovered && !disabled) ? self.theme.palette.primaryText.opacity(0.16) : .clear
 
         return RoundedRectangle(cornerRadius: self.promptSelectorCornerRadius)
             .fill(fillColor)
@@ -2675,8 +2741,8 @@ struct BottomOverlayView: View {
                     .strokeBorder(
                         LinearGradient(
                             colors: [
-                                Color.white.opacity(topStrokeOpacity),
-                                Color.white.opacity(bottomStrokeOpacity),
+                                self.theme.palette.primaryText.opacity(topStrokeOpacity),
+                                self.theme.palette.primaryText.opacity(bottomStrokeOpacity),
                             ],
                             startPoint: .top,
                             endPoint: .bottom
@@ -2785,17 +2851,17 @@ struct BottomOverlayView: View {
             if !self.isCompactControls {
                 Text("Mode:")
                     .font(.system(size: self.promptSelectorFontSize, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.5))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.5))
                     .lineLimit(1)
                     .fixedSize(horizontal: true, vertical: false)
             }
             Text(self.modeLabel)
                 .font(.system(size: self.promptSelectorFontSize, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.75))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.75))
                 .lineLimit(1)
             Image(systemName: "chevron.up")
                 .font(.system(size: max(self.promptSelectorFontSize - 1, 8), weight: .semibold))
-                .foregroundStyle(.white.opacity(0.45))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.45))
         }
         .fixedSize(horizontal: true, vertical: false)
         .padding(.horizontal, 8)
@@ -2836,11 +2902,11 @@ struct BottomOverlayView: View {
             if let promptSelectorIconName = self.promptSelectorIconName {
                 Image(systemName: promptSelectorIconName)
                     .font(.system(size: max(self.promptSelectorFontSize - 1, 9), weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.72))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.72))
             }
             Text(self.promptSelectorDisplayLabel)
                 .font(.system(size: self.promptSelectorFontSize, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.82))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.82))
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .frame(
@@ -2850,17 +2916,17 @@ struct BottomOverlayView: View {
             if self.isAppPromptOverrideActive {
                 Text("App")
                     .font(.system(size: max(self.promptSelectorFontSize - 2, 8), weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.9))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.9))
                     .padding(.horizontal, 5)
                     .padding(.vertical, 1)
                     .background(
                         Capsule()
-                            .fill(Color.white.opacity(0.15))
+                            .fill(self.theme.palette.primaryText.opacity(0.15))
                     )
             }
             Image(systemName: "chevron.down")
                 .font(.system(size: max(self.promptSelectorFontSize - 1, 8), weight: .semibold))
-                .foregroundStyle(.white.opacity(0.45))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.45))
         }
         .padding(.horizontal, 7)
         .padding(.vertical, self.promptSelectorVerticalPadding)
@@ -2868,7 +2934,7 @@ struct BottomOverlayView: View {
             RoundedRectangle(cornerRadius: self.promptSelectorCornerRadius, style: .continuous)
                 .fill(
                     self.isHoveringPromptChip && self.isPromptSelectableMode && !self.contentState.isProcessing
-                        ? Color.white.opacity(0.10)
+                        ? self.theme.palette.primaryText.opacity(0.10)
                         : Color.clear
                 )
         )
@@ -2876,14 +2942,14 @@ struct BottomOverlayView: View {
             if self.isHoveringPromptChip, self.isPromptSelectableMode, !self.contentState.isProcessing {
                 Text("Select cleanup mode")
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.9))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.9))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Color.black.opacity(0.94))
+                    .background(self.theme.palette.cardBackground)
                     .clipShape(Capsule())
                     .overlay(
                         Capsule()
-                            .stroke(Color.white.opacity(0.16), lineWidth: 1)
+                            .stroke(self.theme.palette.primaryText.opacity(0.16), lineWidth: 1)
                     )
                     .fixedSize()
                     .offset(y: -30)
@@ -2922,7 +2988,7 @@ struct BottomOverlayView: View {
                     }
             } else {
                 self.promptSelectorTrigger
-                    .opacity(0.6)
+                    .opacity(1)
                     .onHover { _ in
                         self.isHoveringPromptChip = false
                     }
@@ -2935,25 +3001,25 @@ struct BottomOverlayView: View {
         return HStack(spacing: 0) {
             Image(systemName: "ellipsis")
                 .font(.system(size: 16, weight: .bold))
-                .foregroundStyle(.white.opacity(actionsDisabled ? 0.3 : 0.78))
+                .foregroundStyle(actionsDisabled ? self.theme.palette.secondaryText : self.theme.palette.primaryText)
         }
         .frame(width: 32, height: 32)
         .background(
             RoundedRectangle(cornerRadius: 9, style: .continuous)
-                .fill(self.isHoveringActionsChip && !actionsDisabled ? Color.white.opacity(0.1) : Color.clear)
+                .fill(self.isHoveringActionsChip && !actionsDisabled ? self.theme.palette.primaryText.opacity(0.1) : Color.clear)
         )
         .overlay(alignment: .top) {
             if self.isHoveringActionsChip, !actionsDisabled {
                 Text("Actions")
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.9))
+                    .foregroundStyle(self.theme.palette.primaryText.opacity(0.9))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Color.black.opacity(0.94))
+                    .background(self.theme.palette.cardBackground)
                     .clipShape(Capsule())
                     .overlay(
                         Capsule()
-                            .stroke(Color.white.opacity(0.16), lineWidth: 1)
+                            .stroke(self.theme.palette.primaryText.opacity(0.16), lineWidth: 1)
                     )
                     .fixedSize()
                     .offset(y: -30)
@@ -2998,7 +3064,7 @@ struct BottomOverlayView: View {
         return HStack(spacing: 0) {
             Image(systemName: "gearshape")
                 .font(.system(size: max(self.promptSelectorFontSize + 1, 10), weight: .semibold))
-                .foregroundStyle(.white.opacity(0.72))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.72))
         }
         .padding(.horizontal, 9)
         .padding(.vertical, self.promptSelectorVerticalPadding)
@@ -3025,11 +3091,11 @@ struct BottomOverlayView: View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(.system(size: max(self.layout.transFontSize - 1, 10), weight: .semibold))
-                .foregroundStyle(.white.opacity(0.86))
+                .foregroundStyle(self.theme.palette.primaryText.opacity(0.86))
                 .frame(width: 20, height: 20)
                 .background(
                     Circle()
-                        .fill(Color.white.opacity(0.12))
+                        .fill(self.theme.palette.primaryText.opacity(0.12))
                 )
         }
         .buttonStyle(.plain)
@@ -3042,7 +3108,7 @@ struct BottomOverlayView: View {
                 .font(.system(size: self.layout.transFontSize, weight: .semibold))
                 .foregroundStyle(
                     self.contentState.canRetryAIProcessingFailure
-                        ? Color.white.opacity(0.9)
+                        ? self.theme.palette.primaryText.opacity(0.9)
                         : Color.orange.opacity(0.9)
                 )
                 .lineLimit(1)
@@ -3077,7 +3143,7 @@ struct BottomOverlayView: View {
             if let appIcon = appIcon {
                 Image(nsImage: appIcon)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
                     .frame(width: self.layout.iconSize, height: self.layout.iconSize)
                     .clipShape(RoundedRectangle(cornerRadius: self.layout.iconSize / 4))
             } else if !self.layout.showsModeLabel {
@@ -3133,7 +3199,7 @@ struct BottomOverlayView: View {
 
     @ViewBuilder
     private func dynamicPreviewText(_ previewText: String) -> some View {
-        if self.settings.overlaySize == .small {
+        if self.overlaySize == .small {
             self.richPreviewText(previewText)
                 .font(.system(size: self.layout.transFontSize, weight: .medium))
                 .multilineTextAlignment(.leading)
@@ -3155,6 +3221,13 @@ struct BottomOverlayView: View {
 
     var body: some View {
         VStack(spacing: max(4, self.layout.vPadding / 2)) {
+            #if DEBUG
+            if self.reviewState != nil {
+                Text("Synthetic overlay state")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(self.theme.palette.secondaryText)
+            }
+            #endif
             if self.layout.showsTopControls, !self.isCompactControls {
                 HStack {
                     Spacer(minLength: 4)
@@ -3193,7 +3266,7 @@ struct BottomOverlayView: View {
                                         ScrollView(.vertical, showsIndicators: false) {
                                             Text(previewText)
                                                 .font(.system(size: self.layout.transFontSize, weight: .medium))
-                                                .foregroundStyle(.white.opacity(0.9))
+                                                .foregroundStyle(self.theme.palette.primaryText.opacity(0.9))
                                                 .multilineTextAlignment(.leading)
                                                 .lineLimit(nil)
                                                 .fixedSize(horizontal: false, vertical: true)
@@ -3237,10 +3310,10 @@ struct BottomOverlayView: View {
                             } else if self.hasTranscription && !self.contentState.isProcessing {
                                 let previewText = self.transcriptionPreviewText
                                 if !previewText.isEmpty {
-                                    if self.settings.overlaySize == .small {
+                                    if self.overlaySize == .small {
                                         Text(previewText)
                                             .font(.system(size: self.layout.transFontSize, weight: .medium))
-                                            .foregroundStyle(.white.opacity(0.9))
+                                            .foregroundStyle(self.theme.palette.primaryText.opacity(0.9))
                                             .multilineTextAlignment(.leading)
                                             .lineLimit(1)
                                             .truncationMode(.head)
@@ -3249,7 +3322,7 @@ struct BottomOverlayView: View {
                                     } else {
                                         Text(previewText)
                                             .font(.system(size: self.layout.transFontSize, weight: .medium))
-                                            .foregroundStyle(.white.opacity(0.9))
+                                            .foregroundStyle(self.theme.palette.primaryText.opacity(0.9))
                                             .multilineTextAlignment(.leading)
                                             .lineLimit(Int(self.previewMaxHeight / max(self.estimatedPreviewLineHeight, 1)))
                                             .truncationMode(.head)
@@ -3306,6 +3379,27 @@ struct BottomOverlayView: View {
                         height: self.layout.waveformHeight
                     )
 
+                    if self.isPillSize {
+                        Button { self.contentState.onStopRecordingRequested?() } label: {
+                            Image(systemName: "stop.fill").font(.system(size: 12))
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(self.theme.palette.accent)
+                        .disabled(self.recordingState != .listening)
+                        .focusable()
+                        .accessibilityLabel("Stop recording and transcribe")
+                        .help("Stop capture and transcribe")
+                        Button { self.contentState.onCancelRequested?() } label: {
+                            Image(systemName: "xmark").font(.system(size: 12))
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(self.theme.palette.primaryText)
+                        .disabled(self.recordingState != .listening)
+                        .focusable()
+                        .accessibilityLabel("Cancel and discard recording")
+                        .help("Cancel and discard recording")
+                    }
+
                     // Compact overlays still need a visible mode because they have no selector.
                     if self.layout.showsModeLabel, !self.layout.showsTopControls {
                         VStack(alignment: .leading, spacing: 2) {
@@ -3317,7 +3411,7 @@ struct BottomOverlayView: View {
 
                             if !self.appServices.asr.isAsrReady &&
                                 (self.appServices.asr.isLoadingModel || self.appServices.asr.isDownloadingModel)
-                                && self.settings.overlaySize != .small
+                                && self.overlaySize != .small
                             {
                                 Text("Loading model…")
                                     .font(.system(size: max(self.layout.modeFontSize - 2, 9), weight: .medium))
@@ -3346,84 +3440,26 @@ struct BottomOverlayView: View {
                         }
                     }
                 }
+                if !self.isPillSize {
+                    DictationOverlayControls(
+                        state: self.recordingState,
+                        stop: { self.contentState.onStopRecordingRequested?() },
+                        cancel: { self.contentState.onCancelRequested?() }
+                    )
+                    .padding(.top, 4)
+                }
             }
             .padding(.horizontal, self.layout.hPadding)
             .padding(.vertical, self.layout.vPadding)
             .frame(maxWidth: .infinity, alignment: .center)
             .background(
-                ZStack {
-                    // Solid pitch black background, with a soft drop shadow so the pill lifts
-                    // off whatever is behind it (pill size only; outer padding reserves room).
-                    RoundedRectangle(cornerRadius: self.layout.cornerRadius)
-                        .fill(Color.black)
-                        .shadow(
-                            color: Color.black.opacity(self.isPillSize ? 0.32 : 0),
-                            radius: self.isPillSize ? PillShadowMetrics.radius : 0,
-                            x: 0,
-                            y: self.isPillSize ? PillShadowMetrics.yOffset : 0
-                        )
-
-                    if self.isPillSize {
-                        // Glossy border: a bright highlight that slowly rotates around the edge.
-                        // Paused under reduce-motion to avoid continuous redraws on low-resource Macs.
-                        if self.reduceMotion || !self.contentState.isBottomOverlayPresented {
-                            RoundedRectangle(cornerRadius: self.layout.cornerRadius)
-                                .strokeBorder(
-                                    AngularGradient(
-                                        gradient: Gradient(stops: [
-                                            .init(color: .white.opacity(0.06), location: 0.00),
-                                            .init(color: .white.opacity(0.55), location: 0.13),
-                                            .init(color: .white.opacity(0.10), location: 0.30),
-                                            .init(color: .white.opacity(0.03), location: 0.55),
-                                            .init(color: .white.opacity(0.22), location: 0.80),
-                                            .init(color: .white.opacity(0.06), location: 1.00),
-                                        ]),
-                                        center: .center,
-                                        angle: .degrees(0)
-                                    ),
-                                    lineWidth: 1.2
-                                )
-                        } else {
-                            TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
-                                let seconds = max(
-                                    0,
-                                    timeline.date.timeIntervalSince(self.borderAnimationStartedAt ?? timeline.date)
-                                )
-                                let angle = (seconds.truncatingRemainder(dividingBy: 6.0) / 6.0) * 360.0
-                                RoundedRectangle(cornerRadius: self.layout.cornerRadius)
-                                    .strokeBorder(
-                                        AngularGradient(
-                                            gradient: Gradient(stops: [
-                                                .init(color: .white.opacity(0.06), location: 0.00),
-                                                .init(color: .white.opacity(0.55), location: 0.13),
-                                                .init(color: .white.opacity(0.10), location: 0.30),
-                                                .init(color: .white.opacity(0.03), location: 0.55),
-                                                .init(color: .white.opacity(0.22), location: 0.80),
-                                                .init(color: .white.opacity(0.06), location: 1.00),
-                                            ]),
-                                            center: .center,
-                                            angle: .degrees(angle)
-                                        ),
-                                        lineWidth: 1.2
-                                    )
-                            }
-                        }
-                    } else {
-                        // Inner border
-                        RoundedRectangle(cornerRadius: self.layout.cornerRadius)
-                            .strokeBorder(
-                                LinearGradient(
-                                    colors: [
-                                        Color.white.opacity(self.overlayBorderTopOpacity),
-                                        Color.white.opacity(self.overlayBorderBottomOpacity),
-                                    ],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                ),
-                                lineWidth: self.overlayBorderLineWidth
-                            )
-                    }
-                }
+                RoundedRectangle(cornerRadius: self.isPillSize ? 23 : 10)
+                    .fill(self.theme.palette.cardBackground)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: self.isPillSize ? 23 : 10)
+                            .strokeBorder(self.theme.palette.cardBorder, lineWidth: self.contrast == .increased ? 2 : 1)
+                    )
+                    .shadow(color: .black.opacity(0.18), radius: 8, y: 3)
             )
             .frame(maxWidth: .infinity, alignment: .top)
             .transaction { transaction in
@@ -3437,14 +3473,24 @@ struct BottomOverlayView: View {
             height: self.overlayFrameHeight,
             alignment: .top
         )
+        .appTheme(self.theme)
+        .preferredColorScheme(self.settings.themePreference.preferredColorScheme)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("PratiLekh recording overlay")
+        .accessibilityValue(self.recordingState.title)
+        .contextMenu {
+            Button("Stop recording and transcribe") { self.contentState.onStopRecordingRequested?() }
+                .disabled(!self.appServices.asr.isRunning)
+            Button("Cancel and discard recording") { self.contentState.onCancelRequested?() }
+        }
         // Reserve space around the pill so its drop shadow isn't clipped by the (content-sized) window.
         .padding(self.isPillSize ? 26 : 0)
         .frame(maxHeight: .infinity, alignment: .top)
         .scaleEffect(self.overlayAnimatedScale, anchor: .center)
         .offset(y: self.overlayAnimatedOffsetY)
         .opacity(self.overlayAnimatedOpacity)
-        .animation(.timingCurve(0.22, 0.0, 0.2, 1.0, duration: 0.02), value: self.contentState.isBottomOverlayDismissing)
-        .onChange(of: self.settings.overlaySize) { _, _ in
+        .animation(self.reduceMotion ? nil : .timingCurve(0.22, 0.0, 0.2, 1.0, duration: 0.02), value: self.contentState.isBottomOverlayDismissing)
+        .onChange(of: self.overlaySize) { _, _ in
             self.dynamicPreviewResizeBucket = self.previewResizeBucket(for: self.currentPreviewSizingText)
             self.frozenDynamicPreviewHeight = nil
             BottomOverlayWindowController.shared.refreshSizeForContent()
@@ -3554,6 +3600,7 @@ struct BottomOverlayView: View {
 // MARK: - Bottom Waveform View (reads from NotchContentState)
 
 struct BottomWaveformView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let color: Color
     let layout: BottomOverlayView.LayoutConstants
     let visibleBarCount: Int?
@@ -3607,9 +3654,9 @@ struct BottomWaveformView: View {
 
     private var barFillColor: Color {
         if self.isPillStyle {
-            return Color.white.opacity(self.isProcessingVisualActive ? 0.32 : 0.88)
+            return self.color.opacity(self.isProcessingVisualActive ? 0.45 : 1)
         }
-        return self.color.opacity(self.isProcessingVisualActive ? 0.16 : 1.0)
+        return self.color.opacity(self.isProcessingVisualActive ? 0.65 : 1.0)
     }
 
     private var isReleaseAnimationActive: Bool {
@@ -3629,7 +3676,7 @@ struct BottomWaveformView: View {
             self.barsView
                 .foregroundStyle(self.barFillColor)
 
-            if self.isProcessingVisualActive {
+            if self.isProcessingVisualActive, !self.reduceMotion {
                 CompositorShimmerSweep(duration: 1.05, peakOpacity: 0.9)
                     .mask {
                         self.barsView

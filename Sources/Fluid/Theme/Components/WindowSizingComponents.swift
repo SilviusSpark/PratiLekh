@@ -64,6 +64,11 @@ private final class FluidWindowSizingNSView: NSView {
         super.viewDidMoveToWindow()
         self.observeWindowIfNeeded()
         self.applySizing()
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_MINIMUM"] == "1" {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in self?.applySizing() }
+        }
+        #endif
     }
 
     private func observeWindowIfNeeded() {
@@ -97,6 +102,13 @@ private final class FluidWindowSizingNSView: NSView {
 
         let minSize = self.sizing.minSize
         window.minSize = minSize
+        #if DEBUG
+        // Opt-in review launch: measure the real application at its supported minimum.
+        if ProcessInfo.processInfo.environment["PRATILEKH_REVIEW_MINIMUM"] == "1",
+           window.frame.size != minSize {
+            window.setFrame(NSRect(origin: window.frame.origin, size: minSize), display: true)
+        }
+        #endif
 
         let frame = window.frame
         guard frame.width < minSize.width || frame.height < minSize.height else { return }
