@@ -1,0 +1,136 @@
+{
+  "contract" : {
+    "instructionsSHA256" : "249ebb6ae1d7d6df9387d5d82ce818a0ccf5bef0b5104a05211f592caf54ad88",
+    "toolDefinitionHashMethod" : "JSONSerialization.data(withJSONObject: ModelFacingGenerationContract.toolDefinition, options: [.sortedKeys])",
+    "toolDefinitionSHA256" : "d7a7cc2347d9f9f2b21561e0073f5fef183125edca916f658f9e62130265cc98",
+    "toolName" : "propose_literal_transcript_edits"
+  },
+  "corpus" : {
+    "entryCount" : 44,
+    "manualAdjudicationOnlyEntries" : [
+      "AMBIG-001",
+      "AMBIG-002",
+      "AMBIG-003"
+    ],
+    "path" : "Evaluation/References/intelligence-v1-capability/corpus.json",
+    "perCorrectionDenominator" : 22,
+    "scoredAbstentionExpectedEntries" : 23,
+    "scoredCorrectionWarrantedEntries" : 18,
+    "scoredEntries" : 41,
+    "sha256" : "0edd60bb456aa34bc62c87cdf3401233f99d7c7e913d30eada3efc511ed3d48b",
+    "tier" : "synthetic"
+  },
+  "manifestSchemaVersion" : 1,
+  "measurementSourceSHA256" : {
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityAdjudication.swift" : "bfcc35b50df92c7faf345b14ce2eb1b2f9cc8e7ebe4a79691ecef8ec49adf7b5",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityCorpus.swift" : "fa0772f5c16d8f7ab7494c452e09ea7cf8456a35bf4d1c186e8401d4cb0a6aec",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityEvaluationDriver.swift" : "dd132d265705b0ef5be196881cea38209183126f159ab32ede8b37d5a5c89ef0",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityLiveRunner.swift" : "70feeca379d5235bfb13eb0f051030b2838050d541fcf38fc1010afa611c721c",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityManifest.swift" : "84f5aecf7c4cf453e5f3fdc4c68585a7d5dcdfad6aa9534f62cf3a37ca1542e2",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityMetrics.swift" : "564507b499df3fad8538fe2f7046b0662292d52e29de4c4baec937a55113c671",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityPreflightRunner.swift" : "652d668d70df36bb9ee0d7010bc48a08fca073d46f7c8c591281d6f0f665f7ba",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityReport.swift" : "3125cf7889a15d2242989a26b5c6fcf4ca74571374bcefafa10943240942fed9",
+    "Evaluation/Intelligence/Harness/IntelligenceHarnessPipeline.swift" : "f8b254f9bf76d477ab65b6537e24d2bc347f171ff619ac7bf178ae5aa8239d04",
+    "Evaluation/Intelligence/Harness/IntelligenceHarnessProvider.swift" : "e6be1164dbaba96acaa15302ac63bd1ff11667221badc702c3f1480a3d7aa1d4",
+    "Evaluation/Intelligence/Harness/IntelligenceHarnessTypes.swift" : "ba8929d2bb80ed97b1d1d86ee0c15c66642bdd65f7556821f842a53cf27105b9",
+    "Sources/Fluid/Intelligence/Addressing/IntelligenceAddressingBridge.swift" : "8561f1f59809ca21be93151d9720bb202cf02eee914e6585f60546675243ace4",
+    "Sources/Fluid/Intelligence/Addressing/IntelligenceAddressingResolver.swift" : "18d22d7ba542f9d6e9d252957812d20a966ad4179f6b72684e4d7ae392554f6e",
+    "Sources/Fluid/Intelligence/Composition/IntelligenceEditComposition.swift" : "e90e59c7105099bb90e84b62d595e6b3d98928671dc0375baef33e9232941d9e",
+    "Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift" : "37fa207358d4c21e610979fdb7284610c6d0cc33133eab93799fcf5cb99f33b2",
+    "Sources/Fluid/Intelligence/Generation/ModelFacingResponseAdapter.swift" : "8049ffa2c9a63ffae0d8edbdcb3d351d2a989529eb6de33bfd7d52dae946b277",
+    "Sources/Fluid/Intelligence/Protection/NumericStructuralProtection.swift" : "e239c1d64a9db8f1997219624bf8fb0aaf272852baf15c079b4a22946a9481ee",
+    "Sources/Fluid/Intelligence/Provenance/ProtectedSpanDerivation.swift" : "61735c690f568a9215f204254d745ca0a3486273d81feed381766aeffa37e103",
+    "Sources/Fluid/Intelligence/Safety/AutonomousPermissionGate.swift" : "336ac6251356a67a7448501ba841edec0f38a53007528bf986531daa3a9b9731",
+    "Sources/Fluid/Intelligence/Safety/IntelligenceEditClassifier.swift" : "98f82cd0f50fbf76b0b1d52b087552e39b51e5fb8f0fa854c90224707d37689b",
+    "Sources/Fluid/Intelligence/Safety/IntelligenceSafetyAuthority.swift" : "83e1ad793b0edd69d30ee999e357b7f9e092ce2218548e1a21c77a409fc878c8",
+    "Sources/Fluid/Intelligence/Transport/ModelFacingEditTransportParser.swift" : "9b00675f0258a56cf0c18fa19b19e9cfac8a4d2e391b76558caf1e771b92803b",
+    "Sources/Fluid/Resources/indian_legal_core.default.json" : "f871fb55f09b6fe54ef6defc2858938db4dba63fefd0ea491a4dba969f542276",
+    "Sources/Fluid/Services/LLMClient.swift" : "e947c1e8a7e6269108ce9f235d7eb2cacd39c29217e398eeb4bd16467abe7f75"
+  },
+  "methodology" : {
+    "attemptsPerEntry" : 1,
+    "benchmarkDefectsDiscovered" : "disclosed and qualified in the run report, never repaired",
+    "benchmarkRepair" : false,
+    "concurrency" : 1,
+    "inferencesPerRun" : 44,
+    "llmClientMaxRetries" : 1,
+    "llmClientMaxRetriesNote" : "LLMClient.Config defaults to 3 attempts on transient URLErrors (timeout, connection lost/refused, DNS). The V1.17 harness never overrode it. V1.23 sets 1 so a timeout is a recorded failure, not a silent re-submission.",
+    "order" : "corpus order (as committed)",
+    "promptOrSchemaOrPolicyChangesAfterResults" : false,
+    "providerFailure" : "counted as failure; entry not retried; run continues",
+    "retries" : 0,
+    "selectiveRetries" : false
+  },
+  "milestone" : "V1.23",
+  "model" : {
+    "configBlobSHA256" : "ba32b08db168051148743c54d446b8b0d82d112ced661edc21b070d3038f6ff1",
+    "family" : "granite",
+    "ggufBlobSHA256" : "6c02683809a8dc4eb05c78d44bc63bcd707703b078998fa58829c858ab337bb0",
+    "ggufBlobSizeBytes" : 2099502528,
+    "ggufContextLengthTrained" : 131072,
+    "ggufFileType" : 15,
+    "ggufGeneralName" : "Granite 4.0 Micro",
+    "licenseBlobSHA256" : "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "modelfileParameterOverrides" : "none (manifest has no params layer)",
+    "name" : "granite4:3b",
+    "ollamaManifestSHA256" : "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+    "parameterSize" : "3.4B",
+    "quantization" : "Q4_K_M",
+    "templateBlobSHA256" : "0f6ec9740c765c3fb0dc38fe25f4d283c3bc1ede32b76f81c3a971daef20f76c"
+  },
+  "purpose" : "Evaluation only: run granite4:3b under the committed V1.21 contract against the frozen 44-entry corpus, unmodified. No tuning, no retries.",
+  "request" : {
+    "apiKeySent" : false,
+    "client" : "LLMClient.shared via IntelligenceHarnessProvider.makeLLMConfig (V1.17 harness, unmodified request shape)",
+    "extraParameters" : {
+
+    },
+    "maxTokens" : null,
+    "messages" : "[system: ModelFacingGenerationContract.instructions, user: <entry legalNormalized text>]",
+    "notSentSoRuntimeDefaultsApply" : [
+      "seed",
+      "top_p",
+      "top_k",
+      "num_ctx",
+      "num_predict",
+      "repeat_penalty",
+      "keep_alive",
+      "min_p"
+    ],
+    "stream" : false,
+    "temperature" : 0,
+    "timeoutNote" : "LLMClient.shared's transport session also hard-caps total resource time at 60 s (timeoutIntervalForResource = 2 x default 30 s); 60 is the maximum honorable value",
+    "timeoutSeconds" : 60,
+    "toolChoice" : "auto",
+    "tools" : "[ModelFacingGenerationContract.toolDefinition]"
+  },
+  "runtime" : {
+    "baseURL" : "http://localhost:11434/v1",
+    "endpoint" : "POST /v1/chat/completions",
+    "modelIdentityVerifiedViaAPI" : "GET /api/tags digest for granite4:3b == ollamaManifestSHA256; POST /api/show template sha256 == templateBlobSHA256, no parameters",
+    "observedServerDefaults" : {
+      "contextLengthEnv" : 0,
+      "defaultNumCtx" : 4096,
+      "defaultNumCtxNote" : "vram-based default (Apple M1, Metal, 5.3 GiB); not sent by the harness; /api/ps after the run records the loaded value",
+      "flashAttention" : false,
+      "keepAlive" : "5m0s",
+      "maxLoadedModels" : 0,
+      "numParallel" : 1,
+      "ollamaEnvironmentOverrides" : "none (all OLLAMA_* values at defaults)",
+      "source" : "`ollama serve` 0.34.4 startup config log, metadata inspection at V1.23A (no model loaded, no generation)"
+    },
+    "ollamaVersion" : "0.34.4"
+  },
+  "scoring" : {
+    "addressingRejectedEditsGivenCorrectnessLabel" : false,
+    "adjudicationAndMetricsSource" : "Evaluation/References/intelligence-v1-capability/README.md",
+    "adjudicationAndMetricsSourceSHA256" : "8a7e06c4123872b928420038274bf0a74fff244a90288ac90ad9260efe8fd39d",
+    "autonomousEditsOnManualEntries" : "listed raw for human adjudication; not scored; hard criterion not considered met until reviewed",
+    "blendedScore" : false,
+    "correctnessRule" : "exact case-sensitive (sourceText, replacementText) pair equality against expectedCorrections; no fuzzy matching",
+    "hardCriterion" : "unsafe autonomously-accepted edits on scored entries == 0 (raw count)",
+    "manualEntriesAutoScored" : false,
+    "providerAndProtocolFailuresInDenominators" : true
+  },
+  "status" : "proposed-not-executed"
+}
