@@ -1,0 +1,68 @@
+{
+  "artifactSHA256" : {
+    "Evaluation/References/intelligence-v1-comparison-dev/candidates.json" : "ef68ff0994e0e4c9be03d80fa3eb2b0ae68adaf04b48e646ee4515901d3c9d41",
+    "Evaluation/References/intelligence-v1-comparison-dev/contract_variant.json" : "68b19453707e96251e71961d5aa1383f47a33faae812168a8c0fe72f89b2baec",
+    "Evaluation/References/intelligence-v1-comparison-dev/corpus.json" : "e164297ec472e7f750d8e3e18f52f939e22a89bd7578ecc42df18d5b7941e364",
+    "Evaluation/References/intelligence-v1-comparison-dev/hazard_fixture.json" : "a5353e38c1ac1340a00f9a72904672be0ac9cfb677993b29db11537c1f356202",
+    "Evaluation/References/intelligence-v1-comparison-dev/protocol.json" : "9215c7623ddac8d935bd6c1074af57c918011b987b92d695bb2877fb2c6fefb2"
+  },
+  "baselineContract" : {
+    "instructionsSHA256" : "249ebb6ae1d7d6df9387d5d82ce818a0ccf5bef0b5104a05211f592caf54ad88",
+    "toolDefinitionSHA256" : "d7a7cc2347d9f9f2b21561e0073f5fef183125edca916f658f9e62130265cc98"
+  },
+  "developmentCorpus" : {
+    "composition" : {
+      "ambiguous" : 4,
+      "capitalization-correction-warranted" : 8,
+      "clean-control" : 12,
+      "hazard-acronym-lowering" : 2,
+      "hazard-digit-case" : 2,
+      "hazard-independently-protected" : 2,
+      "hazard-intra-token-punctuation" : 2,
+      "hazard-protected-resolved-span" : 2,
+      "hazard-word-merge" : 2,
+      "multi-edit-correction-warranted" : 8,
+      "multi-sentence-correction-warranted" : 6,
+      "punctuation-correction-warranted" : 10,
+      "whitespace-correction-warranted" : 6
+    },
+    "entries" : 66,
+    "sha256" : "e164297ec472e7f750d8e3e18f52f939e22a89bd7578ecc42df18d5b7941e364"
+  },
+  "frozenBenchmark" : {
+    "access" : "text-level overlap check only; unavailable to candidate screening, contract development and variant development; one confirmatory run by a frozen finalist in a separately authorized milestone",
+    "path" : "Evaluation/References/intelligence-v1-capability/corpus.json",
+    "sha256" : "0edd60bb456aa34bc62c87cdf3401233f99d7c7e913d30eada3efc511ed3d48b"
+  },
+  "hazardFixtures" : {
+    "allContainedAsExpected" : true,
+    "count" : 21
+  },
+  "manifestSchemaVersion" : 1,
+  "milestone" : "V1.27",
+  "overlapCheck" : {
+    "frozenEntriesCompared" : 44,
+    "internalDuplicates" : 0,
+    "nearDuplicateThreshold" : 0.80000000000000004,
+    "ngramLength" : 4,
+    "rules" : [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7"
+    ],
+    "subjectsChecked" : 87,
+    "violations" : 0
+  },
+  "status" : "frozen-preregistration; no inference, no model download, no candidate execution",
+  "toolingSourceSHA256" : {
+    "Evaluation/Intelligence/ComparisonProtocol/ComparisonCorpus.swift" : "c3bf91054908a7180a67a03a155f2b4b3f43817be630fb9c2fa90afdd3072944",
+    "Evaluation/Intelligence/ComparisonProtocol/ComparisonFixtures.swift" : "6ef625091179b87b4b8b5ca5b92722c6800d31039442ccae080902c906926f32",
+    "Evaluation/Intelligence/ComparisonProtocol/ComparisonFreeze.swift" : "fdab49664376071426a14928f9760e019e7f9e28e4eb0534531290daece2ac93",
+    "Evaluation/Intelligence/ComparisonProtocol/ComparisonFreezeRunner.swift" : "14d3e438c99895d3e094a6d8864fa02e07650badea98bdd291df205fa0debd55",
+    "Evaluation/Intelligence/ComparisonProtocol/ComparisonOverlap.swift" : "d58b3ea41611331a3bde7f14d0c03cd82eaea5f7bd96c909a80c22cd1893293b"
+  }
+}

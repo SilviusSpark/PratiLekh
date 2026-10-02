@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "description": "Intelligence V1.27 pre-registered candidate/configuration registry (from the V1.26 shortlist). Identities are recorded only where currently verifiable without downloading a model: the baseline is fully pinned from local files (V1.23A); other candidates carry registry-observed manifest metadata and null local digests until an authorized pull verifies them. A pull whose model-layer digest differs from registryObserved halts the stage. Each candidate's license is recorded and must be acceptable for the intended use before any production adoption.",
+  "runtime": {
+    "ollamaVersion": "0.34.4",
+    "baseURL": "http://localhost:11434/v1",
+    "machine": "Apple M1, 8 GB unified memory; Ollama default_num_ctx 4096; GPU budget about 5.3 GiB",
+    "oneModelResident": true
+  },
+  "requestParameters": {
+    "stream": false,
+    "temperature": 0,
+    "toolChoice": "auto",
+    "maxTokens": null,
+    "timeoutSeconds": 60,
+    "maxRetries": 1,
+    "note": "Parity with V1.23. Per-model settings that cannot be avoided (e.g. a thinking switch) require a pre-registered amendment before inference."
+  },
+  "candidates": [
+    {
+      "id": "CAND-BASE",
+      "ollamaTag": "granite4:3b",
+      "role": "baseline-control",
+      "status": "installed-and-pinned",
+      "family": "granite",
+      "parameters": "3.4B",
+      "quantization": "Q4_K_M",
+      "ollamaSizeGB": 2.1,
+      "contextTokens": 131072,
+      "toolsCapability": true,
+      "license": "Apache-2.0",
+      "licenseSource": "https://ollama.com/library/granite4",
+      "identity": {
+        "ollamaManifestSHA256": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+        "ggufBlobSHA256": "6c02683809a8dc4eb05c78d44bc63bcd707703b078998fa58829c858ab337bb0",
+        "configBlobSHA256": "ba32b08db168051148743c54d446b8b0d82d112ced661edc21b070d3038f6ff1",
+        "templateBlobSHA256": "0f6ec9740c765c3fb0dc38fe25f4d283c3bc1ede32b76f81c3a971daef20f76c",
+        "licenseBlobSHA256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "verifiedBy": "V1.23A pinned run manifest; local file verification"
+      },
+      "registryObserved": {
+        "observedOn": "2026-10-01",
+        "source": "registry.ollama.ai manifest metadata (no model weights downloaded)",
+        "method": "manifest JSON read via the fetch tool; transcription control-validated against the locally pinned granite4:3b manifest (all digests and sizes matched)",
+        "configDigest": "sha256:ba32b08db168051148743c54d446b8b0d82d112ced661edc21b070d3038f6ff1",
+        "layers": [
+          {
+            "mediaType": "application/vnd.ollama.image.model",
+            "digest": "sha256:6c02683809a8dc4eb05c78d44bc63bcd707703b078998fa58829c858ab337bb0",
+            "size": 2099502528
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.template",
+            "digest": "sha256:0f6ec9740c765c3fb0dc38fe25f4d283c3bc1ede32b76f81c3a971daef20f76c",
+            "size": 7082
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.license",
+            "digest": "sha256:cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+            "size": 11358
+          }
+        ]
+      },
+      "paramsLayer": null,
+      "minOllama": "0.34.4",
+      "notes": "V1.23 measured baseline; same runtime and digest to be re-verified before any later stage."
+    },
+    {
+      "id": "CAND-001",
+      "ollamaTag": "granite4.1:3b",
+      "role": "same-family-successor",
+      "status": "registry-observed-not-pulled",
+      "family": "granite",
+      "parameters": "3B dense",
+      "quantization": "(per registry tag; to be recorded at pull)",
+      "ollamaSizeGB": 2.1,
+      "contextTokens": 131072,
+      "toolsCapability": true,
+      "license": "Apache-2.0",
+      "licenseSource": "https://huggingface.co/ibm-granite/granite-4.1-3b",
+      "identity": {
+        "ollamaManifestSHA256": null,
+        "verifiedBy": "not yet pulled: manifest digest to be recorded and the model-layer digest compared with registryObserved after an authorized pull"
+      },
+      "registryObserved": {
+        "observedOn": "2026-10-01",
+        "source": "registry.ollama.ai manifest metadata (no model weights downloaded)",
+        "method": "manifest JSON read via the fetch tool; transcription control-validated against the locally pinned granite4:3b manifest (all digests and sizes matched)",
+        "configDigest": "sha256:87d22d127f1607ac55c112473325a856df6e809244a96f5d91607db459185e0f",
+        "layers": [
+          {
+            "mediaType": "application/vnd.ollama.image.model",
+            "digest": "sha256:662b0626cd58f443baea23559b469df6576a81d349649c59413b36a9fb32eb29",
+            "size": 2099501664
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.template",
+            "digest": "sha256:89a0ab46e638b17149f5a596060e815cb019117e9c7f745aa8861a02d63d66ef",
+            "size": 6843
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.license",
+            "digest": "sha256:58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+            "size": 11357
+          }
+        ]
+      },
+      "paramsLayer": null,
+      "minOllama": "0.34.4",
+      "notes": "Vendor-reported IFEval 82.3% and BFCL v3 60.8% are not evidence for this task."
+    },
+    {
+      "id": "CAND-002",
+      "ollamaTag": "qwen3:4b-instruct-2507-q4_K_M",
+      "role": "strongest-non-thinking-dense-candidate",
+      "status": "registry-observed-not-pulled",
+      "family": "qwen3",
+      "parameters": "4.0B (3.6B non-embedding)",
+      "quantization": "Q4_K_M",
+      "ollamaSizeGB": 2.5,
+      "contextTokens": 262144,
+      "toolsCapability": true,
+      "license": "Apache-2.0",
+      "licenseSource": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507",
+      "identity": {
+        "ollamaManifestSHA256": null,
+        "verifiedBy": "not yet pulled"
+      },
+      "registryObserved": {
+        "observedOn": "2026-10-01",
+        "source": "registry.ollama.ai manifest metadata (no model weights downloaded)",
+        "method": "manifest JSON read via the fetch tool; transcription control-validated against the locally pinned granite4:3b manifest (all digests and sizes matched)",
+        "configDigest": "sha256:b72accf9724e93698c57cbd3b1af2d3341b3d05ec2089d86d273d97964853cd2",
+        "layers": [
+          {
+            "mediaType": "application/vnd.ollama.image.model",
+            "digest": "sha256:85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+            "size": 2497280480
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.template",
+            "digest": "sha256:eade0a07cac7712787bbce23d12f9306adb4781d873d1df6e16f7840fa37afec",
+            "size": 1379
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.license",
+            "digest": "sha256:d18a5cc71b84bc4af394a31116bd3932b42241de70c77d2b76d69a314ec8aa12",
+            "size": 11338
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.params",
+            "digest": "sha256:0914c7781e001948488d937994217538375b4fd8c1466c5e7a625221abd3ea7a",
+            "size": 119
+          }
+        ]
+      },
+      "paramsLayer": {
+        "present": true,
+        "size": 119,
+        "contentObserved": false,
+        "effect": "The tag ships default sampling options (the model card recommends temperature 0.7, top-p 0.8, top-k 20). The harness sends temperature 0 but not top-p/top-k, so the params layer defaults would apply; contents to be recorded after an authorized pull and treated as part of the frozen configuration, never tuned."
+      },
+      "minOllama": "0.34.4",
+      "notes": "Non-thinking only. Greedy decoding is a known degeneration risk for this family; record, do not tune."
+    },
+    {
+      "id": "CAND-003",
+      "ollamaTag": "phi4-mini:latest",
+      "role": "different-family-planned-in-V1.3C-ladder",
+      "status": "registry-observed-not-pulled",
+      "family": "phi4",
+      "parameters": "3.8B",
+      "quantization": "(per registry tag; to be recorded at pull)",
+      "ollamaSizeGB": 2.5,
+      "contextTokens": 131072,
+      "toolsCapability": true,
+      "license": "MIT",
+      "licenseSource": "https://huggingface.co/microsoft/Phi-4-mini-instruct",
+      "identity": {
+        "ollamaManifestSHA256": null,
+        "verifiedBy": "not yet pulled; the 'latest' tag is mutable: the pull-time model-layer digest must equal registryObserved or the stage halts"
+      },
+      "registryObserved": {
+        "observedOn": "2026-10-01",
+        "source": "registry.ollama.ai manifest metadata (no model weights downloaded)",
+        "method": "manifest JSON read via the fetch tool; transcription control-validated against the locally pinned granite4:3b manifest (all digests and sizes matched)",
+        "configDigest": "sha256:8c2539a423c4df2d9d2609fba56e7bad554696b66ed0e280c56e0ef4a32498fa",
+        "layers": [
+          {
+            "mediaType": "application/vnd.ollama.image.model",
+            "digest": "sha256:3c168af1dea0a414299c7d9077e100ac763370e5a98b3c53801a958a47f0a5db",
+            "size": 2491874624
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.template",
+            "digest": "sha256:813f53fdc6e58d35bb1c3853c93266380e9ca918a993e8eab193e8ede5d3a603",
+            "size": 655
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.license",
+            "digest": "sha256:fa8235e5b48faca34e3ca98cf4f694ef08bd216d28b58071a1f85b1d50cb814d",
+            "size": 1084
+          }
+        ]
+      },
+      "paramsLayer": null,
+      "minOllama": "0.5.13",
+      "notes": "Ollama entry last updated about a year ago."
+    },
+    {
+      "id": "CAND-004",
+      "ollamaTag": "ministral-3:3b",
+      "role": "mistral-family-edge-model",
+      "status": "registry-observed-not-pulled",
+      "family": "ministral-3",
+      "parameters": "3B",
+      "quantization": "(per registry tag; to be recorded at pull)",
+      "ollamaSizeGB": 3.0,
+      "contextTokens": 262144,
+      "toolsCapability": true,
+      "license": "Apache-2.0",
+      "licenseSource": "https://ollama.com/library/ministral-3",
+      "identity": {
+        "ollamaManifestSHA256": null,
+        "verifiedBy": "not yet pulled"
+      },
+      "registryObserved": {
+        "observedOn": "2026-10-01",
+        "source": "registry.ollama.ai manifest metadata (no model weights downloaded)",
+        "method": "manifest JSON read via the fetch tool; transcription control-validated against the locally pinned granite4:3b manifest (all digests and sizes matched)",
+        "configDigest": "sha256:12d848b3c47b6e7f93897fb9f8ba7d2d6d9417e6794e029f8450669cfa430793",
+        "layers": [
+          {
+            "mediaType": "application/vnd.ollama.image.model",
+            "digest": "sha256:910e4bf4e2338f181e99796d7452404e85c1b6bbbf8cd0bb094672cf9b6f2f22",
+            "size": 2953825504
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.template",
+            "digest": "sha256:24c6226aca35b16350187fb9125e7cb4e746795c78edd3cb1de45654c7e77181",
+            "size": 3413
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.license",
+            "digest": "sha256:43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+            "size": 11356
+          },
+          {
+            "mediaType": "application/vnd.ollama.image.params",
+            "digest": "sha256:e0daf17ff83eace4813f9e8554b262f6cc33ad880ff8df41a156ff9ef5522ddb",
+            "size": 21
+          }
+        ]
+      },
+      "paramsLayer": {
+        "present": true,
+        "size": 21,
+        "contentObserved": false,
+        "effect": "A 21-byte default-options layer; contents to be recorded after an authorized pull and frozen with the configuration."
+      },
+      "minOllama": "0.13.1",
+      "notes": "Includes vision components in its size; text-only use. Multimodal packaging is not exclusionary if text-only execution fits locally (PO-4 resolved); record its resource cost."
+    },
+    {
+      "id": "CAND-OPT-001",
+      "ollamaTag": "qwen3.5:4b",
+      "role": "optional-wave-2",
+      "status": "optional-not-registered",
+      "family": "qwen3.5",
+      "parameters": "4B",
+      "ollamaSizeGB": 3.4,
+      "contextTokens": 262144,
+      "toolsCapability": true,
+      "license": "Apache-2.0",
+      "licenseSource": "https://huggingface.co/Qwen/Qwen3.5-4B",
+      "identity": {
+        "ollamaManifestSHA256": null,
+        "verifiedBy": "registry manifest not read"
+      },
+      "registryObserved": null,
+      "paramsLayer": null,
+      "minOllama": "0.34.4",
+      "notes": "Thinking is enabled by default and vision weights add size: a protocol/runtime confound. Eligible only if wave 1 is inconclusive and a thinking-off setting is pre-registered as an amendment before any inference."
+    }
+  ],
+  "excluded": [
+    {
+      "ollamaTag": "gemma4:e2b/e4b",
+      "reason": "smallest build 4.6-7.5 GB exceeds the machine's GPU budget"
+    },
+    {
+      "ollamaTag": "qwen3:8b / granite4.1:8b / ministral-3:8b",
+      "reason": "5.2-6.0 GB exceed the practical budget on 8 GB"
+    },
+    {
+      "ollamaTag": "gemma3:4b",
+      "reason": "no tools capability listed; the contract requires tool calling"
+    },
+    {
+      "ollamaTag": "llama3.2:3b",
+      "reason": "older entry; license not verified in V1.26"
+    },
+    {
+      "ollamaTag": "qwen2.5:1.5b",
+      "reason": "V1.3B: never engaged the tool for text-processing (0/15)"
+    },
+    {
+      "ollamaTag": "granite4:350m",
+      "reason": "V1.3C: omitted required fields"
+    }
+  ]
+}

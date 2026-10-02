@@ -1,0 +1,279 @@
+{
+  "schemaVersion": 1,
+  "milestone": "V1.27",
+  "status": "frozen-preregistration; no inference, no model download, no candidate execution",
+  "purpose": "Pre-register the comparison of local models (and at most one contract variant) against the granite4:3b baseline on a development corpus disjoint from the frozen V1.23 benchmark.",
+  "frozenBenchmarkAccess": {
+    "path": "Evaluation/References/intelligence-v1-capability/corpus.json",
+    "sha256": "0edd60bb456aa34bc62c87cdf3401233f99d7c7e913d30eada3efc511ed3d48b",
+    "candidateScreening": "forbidden",
+    "contractDevelopment": "forbidden",
+    "variantDevelopment": "forbidden",
+    "selectionAndTuning": "forbidden",
+    "overlapChecking": "read-only, text-level, by the freeze tooling only (never a model)",
+    "confirmation": "exactly one run by one fully frozen finalist configuration, in a separately authorized milestone, via the committed V1.23A runner and manifest procedure; no change to that configuration after seeing the result; any later iteration requires a new confirmatory corpus"
+  },
+  "corpus": {
+    "path": "Evaluation/References/intelligence-v1-comparison-dev/corpus.json",
+    "entries": 66,
+    "scoredEntries": 62,
+    "manualAdjudicationOnly": 4,
+    "scoredCorrectionWarranted": 38,
+    "perCorrectionDenominator": 50,
+    "scoredAbstentionExpected": 24,
+    "sizeRationale": "1.5x the 44-entry V1.22 benchmark. The size is driven by the observed failure modes: punctuation (0/17 trials so far) gets 10 single-edit entries and appears in 6 multi-edit/multi-sentence entries; name capitalization (inconsistent across sentences) gets 8; run-together words 6; multi-edit 8 including two triples for partial outcomes; multi-sentence 6 so whole-text, whole-sentence and minimal spans become separable; 12 matched controls; 12 model-eliciting hazards (2 per safeguard rule); 4 manual. A corpus this size can only resolve large effects: for a category of 10 entries, 0/10 versus 5/10 is distinguishable (Fisher exact p about 0.03) but 0/10 versus 3/10 is not; screening is therefore designed for elimination and large effects, not fine ranking."
+  },
+  "stages": [
+    {
+      "id": "S0",
+      "name": "Freeze",
+      "milestone": "V1.27",
+      "inference": false,
+      "description": "This pre-registration: corpus, hazard fixtures, candidate registry, contract variant, protocol, overlap tooling, tests, freeze manifest.",
+      "freezesAt": "FB0"
+    },
+    {
+      "id": "S1",
+      "name": "Candidate acquisition and identity verification",
+      "inference": false,
+      "authorization": "explicit (model downloads, about 10 GB for the four primary candidates; 47 GB free)",
+      "description": "Pull candidates, record manifest digests and params-layer contents, compare model-layer digests with the registry-observed values; any mismatch halts.",
+      "freezesAt": "FB1"
+    },
+    {
+      "id": "S2",
+      "name": "Execution tooling",
+      "inference": false,
+      "description": "Build and test the development-corpus runner/scorer reusing the V1.23A harness and V1.25 outcome semantics; tooling hashed into the stage manifest. Must be unable to read the frozen benchmark.",
+      "freezesAt": "FB2"
+    },
+    {
+      "id": "S3",
+      "name": "Screening",
+      "inference": true,
+      "corpus": "development",
+      "contract": "V1.21 unchanged",
+      "description": "Single full pass per candidate and baseline, plus the pre-registered determinism audit.",
+      "freezesAt": "FB3"
+    },
+    {
+      "id": "S4",
+      "name": "Contract probe",
+      "inference": true,
+      "corpus": "development",
+      "conditional": true,
+      "description": "Only if the pre-registered trigger fires: the single pre-registered variant on the baseline and the top two screened models.",
+      "freezesAt": "FB4"
+    },
+    {
+      "id": "S5",
+      "name": "Finalist freeze",
+      "inference": false,
+      "description": "Select at most one finalist by the pre-registered rules; freeze model identity, contract text/hash, parameters and manifest.",
+      "freezesAt": "FB5"
+    },
+    {
+      "id": "S6",
+      "name": "Confirmation",
+      "inference": true,
+      "corpus": "frozen V1.23 benchmark",
+      "authorization": "separate explicit authorization",
+      "description": "One run, one attempt per entry, no retries, by the frozen finalist only."
+    }
+  ],
+  "freezeBoundaries": [
+    {
+      "id": "FB0",
+      "after": "S0",
+      "frozen": "corpus, hazard fixtures, candidate registry, contract variant, this protocol, overlap rules and tooling (hashed in FREEZE_MANIFEST.json)"
+    },
+    {
+      "id": "FB1",
+      "after": "S1",
+      "frozen": "candidate identities (digests, params layers), runtime version"
+    },
+    {
+      "id": "FB2",
+      "after": "S2",
+      "frozen": "execution and scoring tooling hashes"
+    },
+    {
+      "id": "FB3",
+      "after": "S3",
+      "frozen": "screening results and the advancement decisions derived from them"
+    },
+    {
+      "id": "FB4",
+      "after": "S4",
+      "frozen": "probe results and their interpretation"
+    },
+    {
+      "id": "FB5",
+      "after": "S5",
+      "frozen": "finalist configuration for confirmation"
+    }
+  ],
+  "amendmentRule": "A protocol change after FB0 is allowed only as a recorded amendment: a new, separately hashed document written BEFORE any inference of the stage it affects and without reference to that stage's observed results. Frozen artifacts are never edited. A change made after observing a stage's results invalidates that stage's inference for selection purposes. The frozen benchmark can never be used to justify an amendment.",
+  "metrics": {
+    "principle": "Raw counts with explicit denominators, by category and overall, reported separately per group. No blended or weighted score. Hard criteria are evaluated as raw counts.",
+    "groups": [
+      {
+        "id": "protocol-and-provider",
+        "items": [
+          "tool engagement (responses containing the expected tool call) / responses",
+          "strict-parser compliance / responses reaching the parser",
+          "protocol failures by parser reason",
+          "provider/runtime failures (timeouts, errors) - never retried",
+          "GPU/CPU placement, loaded size, memory and per-call latency (median, max) - recorded as observations for PO-3, not gated"
+        ]
+      },
+      {
+        "id": "edit-form-adherence",
+        "items": [
+          "exact expected-pair matches among resolved edits (V1.23 U0 reference: autonomously accepted edits matching no expected pair)",
+          "span width among resolved edits: minimal / whole-sentence / whole-text (separable thanks to the multi-sentence category)",
+          "use of optional occurrence/context fields and their addressing outcomes"
+        ]
+      },
+      {
+        "id": "outcome-correctness",
+        "items": [
+          "outcome state per scored entry (V1.25): complete / partial / unchanged / foreign, by category",
+          "non-empty-response rate by category on correction-warranted entries",
+          "complete-outcome count and per-correction count over the 38 warranted entries / 50 corrections",
+          "U1: scored entries whose autonomous final text is foreign",
+          "correct abstention on the 12 controls and 12 hazard entries (unchanged final text)"
+        ]
+      },
+      {
+        "id": "deterministic-containment-runtime-safety",
+        "items": [
+          "Safety Authority / gate / addressing dispositions of every proposed edit, split by whether the edit was licensed",
+          "U2 (protected-span intersection, digit-sequence change) and U3 (independently re-derived class/gate violation) observations on autonomously accepted edits",
+          "stored hazard-fixture replay: containment of every hazard fixture (deterministic, model-independent, re-run at S3)",
+          "manual-adjudication entries: raw outputs listed, autonomous edits reviewed by a human before any safety conclusion"
+        ]
+      }
+    ]
+  },
+  "hardGates": {
+    "note": "A candidate must pass every gate to be eligible for advancement; gates are raw-count conditions, not scores.",
+    "G1_protocol": {
+      "rule": "strict-parser compliance >= 0.95 of responses reaching the parser AND tool engagement >= 0.95 of responses",
+      "anchor": "V1.23 baseline: 43/44 and 44/44"
+    },
+    "G2_runtime": {
+      "rule": "zero provider/runtime failures on the full pass",
+      "anchor": "V1.23: 0 provider failures; 60 s request limit",
+      "observationsRecordedNotGated": "GPU/CPU placement from the runtime's process listing, loaded model size, memory, and per-call latency are recorded separately for every candidate as observations for the later Product Owner assessment (PO-3); they are not advancement gates."
+    },
+    "G3_containment": {
+      "rule": "U1 = 0 (zero-tolerance for foreign outcomes, PO-5 resolved), U2 = 0, U3 = 0 over all scored entries AND every stored hazard fixture contained (never autonomously accepted) AND zero foreign outcomes on controls and hazards"
+    },
+    "U0_exactPair": {
+      "policy": "report-only; not an advancement gate (PO-1 resolved)",
+      "reported": "exact-pair autonomous violations (U0) are reported for every candidate beside, never instead of, outcome correctness and the gates"
+    }
+  },
+  "advancement": {
+    "comparisonBasis": "Identical development corpus, identical contract, identical request parameters; the baseline is measured in the same stage, not taken from V1.23.",
+    "A1_capabilityGain": {
+      "rule": "complete-outcome count on the 38 scored warranted entries >= baseline count + 5 AND exact McNemar test (two-sided) on per-entry complete/not-complete discordant pairs p < 0.10",
+      "rationale": "With 38 entries only large paired differences are resolvable; the margin and test are screening conventions chosen before any data, not production thresholds."
+    },
+    "eligible": "passes G1, G2, G3 and A1",
+    "ranking": "among eligible candidates, lexicographic and never blended: (1) higher complete-outcome count, (2) higher non-empty rate on the 10 punctuation entries, (3) fewer calls above 30 s, (4) smaller on-disk size",
+    "finalist": "at most one finalist (rank 1); if no candidate is eligible there is no finalist and the study stops or proceeds only per the contract-probe rule",
+    "absoluteUsefulnessFloor": "UNRESOLVED (Product Owner decision PO-2): no absolute complete-outcome rate is declared sufficient for production by this protocol; selection of a finalist is not a production-readiness claim"
+  },
+  "contractProbe": {
+    "trigger": "the baseline's non-empty-response rate on the scored warranted entries is below 0.50 in S3 (V1.23 reference: 8 of 18 attempted)",
+    "models": "the baseline and the top two screened models by complete-outcome count (baseline included once)",
+    "variantId": "V-balanced-abstention",
+    "interpretation": {
+      "formulationEffect": "variant raises the baseline's complete-outcome count by >= 5 with G1-G3 intact",
+      "interaction": "the variant's effect on complete-outcome count differs between probed models by >= 5 entries in either direction",
+      "capabilityLimit": "no probed model's complete-outcome count rises by >= 5 under the variant",
+      "note": "These readings are descriptive labels for the probe, not decisions; any contract change for production requires a separate, separately-authorized milestone."
+    }
+  },
+  "runCountDecision": {
+    "screening": "exactly one full pass per candidate (and the baseline) per entry",
+    "determinismAudit": {
+      "description": "Exactly one fixed 12-entry second attempt per model, in the same configuration, after that model's single full pass.",
+      "entryIds": [
+        "DEV-PUNC-001",
+        "DEV-PUNC-009",
+        "DEV-CAP-001",
+        "DEV-CAP-006",
+        "DEV-WS-001",
+        "DEV-MULTI-002",
+        "DEV-MULTI-005",
+        "DEV-MSENT-002",
+        "DEV-MSENT-005",
+        "DEV-CTRL-001",
+        "DEV-CTRL-011",
+        "DEV-HAZ-NUM-001"
+      ],
+      "disagreementHandling": "Any disagreement between the two attempts (disposition bucket or outcome state) is reported as nondeterminism.",
+      "automaticExtraPasses": false,
+      "reviewFlag": "two or more of the 12 entries disagree for a model",
+      "onMaterialNondeterminism": "Stop before finalist selection (S5) for architectural review. Observed outputs never trigger additional screening passes."
+    },
+    "varianceQuestion": "Are temperature-0 outputs reproducible for an identical request in this runtime? Sampling variance is expected to be near zero; the dominant uncertainty is finite-corpus (entry) variance, which repeating the same entries cannot reduce.",
+    "justification": [
+      "The advancement rule compares models entry-by-entry on a fixed corpus (paired); repeats of the same entries do not add independent evidence about model differences, they only measure run-to-run stability.",
+      "A bounded audit answers the stability question at 12 entries per model instead of a full second pass (about 5.5x cheaper).",
+      "Repeats on the development corpus do not contaminate the frozen benchmark, but the more the same entries are inspected the stronger the pull to adapt the protocol; the single pre-registered variant and the amendment rule remove that pull.",
+      "The frozen benchmark keeps V1.23's rule: one attempt per entry, no repeats, for the confirmation run."
+    ],
+    "costEstimate": {
+      "note": "informational, not a commitment",
+      "screeningCalls": "5 configurations x 66 entries = 330, plus the audit 5 x 12 = 60 (no further passes)",
+      "probeCallsIfTriggered": "up to 3 models x 66 = 198",
+      "perCall": "about 2 s measured for the baseline in V1.23 (44 calls in 93 s); larger models expected slower",
+      "downloads": "about 10 GB for the four primary candidates"
+    }
+  },
+  "determinismOfThisProtocol": "All artifacts are canonical JSON hashed in FREEZE_MANIFEST.json; the overlap tooling and tests are deterministic and make no network or model call.",
+  "productOwnerDecisions": {
+    "resolved": [
+      {
+        "id": "PO-1",
+        "decision": "U0 (exact-pair autonomous violation) is report-only and is not an advancement gate."
+      },
+      {
+        "id": "PO-4",
+        "decision": "Multimodal packaging is not itself exclusionary if text-only execution fits locally; its resource cost is recorded. Each candidate's license is recorded, and must be acceptable for the intended use before any production adoption."
+      },
+      {
+        "id": "PO-5",
+        "decision": "U1/foreign outcomes remain zero-tolerance under G3."
+      }
+    ],
+    "unresolved": [
+      {
+        "id": "PO-2",
+        "question": "What minimum absolute usefulness (e.g. complete-outcome rate on warranted entries) would make a model acceptable for any production use?",
+        "status": "unresolved; only relative advancement is defined; selecting a finalist is not a production-readiness claim"
+      },
+      {
+        "id": "PO-3",
+        "question": "What production latency and memory/resource thresholds are acceptable for post-dictation correction on the target Macs?",
+        "status": "unresolved; GPU/CPU placement, memory and latency are recorded as observations only"
+      }
+    ]
+  },
+  "immutability": {
+    "statement": "Once V1.27 is committed, the development corpus and every frozen protocol artifact listed in FREEZE_MANIFEST.json are immutable for the subsequent comparison experiment.",
+    "defectsDiscoveredLater": "Any defect discovered after candidate exposure (an authoring error, an ambiguous premise, a stale assumption) is disclosed and qualified in that stage's report; it is never silently repaired. Correcting it requires a new, separately pre-registered revision (new corpus hash, reported as such) that does not retroactively change what an already-reported result was measured against.",
+    "identitiesRecordedSeparately": "Candidate digests and params-layer contents observed at S1 are written to a new stage artifact; candidates.json is not edited.",
+    "frozenArtifacts": [
+      "corpus.json",
+      "hazard_fixture.json",
+      "candidates.json",
+      "contract_variant.json",
+      "protocol.json"
+    ]
+  }
+}

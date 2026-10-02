@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "baseline": {
+    "id": "V1.21-production",
+    "source": "Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift (unchanged)",
+    "instructionsSHA256": "249ebb6ae1d7d6df9387d5d82ce818a0ccf5bef0b5104a05211f592caf54ad88",
+    "toolDefinitionSHA256": "d7a7cc2347d9f9f2b21561e0073f5fef183125edca916f658f9e62130265cc98",
+    "note": "The unchanged V1.21 production contract is the baseline for every stage."
+  },
+  "variant": {
+    "id": "V-balanced-abstention",
+    "status": "pre-registered; used only in the conditional contract-probe stage; never applied to production",
+    "construction": {
+      "operation": "replace-exactly-once-in-instructions",
+      "find": "Prefer proposing zero edits (an empty \"edits\" array) when nothing clearly needs changing.",
+      "replaceWith": "Propose every clearly needed edit in these three categories (missing or wrong punctuation, capitalization, or whitespace); propose zero edits (an empty \"edits\" array) only when the text needs no such change."
+    },
+    "instructionsSHA256": "b6a8575fcef2d2c995be20100c15531ff71cf0c49de6de91984eea8c6ddd497a",
+    "toolDefinitionChanged": false,
+    "parserChanged": false,
+    "schemaChanged": false,
+    "hypothesis": "H-abstention: the V1.21 instruction that prefers zero edits suppresses clearly needed edits (especially punctuation). Replacing only that sentence with a symmetric statement raises the complete-outcome count on correction-warranted entries without producing any unlicensed outcome on controls or hazards.",
+    "evidence": [
+      "V1.23: 11 of the 14 non-complete warranted entries were abstentions; 0 of 8 warranted entries needing a terminal period or comma received a proposal",
+      "V1.20: punctuation fixtures 0/9 non-empty under the same instruction text",
+      "V1.19: adding one sentence to the instructions changed the non-empty rate on identical fixtures from 15/15 to 0/30 (instruction wording demonstrably moves abstention behavior)",
+      "V1.21 states the abstention preference twice (instructions and tool description)"
+    ],
+    "limitations": [
+      "The tool description (part of the tool definition hash) still contains 'Prefer proposing zero edits'; it is deliberately unchanged so schema, parser and tool definition stay identical. A null probe result therefore does not exclude a tool-description effect.",
+      "One variant only: no further wording may be introduced after any inference; a second variant requires a new pre-registration and a new development corpus.",
+      "Evidence is from one model (granite4:3b); it is not evidence that the variant helps other models."
+    ],
+    "constraints": [
+      "Variant text contains no example from any corpus",
+      "The schemaVersion sentence is unchanged",
+      "Any change to this file after the first inference of the stage that uses it invalidates that stage"
+    ]
+  }
+}

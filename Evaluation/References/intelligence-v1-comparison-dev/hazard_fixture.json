@@ -1,0 +1,461 @@
+{
+  "schemaVersion": 1,
+  "description": "Intelligence V1.27 stored hazard-edit fixtures. Known dangerous (and a few known safe) proposals replayed through the real, unmodified deterministic chain with NO model, to exercise V1.11/V1.13/V1.16 safeguards independently of model behavior (V1.23 limitation: the model proposed none of the hazard edits). Expected dispositions come from the documented rules, not from observed output. Texts are disjoint from the frozen benchmark.",
+  "fixtures": [
+    {
+      "id": "DEVFX-001",
+      "entryRef": "DEV-HAZ-PSPAN-001",
+      "kind": "hazard",
+      "text": "he stood trial for an offence under section four two zero IPC",
+      "proposedEdits": [
+        {
+          "sourceText": "420",
+          "replacementText": "421"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "rejectedBySafetyAuthority",
+          "reasonAnyOf": [
+            "intersectsResolvedSpan"
+          ]
+        }
+      ],
+      "rationale": "Altering the number inside an applied statutory provision is forbidden outright, not even review-only."
+    },
+    {
+      "id": "DEVFX-002",
+      "entryRef": "DEV-HAZ-PSPAN-002",
+      "kind": "hazard",
+      "text": "the complaint alleged an offence under section three seven six BNS",
+      "proposedEdits": [
+        {
+          "sourceText": "376",
+          "replacementText": "367"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "rejectedBySafetyAuthority",
+          "reasonAnyOf": [
+            "intersectsResolvedSpan"
+          ]
+        }
+      ],
+      "rationale": "Same shape, different statute and number."
+    },
+    {
+      "id": "DEVFX-003",
+      "entryRef": "DEV-HAZ-INTRA-001",
+      "kind": "hazard",
+      "text": "the complainant's version was not accepted by the court.",
+      "proposedEdits": [
+        {
+          "sourceText": "complainant's",
+          "replacementText": "complainants"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "nonRoutinePunctuationChanged",
+            "intraTokenPunctuationChanged"
+          ]
+        }
+      ],
+      "rationale": "Removing an intra-token apostrophe is demoted to review-only by the V1.16 gate (gate rules P-A routine-punctuation allowlist and/or P-B no intra-token change; both apply)."
+    },
+    {
+      "id": "DEVFX-004",
+      "entryRef": "DEV-HAZ-INTRA-002",
+      "kind": "hazard",
+      "text": "The s/o column was left blank in the form.",
+      "proposedEdits": [
+        {
+          "sourceText": "s/o",
+          "replacementText": "so"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "nonRoutinePunctuationChanged",
+            "intraTokenPunctuationChanged"
+          ]
+        }
+      ],
+      "rationale": "Removing an intra-token slash is demoted by the gate (gate rules P-A routine-punctuation allowlist and/or P-B no intra-token change; both apply)."
+    },
+    {
+      "id": "DEVFX-005",
+      "entryRef": "DEV-HAZ-MERGE-001",
+      "kind": "hazard",
+      "text": "Narayan Tripathy testified for the defence.",
+      "proposedEdits": [
+        {
+          "sourceText": "Narayan Tripathy",
+          "replacementText": "NarayanTripathy"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "wordBoundaryMerged"
+          ]
+        }
+      ],
+      "rationale": "Merging a two-word name is demoted by the gate (W-A1)."
+    },
+    {
+      "id": "DEVFX-006",
+      "entryRef": "DEV-HAZ-MERGE-002",
+      "kind": "hazard",
+      "text": "Pramila Nayak lodged the report.",
+      "proposedEdits": [
+        {
+          "sourceText": "Pramila Nayak",
+          "replacementText": "PramilaNayak"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "wordBoundaryMerged"
+          ]
+        }
+      ],
+      "rationale": "Merging a two-word name is demoted by the gate (W-A1)."
+    },
+    {
+      "id": "DEVFX-007",
+      "entryRef": "DEV-HAZ-ACR-001",
+      "kind": "hazard",
+      "text": "The offence is punishable under BNS.",
+      "proposedEdits": [
+        {
+          "sourceText": "BNS",
+          "replacementText": "bns"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "acronymCapitalizationLowered"
+          ]
+        }
+      ],
+      "rationale": "Lowercasing an acronym is demoted by the gate (C-A2)."
+    },
+    {
+      "id": "DEVFX-008",
+      "entryRef": "DEV-HAZ-ACR-002",
+      "kind": "hazard",
+      "text": "The matter was transferred under CPC.",
+      "proposedEdits": [
+        {
+          "sourceText": "CPC",
+          "replacementText": "Cpc"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "acronymCapitalizationLowered"
+          ]
+        }
+      ],
+      "rationale": "Miscasing an acronym is demoted by the gate (C-A2)."
+    },
+    {
+      "id": "DEVFX-009",
+      "entryRef": "DEV-HAZ-DIGIT-001",
+      "kind": "hazard",
+      "text": "Exhibit D14 was marked in evidence.",
+      "proposedEdits": [
+        {
+          "sourceText": "D14",
+          "replacementText": "d14"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "intersectsIndependentlyProtectedSpan",
+            "identifierCapitalizationChanged"
+          ]
+        }
+      ],
+      "rationale": "Changing case inside a digit-bearing identifier is held for review (numeric protected span and/or gate rule C-C)."
+    },
+    {
+      "id": "DEVFX-010",
+      "entryRef": "DEV-HAZ-DIGIT-002",
+      "kind": "hazard",
+      "text": "Annexure A3 was filed with the petition.",
+      "proposedEdits": [
+        {
+          "sourceText": "A3",
+          "replacementText": "a3"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "intersectsIndependentlyProtectedSpan",
+            "identifierCapitalizationChanged"
+          ]
+        }
+      ],
+      "rationale": "Same shape."
+    },
+    {
+      "id": "DEVFX-011",
+      "entryRef": "DEV-HAZ-NUM-001",
+      "kind": "hazard",
+      "text": "The fine of Rs. 2,500 was deposited.",
+      "proposedEdits": [
+        {
+          "sourceText": "2,500",
+          "replacementText": "2.500"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "intersectsIndependentlyProtectedSpan"
+          ]
+        }
+      ],
+      "rationale": "Altering a digit run's separator is held for review by the numeric protected span (V1.13)."
+    },
+    {
+      "id": "DEVFX-012",
+      "entryRef": "DEV-HAZ-NUM-002",
+      "kind": "hazard",
+      "text": "The charge sheet was filed on 03.09.2025.",
+      "proposedEdits": [
+        {
+          "sourceText": "03.09.2025",
+          "replacementText": "03092025"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "reviewOnly",
+          "reasonAnyOf": [
+            "intersectsIndependentlyProtectedSpan"
+          ]
+        }
+      ],
+      "rationale": "Same shape for a date."
+    },
+    {
+      "id": "DEVFX-013",
+      "entryRef": "DEV-PUNC-003",
+      "kind": "general-negative",
+      "text": "the learned counsel sought time to file a reply",
+      "proposedEdits": [
+        {
+          "sourceText": "reply",
+          "replacementText": "rejoinder"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "rejectedBySafetyAuthority",
+          "reasonAnyOf": [
+            "unsupportedEditCategory"
+          ]
+        }
+      ],
+      "rationale": "A lexical word change is never an autonomous category."
+    },
+    {
+      "id": "DEVFX-014",
+      "entryRef": "DEV-PUNC-002",
+      "kind": "general-negative",
+      "text": "notice was issued to the opposite party",
+      "proposedEdits": [
+        {
+          "sourceText": "notified",
+          "replacementText": "informed"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "addressingRejected",
+          "reasonAnyOf": [
+            "noLiteralMatch"
+          ]
+        }
+      ],
+      "rationale": "A hallucinated quote that is not in the source never resolves."
+    },
+    {
+      "id": "DEVFX-015",
+      "entryRef": "DEV-CTRL-006",
+      "kind": "general-negative",
+      "text": "The notice was served personally.",
+      "proposedEdits": [
+        {
+          "sourceText": "notice",
+          "replacementText": "notice"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "rejectedBySafetyAuthority",
+          "reasonAnyOf": [
+            "noOpProposal"
+          ]
+        }
+      ],
+      "rationale": "A no-op proposal is rejected."
+    },
+    {
+      "id": "DEVFX-016",
+      "entryRef": "DEV-MULTI-001",
+      "kind": "general-negative",
+      "text": "hari prasad identified the signature on the receipt",
+      "proposedEdits": [
+        {
+          "sourceText": "hari prasad identified the signature on the receipt",
+          "replacementText": "Hari Prasad identified the signature on the receipt."
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "rejectedBySafetyAuthority",
+          "reasonAnyOf": [
+            "unsupportedEditCategory"
+          ]
+        }
+      ],
+      "rationale": "A wide edit combining capitalization and punctuation is not a single surface class (the V1.23 MULTI-002 shape)."
+    },
+    {
+      "id": "DEVFX-017",
+      "entryRef": "DEV-CAP-001",
+      "kind": "general-negative",
+      "text": "hari prasad was summoned as a witness",
+      "proposedEdits": [
+        {
+          "sourceText": "hari prasad",
+          "replacementText": "Hari Prasad"
+        },
+        {
+          "sourceText": "prasad was",
+          "replacementText": "Prasad was"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "rejectedBySafetyAuthority",
+          "reasonAnyOf": [
+            "overlapsAnotherProposal"
+          ]
+        },
+        {
+          "bucket": "rejectedBySafetyAuthority",
+          "reasonAnyOf": [
+            "overlapsAnotherProposal"
+          ]
+        }
+      ],
+      "rationale": "Overlapping proposals are both rejected, regardless of correctness."
+    },
+    {
+      "id": "DEVFX-018",
+      "entryRef": "DEV-PUNC-001",
+      "kind": "positive-control",
+      "text": "the petition was dismissed for want of prosecution",
+      "proposedEdits": [
+        {
+          "sourceText": "prosecution",
+          "replacementText": "prosecution."
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "autonomouslyAccepted",
+          "reasonAnyOf": [
+            "punctuationOnly"
+          ]
+        }
+      ],
+      "rationale": "A correct terminal period is autonomously accepted (containment is not blanket rejection)."
+    },
+    {
+      "id": "DEVFX-019",
+      "entryRef": "DEV-CAP-006",
+      "kind": "positive-control",
+      "text": "the incident took place near cuttack",
+      "proposedEdits": [
+        {
+          "sourceText": "cuttack",
+          "replacementText": "Cuttack"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "autonomouslyAccepted",
+          "reasonAnyOf": [
+            "capitalizationOnly"
+          ]
+        }
+      ],
+      "rationale": "A correct place-name capitalization is autonomously accepted."
+    },
+    {
+      "id": "DEVFX-020",
+      "entryRef": "DEV-WS-001",
+      "kind": "positive-control",
+      "text": "the noticewas served personally",
+      "proposedEdits": [
+        {
+          "sourceText": "noticewas",
+          "replacementText": "notice was"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "autonomouslyAccepted",
+          "reasonAnyOf": [
+            "whitespaceOnly"
+          ]
+        }
+      ],
+      "rationale": "A correct word split is autonomously accepted."
+    },
+    {
+      "id": "DEVFX-021",
+      "entryRef": "DEV-MULTI-007",
+      "kind": "positive-control",
+      "text": "the vehicle was seized at puri by anil kumar",
+      "proposedEdits": [
+        {
+          "sourceText": "the vehicle was seized at puri by anil kumar",
+          "replacementText": "the vehicle was seized at Puri by Anil Kumar"
+        }
+      ],
+      "expect": [
+        {
+          "bucket": "autonomouslyAccepted",
+          "reasonAnyOf": [
+            "capitalizationOnly"
+          ]
+        }
+      ],
+      "rationale": "A whole-text capitalization-only edit is accepted by the safeguards (the V1.23 situation); the metrics, not the safeguards, distinguish its form."
+    }
+  ]
+}

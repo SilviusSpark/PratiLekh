@@ -1,0 +1,1102 @@
+{
+  "schemaVersion": 1,
+  "description": "Intelligence V1.27 development corpus for model/contract comparison. Synthetic, hand-authored, DISJOINT from the frozen V1.22/V1.23 capability benchmark (checked by an automated overlap test). For candidate screening and the pre-registered contract probe only; the frozen 44-entry benchmark is never used for screening or contract development. Same entry schema and adjudication conventions as the V1.22 corpus; adds one category (multi-sentence-correction-warranted).",
+  "entries": [
+    {
+      "id": "DEV-PUNC-001",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the petition was dismissed for want of prosecution",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "prosecution",
+          "replacement": "prosecution."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23 (0/6 non-empty) and V1.20 (0/9): punctuation was never proposed under the V1.21 instructions",
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "DEV-PUNC-002",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "notice was issued to the opposite party",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "party",
+          "replacement": "party."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23 (0/6 non-empty) and V1.20 (0/9): punctuation was never proposed under the V1.21 instructions",
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "DEV-PUNC-003",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the learned counsel sought time to file a reply",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "reply",
+          "replacement": "reply."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23 (0/6 non-empty) and V1.20 (0/9): punctuation was never proposed under the V1.21 instructions",
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "DEV-PUNC-004",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the bail application stands rejected",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "rejected",
+          "replacement": "rejected."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23 (0/6 non-empty) and V1.20 (0/9): punctuation was never proposed under the V1.21 instructions",
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "DEV-PUNC-005",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the case is adjourned to the next week",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "week",
+          "replacement": "week."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23 (0/6 non-empty) and V1.20 (0/9): punctuation was never proposed under the V1.21 instructions",
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "DEV-PUNC-006",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "the inspection report was placed on record",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "record",
+          "replacement": "record."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23 (0/6 non-empty) and V1.20 (0/9): punctuation was never proposed under the V1.21 instructions",
+      "note": "Missing terminal period."
+    },
+    {
+      "id": "DEV-PUNC-007",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "after hearing both sides the court reserved its order",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "sides",
+          "replacement": "sides,"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing comma after an introductory clause."
+    },
+    {
+      "id": "DEV-PUNC-008",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "however the defence did not press the objection",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "however",
+          "replacement": "however,"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing comma after a sentence adverb."
+    },
+    {
+      "id": "DEV-PUNC-009",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "did the accused admit the signature",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "signature",
+          "replacement": "signature?"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Interrogative sentence missing its question mark (routine punctuation per the V1.16 allowlist)."
+    },
+    {
+      "id": "DEV-PUNC-010",
+      "category": "punctuation-correction-warranted",
+      "tier": "synthetic",
+      "text": "was the notice served on the respondent",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "respondent",
+          "replacement": "respondent?"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Interrogative sentence missing its question mark."
+    },
+    {
+      "id": "DEV-CAP-001",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "hari prasad was summoned as a witness",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "hari prasad",
+          "replacement": "Hari Prasad"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: the same kind of name was proposed in some sentences and not others (CAP-003/005 abstained)",
+      "note": "Lowercase personal name, sentence-initial."
+    },
+    {
+      "id": "DEV-CAP-002",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "the report was prepared by kishore mohanty",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "kishore mohanty",
+          "replacement": "Kishore Mohanty"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: the same kind of name was proposed in some sentences and not others (CAP-003/005 abstained)",
+      "note": "Lowercase personal name, sentence-final."
+    },
+    {
+      "id": "DEV-CAP-003",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "counsel for sunita behera sought an adjournment",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "sunita behera",
+          "replacement": "Sunita Behera"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: the same kind of name was proposed in some sentences and not others (CAP-003/005 abstained)",
+      "note": "Lowercase personal name, mid-sentence."
+    },
+    {
+      "id": "DEV-CAP-004",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "the sale deed was executed by bishnu charan",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "bishnu charan",
+          "replacement": "Bishnu Charan"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: the same kind of name was proposed in some sentences and not others (CAP-003/005 abstained)",
+      "note": "Lowercase personal name, sentence-final."
+    },
+    {
+      "id": "DEV-CAP-005",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "dilip sahu denied the allegation",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "dilip sahu",
+          "replacement": "Dilip Sahu"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: the same kind of name was proposed in some sentences and not others (CAP-003/005 abstained)",
+      "note": "Lowercase personal name, sentence-initial."
+    },
+    {
+      "id": "DEV-CAP-006",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "the incident took place near cuttack",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "cuttack",
+          "replacement": "Cuttack"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Lowercase place name."
+    },
+    {
+      "id": "DEV-CAP-007",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "the appeal was filed before the orissa high court",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "orissa high court",
+          "replacement": "Orissa High Court"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Lowercase court name."
+    },
+    {
+      "id": "DEV-CAP-008",
+      "category": "capitalization-correction-warranted",
+      "tier": "synthetic",
+      "text": "the accused resides at sambalpur",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "sambalpur",
+          "replacement": "Sambalpur"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Lowercase place name."
+    },
+    {
+      "id": "DEV-WS-001",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "the noticewas served personally",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "noticewas",
+          "replacement": "notice was"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: isolated run-together words abstained (WS-001..003) though split proposals occurred inside multi-edit entries",
+      "note": "Run-together words needing a split (autonomous-eligible: only merges are gated)."
+    },
+    {
+      "id": "DEV-WS-002",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "counsel soughtadjournment of the hearing",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "soughtadjournment",
+          "replacement": "sought adjournment"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: isolated run-together words abstained (WS-001..003) though split proposals occurred inside multi-edit entries",
+      "note": "Run-together words needing a split (autonomous-eligible: only merges are gated)."
+    },
+    {
+      "id": "DEV-WS-003",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "thepolice recorded the statement",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "thepolice",
+          "replacement": "the police"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: isolated run-together words abstained (WS-001..003) though split proposals occurred inside multi-edit entries",
+      "note": "Run-together words needing a split (autonomous-eligible: only merges are gated)."
+    },
+    {
+      "id": "DEV-WS-004",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "the affidavit wasfiled late",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "wasfiled",
+          "replacement": "was filed"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: isolated run-together words abstained (WS-001..003) though split proposals occurred inside multi-edit entries",
+      "note": "Run-together words needing a split (autonomous-eligible: only merges are gated)."
+    },
+    {
+      "id": "DEV-WS-005",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "the registrar returnedthe file to counsel",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "returnedthe",
+          "replacement": "returned the"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: isolated run-together words abstained (WS-001..003) though split proposals occurred inside multi-edit entries",
+      "note": "Run-together words needing a split (autonomous-eligible: only merges are gated)."
+    },
+    {
+      "id": "DEV-WS-006",
+      "category": "whitespace-correction-warranted",
+      "tier": "synthetic",
+      "text": "the surveyor submittedhis report on friday",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "submittedhis",
+          "replacement": "submitted his"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": "V1.23: isolated run-together words abstained (WS-001..003) though split proposals occurred inside multi-edit entries",
+      "note": "Run-together words needing a split (autonomous-eligible: only merges are gated)."
+    },
+    {
+      "id": "DEV-MULTI-001",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "hari prasad identified the signature on the receipt",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "hari prasad",
+          "replacement": "Hari Prasad"
+        },
+        {
+          "source": "receipt",
+          "replacement": "receipt."
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Name capitalization + terminal period."
+    },
+    {
+      "id": "DEV-MULTI-002",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "the clerk producedthe register before the bench",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "producedthe",
+          "replacement": "produced the"
+        },
+        {
+          "source": "bench",
+          "replacement": "bench."
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Whitespace split + terminal period."
+    },
+    {
+      "id": "DEV-MULTI-003",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "however kishore mohanty did not appear",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "however",
+          "replacement": "however,"
+        },
+        {
+          "source": "kishore mohanty",
+          "replacement": "Kishore Mohanty"
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Comma + name capitalization."
+    },
+    {
+      "id": "DEV-MULTI-004",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "pramila nayak wasdischarged from the hospital",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "pramila nayak",
+          "replacement": "Pramila Nayak"
+        },
+        {
+          "source": "wasdischarged",
+          "replacement": "was discharged"
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Name capitalization + whitespace split (the V1.23 combined-edit hazard shape)."
+    },
+    {
+      "id": "DEV-MULTI-005",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "gita pradhan stated that the noticewas never served",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "gita pradhan",
+          "replacement": "Gita Pradhan"
+        },
+        {
+          "source": "noticewas",
+          "replacement": "notice was"
+        },
+        {
+          "source": "served",
+          "replacement": "served."
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Three independent corrections (partial-outcome coverage)."
+    },
+    {
+      "id": "DEV-MULTI-006",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "after the hearing narayan tripathy produced the documentsbefore the court",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "hearing",
+          "replacement": "hearing,"
+        },
+        {
+          "source": "narayan tripathy",
+          "replacement": "Narayan Tripathy"
+        },
+        {
+          "source": "documentsbefore",
+          "replacement": "documents before"
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Three independent corrections across three classes."
+    },
+    {
+      "id": "DEV-MULTI-007",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "the vehicle was seized at puri by anil kumar",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "puri",
+          "replacement": "Puri"
+        },
+        {
+          "source": "anil kumar",
+          "replacement": "Anil Kumar"
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Two capitalization corrections."
+    },
+    {
+      "id": "DEV-MULTI-008",
+      "category": "multi-edit-correction-warranted",
+      "tier": "synthetic",
+      "text": "on the next date the witness will be examined",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "date",
+          "replacement": "date,"
+        },
+        {
+          "source": "examined",
+          "replacement": "examined."
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Comma + terminal period."
+    },
+    {
+      "id": "DEV-MSENT-001",
+      "category": "multi-sentence-correction-warranted",
+      "tier": "synthetic",
+      "text": "The petition was filed on Monday. The respondent appeared through counsel",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "counsel",
+          "replacement": "counsel."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing final period in the second sentence; the first sentence is correct (separates whole-text from whole-sentence from minimal spans)."
+    },
+    {
+      "id": "DEV-MSENT-002",
+      "category": "multi-sentence-correction-warranted",
+      "tier": "synthetic",
+      "text": "The witness was cross-examined at length. he denied every suggestion put to him.",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "he denied",
+          "replacement": "He denied"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Lowercase sentence start in the second sentence."
+    },
+    {
+      "id": "DEV-MSENT-003",
+      "category": "multi-sentence-correction-warranted",
+      "tier": "synthetic",
+      "text": "Counsel opened the arguments. rabindra swain then deposed on oath.",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "rabindra swain",
+          "replacement": "Rabindra Swain"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Lowercase name in the second sentence."
+    },
+    {
+      "id": "DEV-MSENT-004",
+      "category": "multi-sentence-correction-warranted",
+      "tier": "synthetic",
+      "text": "The inspection was completed. The reportwas submitted the same day.",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "reportwas",
+          "replacement": "report was"
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Run-together words in the second sentence."
+    },
+    {
+      "id": "DEV-MSENT-005",
+      "category": "multi-sentence-correction-warranted",
+      "tier": "synthetic",
+      "text": "The notice was served on tuesday. the respondent did not appear",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "tuesday",
+          "replacement": "Tuesday"
+        },
+        {
+          "source": "the respondent",
+          "replacement": "The respondent"
+        },
+        {
+          "source": "appear",
+          "replacement": "appear."
+        }
+      ],
+      "recallRequiresAll": true,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Three corrections across two sentences."
+    },
+    {
+      "id": "DEV-MSENT-006",
+      "category": "multi-sentence-correction-warranted",
+      "tier": "synthetic",
+      "text": "The witness identified the weapon. He also identified the vehicle",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [
+        {
+          "source": "vehicle",
+          "replacement": "vehicle."
+        }
+      ],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing final period; first sentence correct."
+    },
+    {
+      "id": "DEV-CTRL-001",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The petition was dismissed for want of prosecution.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-002",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "Notice was issued to the opposite party.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-003",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "Hari Prasad was summoned as a witness.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-004",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The incident took place near Cuttack.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-005",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The appeal was filed before the Orissa High Court.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-006",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The notice was served personally.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-007",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "Did the accused admit the signature?",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-008",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "However, the defence did not press the objection.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-009",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "Gita Pradhan stated that the notice was never served.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-010",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The vehicle was seized at Puri by Anil Kumar.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-011",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The petition was filed on Monday. The respondent appeared through counsel.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-CTRL-012",
+      "category": "clean-control",
+      "tier": "synthetic",
+      "text": "The inspection was completed. The report was submitted the same day.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Already-canonical text; minimal pair of a warranted entry. Correct behavior is edits: []."
+    },
+    {
+      "id": "DEV-HAZ-PSPAN-001",
+      "category": "hazard-protected-resolved-span",
+      "tier": "synthetic",
+      "text": "he stood trial for an offence under section four two zero IPC",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Spoken digits trigger the real statutory normalizer (applied provision, resolved protected span); a tempting edit would alter the number.",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-PSPAN-002",
+      "category": "hazard-protected-resolved-span",
+      "tier": "synthetic",
+      "text": "the complaint alleged an offence under section three seven six BNS",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Applied provision with a resolved protected span; same hazard shape as DEV-HAZ-PSPAN-001, different statute.",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-INTRA-001",
+      "category": "hazard-intra-token-punctuation",
+      "tier": "synthetic",
+      "text": "the complainant's version was not accepted by the court.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "A tempting edit would remove the possessive apostrophe (intra-token punctuation).",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-INTRA-002",
+      "category": "hazard-intra-token-punctuation",
+      "tier": "synthetic",
+      "text": "The s/o column was left blank in the form.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "A tempting edit would remove the slash in the abbreviation (intra-token punctuation).",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-MERGE-001",
+      "category": "hazard-word-merge",
+      "tier": "synthetic",
+      "text": "Narayan Tripathy testified for the defence.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Already-correct two-word name; a tempting edit would merge it.",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-MERGE-002",
+      "category": "hazard-word-merge",
+      "tier": "synthetic",
+      "text": "Pramila Nayak lodged the report.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Already-correct two-word name; a tempting edit would merge it.",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-ACR-001",
+      "category": "hazard-acronym-lowering",
+      "tier": "synthetic",
+      "text": "The offence is punishable under BNS.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Correctly-cased acronym; a tempting edit would lowercase it.",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-ACR-002",
+      "category": "hazard-acronym-lowering",
+      "tier": "synthetic",
+      "text": "The matter was transferred under CPC.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Correctly-cased acronym; a tempting edit would lowercase it.",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-DIGIT-001",
+      "category": "hazard-digit-case",
+      "tier": "synthetic",
+      "text": "Exhibit D14 was marked in evidence.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Digit-bearing identifier; a tempting edit would change its case (also covered by a numeric protected span).",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-DIGIT-002",
+      "category": "hazard-digit-case",
+      "tier": "synthetic",
+      "text": "Annexure A3 was filed with the petition.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Digit-bearing identifier; a tempting edit would change its case (also covered by a numeric protected span).",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-NUM-001",
+      "category": "hazard-independently-protected",
+      "tier": "synthetic",
+      "text": "The fine of Rs. 2,500 was deposited.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Amount with no statutory pattern; a tempting edit would alter its separators (the V1.12 hazard shape).",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-HAZ-NUM-002",
+      "category": "hazard-independently-protected",
+      "tier": "synthetic",
+      "text": "The charge sheet was filed on 03.09.2025.",
+      "expectation": "abstentionExpected",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": false,
+      "hazardNote": "Date with no statutory pattern; a tempting edit would alter its separators.",
+      "knownRiskReference": null,
+      "note": "Model-eliciting hazard bait: no edit is warranted; any change is an outcome the ground truth does not license."
+    },
+    {
+      "id": "DEV-AMBIG-001",
+      "category": "ambiguous",
+      "tier": "synthetic",
+      "text": "the arguments were concluded the judgment was reserved",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": true,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Missing sentence boundary with several equally valid repairs (period + capital, semicolon, comma)."
+    },
+    {
+      "id": "DEV-AMBIG-002",
+      "category": "ambiguous",
+      "tier": "synthetic",
+      "text": "bns and cpc were both mentioned in the order",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": true,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Bare lowercase statute abbreviations with no context; whether to capitalize is contestable."
+    },
+    {
+      "id": "DEV-AMBIG-003",
+      "category": "ambiguous",
+      "tier": "synthetic",
+      "text": "he was was released on bail yesterday",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": true,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Duplicated word (disfluency) requiring a lexical deletion, outside the V1 surface-edit scope."
+    },
+    {
+      "id": "DEV-AMBIG-004",
+      "category": "ambiguous",
+      "tier": "synthetic",
+      "text": "the witness said no he was not there",
+      "expectation": "correctionWarranted",
+      "expectedCorrections": [],
+      "recallRequiresAll": false,
+      "manualAdjudicationOnly": true,
+      "hazardNote": null,
+      "knownRiskReference": null,
+      "note": "Comma/period placement is contestable."
+    }
+  ]
+}
