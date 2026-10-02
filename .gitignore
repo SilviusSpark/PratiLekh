@@ -229,6 +229,8 @@ scripts/*
 !scripts/intelligence_v1_supplementary_outcome.sh
 !scripts/test_intelligence_v1_comparison_protocol.sh
 !scripts/intelligence_v1_comparison_freeze.sh
+!scripts/test_intelligence_v1_comparison_s1.sh
+!scripts/intelligence_v1_comparison_s1_verify.sh
 !scripts/intelligence_v1_capability_preflight.sh
 !scripts/intelligence_v1_capability_run.sh
 !scripts/test_v1_3a_experimental_resolver.sh
