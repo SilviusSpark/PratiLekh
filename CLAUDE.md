@@ -72,12 +72,19 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.19 — protocol adherence experiment (pre-frozen 3-arm, 45-call, hashed-before-first-call experiment; no production/harness/contract change): Arm A (frozen production instructions, unmodified) 15/15 tool engagement, **0/15** protocol compliance, all 15 failing `missingField("schemaVersion")`; Arm B (A + one explicit `schemaVersion`-requirement sentence) 15/15 engagement, **15/15** compliance; Arm C (B + one minimal structural example) also 15/15/15/15 — **no measurable compliance benefit from the example over the explicit instruction alone**; confound recorded: all 30 B/C responses proposed zero edits while all 15 A responses proposed a (mostly genuine) edit, so **V1.19 does not establish Arm B remains compliant on a non-empty edit proposal**; no correction-quality or safety conclusion drawn; **Arm B recorded as the smallest experimentally-supported candidate instruction change, explicitly not production-approved**; no mid-run tuning or matrix changes | ✅ committed | `7e2d7b4` (full: `7e2d7b49ebba75dd7a61cd58c56c50b4dbf23dae`) |
 | Intelligence V1.20 — non-empty protocol compliance validation (pre-frozen, hashed-before-first-call experiment, Arm B instruction verified by `precondition` to match V1.19's hash exactly before any call; no production/harness/contract change): 5 fixtures (3 punctuation, 2 capitalization) × 3 reps = 15 trials, zero protected spans; 15/15 tool engagement, **15/15** strict V1 protocol compliance (0 parse failures of any kind); 6/15 non-empty proposals, 9/15 valid empty responses; **of the 6 non-empty proposals: 6/6 structurally complete, 6/6 addressing-resolved, 6/6 predetermined-transformation represented, 6/6 autonomously accepted** — Arm B's protocol compliance survives constructing a real non-empty proposal without degradation; punctuation fixtures 0/9 non-empty vs. capitalization fixtures 6/6 non-empty, recorded as a **model usefulness/recall finding, not a protocol-compliance failure**, cause unknown and not investigated; **closes the specific non-empty protocol-adherence gap V1.19 left open — Arm B now has sufficient protocol evidence for a separate production-contract promotion decision, not made here**; no correction-quality or safety generalization claimed | ✅ committed | `32678c4` (full: `32678c4039c39cf3652996f7c1c44a25a391517d`) |
 | Intelligence V1.21 — explicit schema-version instruction promotion (`Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift`; first production Intelligence code change since V1.16): added exactly the V1.19/V1.20-validated Arm B sentence to `instructions`, nothing else changed (no Arm C, no schema/parser/policy/harness change); **hash-equivalence proof**: the promoted `instructions` string's SHA-256 matches V1.19's frozen Arm B hash (`249ebb6a…4ad88`) exactly, verified on first attempt, no historical evidence adjusted; added two drift-detection regression tests to `ModelFacingGenerationContractTests.swift` (a readable substring check plus the byte-for-byte hash check, warning explicitly against "fixing" a future failure by updating the hash); punctuation/empty-edit recall (V1.20's 0/9 finding) deliberately not addressed; `granite4:3b` not rerun (hash proof was the acceptance criterion and it matched); **not wired into dictation** | ✅ committed | `d5a37b7` (full: `d5a37b73f233b4e4e865934faee960a39fd5ad64`) |
-| Intelligence V1.22 — model capability evaluation design & freeze (`Evaluation/References/intelligence-v1-capability/`: `README.md` + `corpus.json`, plus `Tests/IntelligenceV1CapabilityCorpusTests.swift`/`scripts/test_intelligence_v1_capability_corpus.sh`; design/freeze only, **no model run, zero `Sources/` change**): a 44-entry, synthetic, pinned-SHA-256 ground-truth corpus covering the three V1 surface categories (14 correction-warranted + 6 matched clean-control minimal pairs), 4 multi-edit entries combining already-covered categories (two independent, non-overlapping warranted corrections per text, exercising partial recall/per-edit precision/deterministic multi-edit addressing), and 17 hazard entries exercising the V1.16 gate and V1.11/V1.13 protected spans individually; frozen adjudication rules (exact-match correctness, the two distinct uses of `recallRequiresAll`, partial recall as its own reportable outcome, multiple/equivalent/unnecessary/missed/ambiguous handling, `manualAdjudicationOnly` exclusion) and 9 separately-reported metrics (never blended, entry-level **and** per-correction recall) reusing the existing V1.17 harness's disposition taxonomy plus a new ground-truth cross-reference step; hard safety criterion restated (0 unsafe autonomous acceptances), no arbitrary recall threshold invented; the corpus-freeze test replays every entry through the real, unmodified `LegalDictationProcessor`/`ProtectedSpanDerivation`/`NumericStructuralProtection` (catching one authoring bug pre-exposure: a digit-bearing hazard fixture that accidentally also carried a numeric protected span) and, for the 4 multi-edit entries specifically, verifies their expected corrections are pairwise non-overlapping so a real overlap check could never spuriously reject two independent correct proposals; explicitly reuses the V1.17 harness/provider/privacy discipline rather than a parallel framework; architectural decisions recorded: no dev/held-out split (single frozen benchmark, not a tuning corpus), 44 entries is sufficient for this first diagnostic (not expanded for scale), and the corpus is immutable once frozen — any future discovered defect must be disclosed/qualified in that run's report, never silently repaired; **not exposed to any model in this milestone** | ✅ documented, **uncommitted at time of writing** | pending commit |
+| Intelligence V1.22 — model capability evaluation design & freeze (`Evaluation/References/intelligence-v1-capability/`: `README.md` + `corpus.json`, plus `Tests/IntelligenceV1CapabilityCorpusTests.swift`/`scripts/test_intelligence_v1_capability_corpus.sh`; design/freeze only, **no model run, zero `Sources/` change**): a 44-entry, synthetic, pinned-SHA-256 ground-truth corpus covering the three V1 surface categories (14 correction-warranted + 6 matched clean-control minimal pairs), 4 multi-edit entries combining already-covered categories (two independent, non-overlapping warranted corrections per text, exercising partial recall/per-edit precision/deterministic multi-edit addressing), and 17 hazard entries exercising the V1.16 gate and V1.11/V1.13 protected spans individually; frozen adjudication rules (exact-match correctness, the two distinct uses of `recallRequiresAll`, partial recall as its own reportable outcome, multiple/equivalent/unnecessary/missed/ambiguous handling, `manualAdjudicationOnly` exclusion) and 9 separately-reported metrics (never blended, entry-level **and** per-correction recall) reusing the existing V1.17 harness's disposition taxonomy plus a new ground-truth cross-reference step; hard safety criterion restated (0 unsafe autonomous acceptances), no arbitrary recall threshold invented; the corpus-freeze test replays every entry through the real, unmodified `LegalDictationProcessor`/`ProtectedSpanDerivation`/`NumericStructuralProtection` (catching one authoring bug pre-exposure: a digit-bearing hazard fixture that accidentally also carried a numeric protected span) and, for the 4 multi-edit entries specifically, verifies their expected corrections are pairwise non-overlapping so a real overlap check could never spuriously reject two independent correct proposals; explicitly reuses the V1.17 harness/provider/privacy discipline rather than a parallel framework; architectural decisions recorded: no dev/held-out split (single frozen benchmark, not a tuning corpus), 44 entries is sufficient for this first diagnostic (not expanded for scale), and the corpus is immutable once frozen — any future discovered defect must be disclosed/qualified in that run's report, never silently repaired; **not exposed to any model in this milestone** | ✅ committed | `b6e967c4fa1d4771c8205cfe919c9dbba7b4605f` |
+| Intelligence V1.23A — frozen capability-evaluation infrastructure (`Evaluation/Intelligence/CapabilityEvaluation/`, hash-pinned corpus loader, README §4/§5 adjudicator and metrics, driver, content-addressed run manifest, guarded live runner, `V1_23A_PROPOSED_RUN_MANIFEST.json`); found and closed `LLMClient`'s hidden 3-attempt retry default (`maxRetries` forced to 1); evaluation-side only | ✅ committed | `60b608e0b8681728d32c98d9c626bad36b3d9d9f` |
+| Intelligence V1.23 — frozen capability evaluation of `granite4:3b` under the unchanged V1.21 contract on the 44-entry benchmark: one attempt per entry, no retries; headline in `V1_23_FROZEN_CAPABILITY_EVALUATION.md` (4/18 complete warranted outcomes; frozen exact-pair hard criterion = 4, see V1.24/V1.25 for what that does and does not mean); raw outputs in `Evaluation/Intelligence/V1_23_RESULTS/` | ✅ committed | `07aab42291fa0c14242dc9900505631df2746364`, log `620e5909dcdc6ff1b8b4c501cffcff3ebb054dca` |
+| Intelligence V1.24 — evaluation semantics & V1.23 findings review (edit-form adherence vs outcome correctness vs runtime safety; proposed U0–U3; investigation only) | ✅ committed | `a6f7eec83c0fe1af60bb7ea64fe48feede1f99c6` |
+| Intelligence V1.25 — supplementary post-hoc outcome evaluation of the committed V1.23 trials (`Evaluation/Intelligence/CapabilitySupplementary/`, `V1_25_RESULTS/`); a supplement, never a re-scoring of V1.23 | ✅ committed | `847914b85059e159fcd06723026f459493a4c558` |
+| Intelligence V1.26 — model capability investigation (diagnosis of the 4/18 result, candidate shortlist, recommendation: controlled model comparison before Granite prompt tuning); investigation only | ✅ committed | `d163bd0f29d52a4c7e473693f53a79b87e3f6044` |
+| Intelligence V1.27 — **frozen** model-comparison protocol (`Evaluation/Intelligence/V1_27_MODEL_COMPARISON_PROTOCOL.md`; artifacts + `FREEZE_MANIFEST.json` in `Evaluation/References/intelligence-v1-comparison-dev/`): 66-entry disjoint development corpus, stored hazard fixtures, candidate registry, one pre-registered contract variant, metrics/gates, stages S0–S6; canonical freeze-manifest hash `fa5c3110b635438e29256eeb73a16075fc6219858165b781ab2a9771a7325940` (NOT the file's raw SHA-256, which is `e5426006dc85b068c653ee86fb4633fd0255d119a45084abd7691a1ea059f8bd`; see "V1.27 freeze hashes" below); no inference | ✅ committed and frozen | `32af8d3f99fa7196dbb60106536c822941ac8a45` |
+| Intelligence V1.28 — stage S1: candidate acquisition & identity verification (baseline + four candidates pulled/verified against the V1.27 registry; S1 artifact `Evaluation/References/intelligence-v1-comparison-s1/acquisition_identity.json`; verifier `scripts/intelligence_v1_comparison_s1_verify.sh`); zero inference, zero corpus exposure | ✅ committed | `1c1f8ddefb763329dd0c57619c93d43d5d3a1036` |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
-Local `main` was 44 commits ahead of `origin/main`, 0 behind, nothing pushed, at V1.22
-(`b6e967c4fa1d4771c8205cfe919c9dbba7b4605f`).
-Verify current ahead/behind state with Git rather than relying on this document.
+`origin/main` was last pushed at V1.27 (`32af8d3f99fa7196dbb60106536c822941ac8a45`); V1.28 and later
+handoff commits may be local until pushed. Verify the current HEAD and ahead/behind state with Git
+rather than relying on this document.
 
 **Phase 3 is not complete as a whole.** 3C+3C.1 is the committed first checkpoint (two rule
 families only). **Phase 3D Slices A+B (committed, `0abf627`)** live-activate that normalization at one
@@ -139,6 +146,11 @@ xcodebuild test -project PratiLekh.xcodeproj -scheme PratiLekh -destination 'pla
   transform because doing so could alter legal meaning), mixed applied+declined outcomes,
   candidate-boundary cases (e.g. cross-statute references that must stay independent), and a
   standing bucket for regressions found later.
+- Intelligence evaluation scripts (V1.23A–V1.28), all offline and model-free unless named `*_run.sh`:
+  `scripts/test_intelligence_v1_capability_evaluation.sh`, `scripts/test_intelligence_v1_supplementary_outcome.sh`,
+  `scripts/test_intelligence_v1_comparison_protocol.sh` (+ `scripts/intelligence_v1_comparison_freeze.sh`),
+  `scripts/test_intelligence_v1_comparison_s1.sh` (+ `scripts/intelligence_v1_comparison_s1_verify.sh [--local]`).
+  `scripts/intelligence_v1_capability_run.sh` is the guarded live runner used once in V1.23; do not run it again.
 - Existing standalone regression scripts (`scripts/test_*.sh`, `Tests/run_paste_key_cache_tests.sh`)
   must continue to pass after any change — run them alongside the legal-language suite.
 - `DEVELOPMENT_TEAM` in the pbxproj is currently the original FluidVoice vendor's Team ID
@@ -599,15 +611,20 @@ follow-on milestones: a read-only Intelligence-layer safety/output-contract inve
 read-only investigation into whether FluidVoice's own local "Fluid Intelligence" runtime is a
 viable PratiLekh dependency, and a Version 1 text-only proposal/validator design plus a further
 read-only research investigation into the long-term (text-only vs. audio-aware vs. unified)
-architecture question. **No Intelligence code has been implemented from any of this** — it is
+architecture question. **No Intelligence code had been implemented from any of this at that point** (since then V1.0–V1.21 were built — see the Current Handoff) — it was
 design and research only.
 
-## PratiLekh Intelligence architecture (investigated and designed — not implemented)
+## PratiLekh Intelligence architecture (design record — since implemented as V1.0–V1.21; see handoff)
+
+**Historical design record.** Its architecture decisions and governing principles remain in force,
+but its statements that nothing is built are superseded: the safety-contract foundation, transport,
+addressing, composition, protected-span derivation, autonomous permission gate and V1 model-facing
+contract were implemented in V1.0–V1.21 and evaluated in V1.23–V1.28 (see "Intelligence V1.3A–V1.22",
+"Intelligence V1.23–V1.28" and the Current Handoff). Do not re-implement from this section; its "Next
+milestone" paragraph is completed history, not current authorization.
 
 Three read-only/design-only milestones followed directly from the closed recognition-tuning
-branch above, producing architecture decisions and a first proposal-contract design, but **zero
-implementation**. Nothing in this section has been built; do not implement from it without an
-explicit, separate implementation milestone (see "Next milestone" at the end of this section).
+branch above, producing the architecture decisions and first proposal-contract design below.
 
 **Why Fluid Intelligence (FluidVoice's own local AI) is not a PratiLekh dependency — the lesson,
 not the dependency.** A read-only investigation (no PratiLekh or FluidVoice files edited) confirmed
@@ -781,7 +798,7 @@ is a failure. Deletion of substantive speech and unsafe protected-fact mutation 
 raw violations, not hidden inside aggregate scores** — the same discipline Phase 3F's WER-vs-safety
 finding already established for deterministic normalization now applies to Intelligence too.
 
-**Next milestone (the only currently-authorized Intelligence work).** Implement the
+**Next milestone (historical — completed as V1.0–V1.2; not current authorization).** Implement the
 model-independent Text-Only Intelligence Safety Contract V1 foundation: proposal data types,
 protected-span representation, the deterministic validator, and comprehensive deterministic unit
 tests — with **zero LLM/model/network integration**. The purpose is to prove the safety boundary
@@ -1198,6 +1215,46 @@ discriminator fields together, under permissive prompting, correlated with the m
 whole-passage `sourceText` over minimal-diff spans — safe (contained by Safety Authority) but a real
 efficiency/usability concern, not yet mitigated.
 
+## Intelligence V1.23–V1.28 (capability evaluation, model-comparison pre-registration, candidate acquisition)
+
+Pointer/summary only; the milestone documents and artifacts are authoritative — read them, do not
+reconstruct from this file.
+- **V1.23A/V1.23** — evaluation infrastructure and the single frozen run of `granite4:3b` on the 44-entry
+  benchmark (`Evaluation/Intelligence/V1_23_FROZEN_CAPABILITY_EVALUATION.md`, `V1_23_RESULTS/`, manifest
+  `V1_23A_PROPOSED_RUN_MANIFEST.json`). Frozen results are immutable and must never be re-scored or repaired.
+- **V1.24** (`V1_24_CAPABILITY_EVALUATION_SEMANTICS_AND_V1_23_FINDINGS_REVIEW.md`) and **V1.25**
+  (`V1_25_SUPPLEMENTARY_POST_HOC_OUTCOME_EVALUATION.md`, `V1_25_RESULTS/`): edit-form adherence, outcome
+  correctness and deterministic runtime safety are separate concepts; V1.25 is a labelled post-hoc supplement
+  beside, never replacing, V1.23.
+- **V1.26** (`V1_26_MODEL_CAPABILITY_INVESTIGATION.md`): diagnosis and recommendation (compare models under a
+  controlled protocol before further Granite-specific prompt tuning).
+- **V1.27** (`V1_27_MODEL_COMPARISON_PROTOCOL.md`; `Evaluation/References/intelligence-v1-comparison-dev/`):
+  the **frozen** protocol — 66 immutable synthetic development-corpus entries, `FREEZE_MANIFEST.json`
+  canonical hash `fa5c3110b635438e29256eeb73a16075fc6219858165b781ab2a9771a7325940` (raw file SHA-256 `e5426006dc85b068c653ee86fb4633fd0255d119a45084abd7691a1ea059f8bd`; see "V1.27 freeze hashes" below), stages S0–S6, freeze boundaries,
+  one pre-registered contract variant, gates G1–G3, one screening pass plus a 12-entry determinism audit.
+  Once committed, the development corpus and every artifact in the manifest are immutable for the comparison
+  experiment: a later defect is disclosed and qualified, never silently repaired; a correction needs a new,
+  separately pre-registered revision. Product Owner decisions: PO-1, PO-4, PO-5 resolved; **PO-2 (minimum
+  absolute production usefulness) and PO-3 (production latency/resource thresholds) remain unresolved**.
+- **V1.27 freeze hashes (V1.28A reconciliation — two distinct values, both correct).**
+  `e5426006dc85b068c653ee86fb4633fd0255d119a45084abd7691a1ea059f8bd` is the **raw SHA-256 of the committed
+  `FREEZE_MANIFEST.json` file bytes** (identical at `32af8d3` and HEAD).
+  `fa5c3110b635438e29256eeb73a16075fc6219858165b781ab2a9771a7325940` is the **canonical freeze-manifest hash**
+  printed by `scripts/intelligence_v1_comparison_freeze.sh` and recorded in the `32af8d3` commit message: SHA-256 of
+  the manifest dictionary serialized by Foundation `JSONSerialization` with `[.sortedKeys, .withoutEscapingSlashes]`
+  (compact; `ComparisonFreeze.canonical`). Reproduce by re-running that script without `--write` (read-only, no
+  model); it is also derivable from the committed file by compact sorted-key serialization, with Foundation writing
+  `nearDuplicateThreshold` as `0.80000000000000004` where Python writes `0.8`. The two are not interchangeable; the
+  `32af8d3` message and earlier prose said only "freeze manifest SHA-256". Verify against the canonical hash or the
+  per-artifact hashes inside the manifest, never the raw file hash alone.
+- **V1.28 (stage S1)** (`Evaluation/References/intelligence-v1-comparison-s1/acquisition_identity.json`,
+  `Evaluation/Intelligence/ComparisonAcquisition/`, `scripts/intelligence_v1_comparison_s1_verify.sh [--local]`):
+  `granite4:3b` plus `granite4.1:3b`, `qwen3:4b-instruct-2507-q4_K_M`, `phi4-mini:latest` and `ministral-3:3b`
+  were acquired and verified against the V1.27 registry (manifest, every layer, re-hashed blobs); zero
+  inference, no model loaded, zero corpus exposure. **Parameter-layer, template and default-option findings
+  live in the S1 artifact — do not reconstruct them from prose.** The models are present in
+  `~/.ollama/models` (about 13.8 GB); Ollama is not left running.
+
 ## Evaluation framework (Phase 3E.1, `Evaluation/`)
 
 Standalone tooling to measure where dictation fails, stage by stage. **Governing principle: the
@@ -1298,38 +1355,36 @@ from the real-audio run (private results, not committed):
 ## Current Handoff (read this first in a new session)
 
 **Read this paragraph first; it supersedes anything below that conflicts with it.**
-`main` is at **V1.22**, commit `b6e967c4fa1d4771c8205cfe919c9dbba7b4605f`
-("Freeze Intelligence V1 capability benchmark"), 44 ahead of `origin/main`, 0 behind,
-nothing pushed. The protocol-development sequence (V1.6 production addressing through
-V1.21's schema-version instruction promotion) is **complete** — see "Intelligence
-V1.3A–V1.22" above for the full narrative; this handoff does not repeat it. The
-**Intelligence V1 capability benchmark is frozen**: 44 entries,
-`Evaluation/References/intelligence-v1-capability/corpus.json`, SHA-256
-`0edd60bb456aa34bc62c87cdf3401233f99d7c7e913d30eada3efc511ed3d48b`, pinned in
-`Tests/IntelligenceV1CapabilityCorpusTests.swift`. **The corpus has never been exposed
-to any model.** The **V1.21 production contract
-(`Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift`) remains
-authoritative and unchanged** since its own commit (`d5a37b7`), independently
-hash-pinned in `ModelFacingGenerationContractTests.swift`.
+`main` includes **V1.28** (commit `1c1f8ddefb763329dd0c57619c93d43d5d3a1036`, "Record V1.28 candidate
+acquisition identities"); this handoff refresh is the commit after it. Trust `git log`/`git status` for the
+exact HEAD and ahead/behind (`origin/main` was last pushed at V1.27, `32af8d3f…`). The V1.21 production
+contract (`Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift`) is authoritative and
+unchanged since `d5a37b7`; nothing is wired into dictation.
 
-**Next declared work: Intelligence V1.23 — Frozen Intelligence V1 Capability
-Evaluation. Not started; do not begin it without being explicitly asked.** When it
-starts, its discipline is: **evaluation only, not development.** Run `granite4:3b`
-under the committed V1.21 contract against the committed 44-entry benchmark,
-**without modification**. Before the first inference, verify/freeze: the model
-identity, the runtime/configuration, the corpus SHA-256 above, the V1.21 contract's
-own pinned hash, the scoring procedure, and the retry policy — all as already
-specified in `Evaluation/References/intelligence-v1-capability/README.md` (the
-scoring/adjudication source of truth; this paragraph does not duplicate it). **No
-selective retries, prompt/policy/schema changes, benchmark repairs, or tuning after
-results are observed.** Report separately (never blended): correction precision,
-entry-level and per-correction recall, partial multi-edit recall, abstention/missed
-corrections, protocol/provider failures, and addressing/Safety-Authority
-dispositions. **Hard safety observation: unsafe autonomously-accepted edits = 0.**
-Any benchmark defect discovered during the run must be **disclosed and qualified in
-that run's report, never silently repaired** (per the corpus's own immutability
-policy, README §7). Any response to a discovered model deficiency belongs to a
-later, separately-authorized milestone — V1.23 itself only evaluates and reports.
+**State (milestone documents/artifacts are authoritative; see "Intelligence V1.23–V1.28" above):**
+- **V1.23–V1.26 are complete** (frozen capability evaluation, evaluation-semantics review, supplementary
+  post-hoc outcome evaluation, model capability investigation).
+- **V1.27 is the frozen model-comparison protocol** at `32af8d3f99fa7196dbb60106536c822941ac8a45`:
+  `Evaluation/Intelligence/V1_27_MODEL_COMPARISON_PROTOCOL.md` + `Evaluation/References/intelligence-v1-comparison-dev/`.
+  Its development corpus is **66 immutable synthetic entries**; canonical
+  freeze-manifest hash `fa5c3110b635438e29256eeb73a16075fc6219858165b781ab2a9771a7325940` (the raw file SHA-256 is `e5426006dc85b068c653ee86fb4633fd0255d119a45084abd7691a1ea059f8bd`; see "V1.27 freeze hashes" below).
+- **V1.28 (S1) is complete:** the baseline `granite4:3b` and four candidates (`granite4.1:3b`,
+  `qwen3:4b-instruct-2507-q4_K_M`, `phi4-mini:latest`, `ministral-3:3b`) were acquired and verified against the
+  V1.27 registry with zero inference and zero corpus exposure. Authoritative artifact:
+  `Evaluation/References/intelligence-v1-comparison-s1/acquisition_identity.json`; verify with
+  `scripts/intelligence_v1_comparison_s1_verify.sh [--local]`. Candidate parameter/template/default findings
+  live in that artifact — do not reconstruct them from this file.
+- **S2 (execution tooling) and S3 (screening) have not begun.** **No candidate has seen the 66-entry
+  development corpus.** The **frozen 44-entry V1.23 benchmark remains unavailable** (not for screening,
+  contract development or selection) until the separately authorized finalist-confirmation stage, where one
+  fully frozen finalist may use it exactly once.
+- **Unresolved Product Owner decisions:** PO-2 minimum absolute production usefulness; PO-3 production
+  latency/resource thresholds.
+
+**A new session must first read** `V1_27_MODEL_COMPARISON_PROTOCOL.md` (and `protocol.json`) and the V1.28 S1
+artifact **before proposing the next stage**, and must not design or implement S2 unless explicitly asked.
+Frozen artifacts (V1.27 corpus/protocol/registry/manifest, V1.23 results, the 44-entry benchmark) are immutable;
+disclose and qualify any defect, never silently repair it.
 
 1. **Completed:** Phases 0–2, 3C+3C.1, 3D (live activation), 3E.1 (evaluation framework), 3E.2A and
    3E.2B (diagnostic corpora + real-audio runs, findings above), 3F.A (fail-closed statutory safety,
@@ -1343,20 +1398,10 @@ later, separately-authorized milestone — V1.23 itself only evaluates and repor
    investigation/design track (read-only Intelligence-layer investigation, read-only
    FluidVoice/Fluid-Intelligence runtime-access investigation, Text-Only Intelligence Baseline /
    Safety Contract V1 design, and audio-aware architecture research) — see "PratiLekh Intelligence
-   architecture" above. **No Intelligence code has been implemented.**
-2. **Exact current `HEAD` at the time of writing this entry:** `b6e967c4fa1d4771c8205cfe919c9dbba7b4605f`
-   ("Freeze Intelligence V1 capability benchmark", V1.22), branch `main`, 44 ahead of
-   `origin/main`/0 behind, nothing pushed — see the lead paragraph above for the full current
-   state. Per this file's own opening instruction, trust `git log`/`git status` over this
-   paragraph if time has passed. This superseded the (now historical) `7ff7a13` HEAD this item
-   previously recorded, back when only Intelligence V1.0–V1.2 existed; see "Intelligence
-   V1.3A–V1.22" above for everything committed since (V1.6 production addressing through V1.22's
-   frozen capability benchmark).
-3. **Nothing is staged or pending.** Everything through V1.22 (the frozen 44-entry capability
-   benchmark) is fully committed at the `HEAD` above; no `Sources/` or `Evaluation/` changes are
-   outstanding. The item-14 "test-infrastructure verification milestone" this item previously
-   cross-referenced as "pending" was committed long ago (`b5969ba`) and item 14 below already
-   says so. Verify with `git status`/`git log` before trusting this if time has passed.
+   architecture" above. *(Historical as of that entry: Intelligence V1.0–V1.21 has since been implemented and evaluated — see the lead paragraph above.)*
+2. **Current `HEAD`:** see the lead paragraph above (V1.28 `1c1f8dd…` plus this handoff refresh); always confirm with
+   `git log`/`git status`, which override this prose.
+3. **Working tree:** verify with `git status` before trusting any statement here; V1.28 was committed with a clean tree.
 4. **What 3F.A changed:** see "Phase 3F" above — `hundred`-continuation fail-closed decline;
    fragmented-statute/suffix-ambiguity fail-closed decline. No grammar expansion. Confirmed on real
    audio (N10, N04/N12), not just unit tests.
@@ -1524,22 +1569,17 @@ later, separately-authorized milestone — V1.23 itself only evaluates and repor
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
       — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.22" above for
       everything since, including the now-frozen addressing contract and its own open risks.
-13. **Must NOT be started yet (current, as of V1.22 — this replaces this item's older,
-    now-stale V1.5/V1.6-era text):** **Intelligence V1.23 — Frozen Intelligence V1 Capability
-    Evaluation is the next declared work and has NOT been started; do not begin it without
-    being explicitly asked** (see the lead paragraph at the top of this section for its exact
-    discipline). Beyond that: wiring any model/provider into production dictation, live
-    production inference, audio-aware Intelligence, fine-tuning of any kind, and Intelligence V2
-    all remain unauthorized. Insertion (as opposed to replacement/deletion) in the addressing
-    resolver remains unbuilt. The recognition-tuning branch remains closed — do not resume it: no
-    threshold tuning, alias additions, another vocabulary-boosting experiment, modifying the
-    three-character compound-length rule, modifying FluidAudio, exposing rejected-candidate score
-    structures, a production vocabulary-boosting default, or a Phase 3G.D recognition experiment.
-    Also not started: date normalization, punctuation/sentence-boundary heuristics,
-    custom-dictionary reconciliation (Slice D), evaluation-framework redesign, UI/history work,
-    and Phase 4 — none of these are authorized by any evidence gathered so far. **Specifically for
-    V1.23 once it begins:** no selective retries, no prompt/policy/schema tuning in response to
-    observed results, no silent benchmark repair (disclose and qualify any discovered defect
-    instead, per the corpus's immutability policy), and any response to a discovered model
-    deficiency is explicitly out of scope for V1.23 itself (a later, separately-authorized
-    milestone's job).
+13. **Must NOT be started yet (current, as of the V1.28 handoff):** **S2 (execution tooling for the
+    development corpus), screening (S3), the contract probe (S4), finalist freeze (S5) and the one-shot
+    confirmation on the frozen 44-entry benchmark (S6)** — each needs its own explicit authorization, and
+    S2 must not be designed in a session that has not first read the V1.27 protocol and the V1.28 S1 artifact.
+    Also not authorized: pulling or running any further model, exposing the development corpus or the frozen
+    benchmark to any model, editing any V1.27 frozen artifact, wiring any model/provider into production
+    dictation, live production inference, audio-aware Intelligence, fine-tuning of any kind and Intelligence V2.
+    Insertion (as opposed to replacement/deletion) in the addressing resolver remains unbuilt. The
+    recognition-tuning branch remains closed — do not resume it: no threshold tuning, alias additions,
+    another vocabulary-boosting experiment, modifying the three-character compound-length rule, modifying
+    FluidAudio, exposing rejected-candidate score structures, a production vocabulary-boosting default, or a
+    Phase 3G.D recognition experiment. Also not started: date normalization, punctuation/sentence-boundary
+    heuristics, custom-dictionary reconciliation (Slice D), evaluation-framework redesign, UI/history work and
+    Phase 4 — none of these are authorized by any evidence gathered so far.
