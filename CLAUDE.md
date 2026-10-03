@@ -80,6 +80,7 @@ codebase but are not building blocks for this roadmap — see Architecture map b
 | Intelligence V1.26 — model capability investigation (diagnosis of the 4/18 result, candidate shortlist, recommendation: controlled model comparison before Granite prompt tuning); investigation only | ✅ committed | `d163bd0f29d52a4c7e473693f53a79b87e3f6044` |
 | Intelligence V1.27 — **frozen** model-comparison protocol (`Evaluation/Intelligence/V1_27_MODEL_COMPARISON_PROTOCOL.md`; artifacts + `FREEZE_MANIFEST.json` in `Evaluation/References/intelligence-v1-comparison-dev/`): 66-entry disjoint development corpus, stored hazard fixtures, candidate registry, one pre-registered contract variant, metrics/gates, stages S0–S6; canonical freeze-manifest hash `fa5c3110b635438e29256eeb73a16075fc6219858165b781ab2a9771a7325940` (NOT the file's raw SHA-256, which is `e5426006dc85b068c653ee86fb4633fd0255d119a45084abd7691a1ea059f8bd`; see "V1.27 freeze hashes" below); no inference | ✅ committed and frozen | `32af8d3f99fa7196dbb60106536c822941ac8a45` |
 | Intelligence V1.28 — stage S1: candidate acquisition & identity verification (baseline + four candidates pulled/verified against the V1.27 registry; S1 artifact `Evaluation/References/intelligence-v1-comparison-s1/acquisition_identity.json`; verifier `scripts/intelligence_v1_comparison_s1_verify.sh`); zero inference, zero corpus exposure | ✅ committed | `1c1f8ddefb763329dd0c57619c93d43d5d3a1036` |
+| Intelligence V1.29 — stage S2: comparison execution tooling (`Evaluation/Intelligence/ComparisonExecution/`, `scripts/intelligence_v1_comparison_s3_run.sh` / `_s3_analyze.sh` / `test_intelligence_v1_comparison_s2.sh`, `Tests/IntelligenceV1ComparisonS2*.swift`, proposed plan `Evaluation/References/intelligence-v1-comparison-s2/S3_PROPOSED_RUN_PLAN.json`; record `Evaluation/Intelligence/V1_29_S2_COMPARISON_EXECUTION_TOOLING.md`): guarded S3 runner (built, **not run**), raw per-call capture, deterministic scoring/analysis from raw records, benchmark loader structurally absent from the execution build (negative-compile + source-set + content guards); no model run, no corpus exposure, no frozen artifact or `Sources/` change; one stale V1.27 test guard amended | ⏳ built and validated offline; uncommitted pending review | see `git log` |
 | Test-infrastructure verification milestone — root-caused and fixed the pre-existing `FluidDictationIntegrationTests` build failure (stale pre-rebrand `FluidVoice_Debug` module name in every test file's `@testable import`, plus one dead upstream `AudioRecoveryTestSupport` fallback); executed the 3 previously-blocked V1.2 raw-argument tests for real plus 1 new one, all passing | ✅ committed | `b5969ba` (duplicate row with the entry above; kept for history) |
 
 `origin/main` was last pushed at V1.27 (`32af8d3f99fa7196dbb60106536c822941ac8a45`); V1.28 and later
@@ -1374,7 +1375,8 @@ unchanged since `d5a37b7`; nothing is wired into dictation.
   `Evaluation/References/intelligence-v1-comparison-s1/acquisition_identity.json`; verify with
   `scripts/intelligence_v1_comparison_s1_verify.sh [--local]`. Candidate parameter/template/default findings
   live in that artifact — do not reconstruct them from this file.
-- **S2 (execution tooling) and S3 (screening) have not begun.** **No candidate has seen the 66-entry
+- **S2 (execution tooling, V1.29) is built and validated offline** (`V1_29_S2_COMPARISON_EXECUTION_TOOLING.md`); **S3
+  (screening) has not begun.** **No candidate has seen the 66-entry
   development corpus.** The **frozen 44-entry V1.23 benchmark remains unavailable** (not for screening,
   contract development or selection) until the separately authorized finalist-confirmation stage, where one
   fully frozen finalist may use it exactly once.
@@ -1382,7 +1384,7 @@ unchanged since `d5a37b7`; nothing is wired into dictation.
   latency/resource thresholds.
 
 **A new session must first read** `V1_27_MODEL_COMPARISON_PROTOCOL.md` (and `protocol.json`) and the V1.28 S1
-artifact **before proposing the next stage**, and must not design or implement S2 unless explicitly asked.
+artifact **before proposing the next stage**, and must not start S3 (or design S4) unless explicitly asked; read `V1_29_S2_COMPARISON_EXECUTION_TOOLING.md` first.
 Frozen artifacts (V1.27 corpus/protocol/registry/manifest, V1.23 results, the 44-entry benchmark) are immutable;
 disclose and qualify any defect, never silently repair it.
 
@@ -1569,10 +1571,9 @@ disclose and qualify any defect, never silently repair it.
       milestone's explicit scope. **Committed** (`b5969ba`, full: `b5969baa5c5382c16740af41522c046c924881f8`)
       — this item is otherwise historical/superseded; see "Intelligence V1.3A–V1.22" above for
       everything since, including the now-frozen addressing contract and its own open risks.
-13. **Must NOT be started yet (current, as of the V1.28 handoff):** **S2 (execution tooling for the
-    development corpus), screening (S3), the contract probe (S4), finalist freeze (S5) and the one-shot
+13. **Must NOT be started yet (current, as of the V1.29 S2 handoff):** **screening (S3), the contract probe (S4), finalist freeze (S5) and the one-shot
     confirmation on the frozen 44-entry benchmark (S6)** — each needs its own explicit authorization, and
-    S2 must not be designed in a session that has not first read the V1.27 protocol and the V1.28 S1 artifact.
+    S3 must not be run in a session that has not first read the V1.27 protocol, the V1.28 S1 artifact and the V1.29 S2 document.
     Also not authorized: pulling or running any further model, exposing the development corpus or the frozen
     benchmark to any model, editing any V1.27 frozen artifact, wiring any model/provider into production
     dictation, live production inference, audio-aware Intelligence, fine-tuning of any kind and Intelligence V2.

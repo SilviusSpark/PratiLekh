@@ -374,8 +374,15 @@ enum IntelligenceV1ComparisonProtocolTests {
             let touchesFrozen = code.contains("intelligence-v1-capability") || code.contains("CapabilityCorpus.relativePath")
             precondition(!touchesFrozen || ["ComparisonFreeze.swift", "ComparisonFreezeRunner.swift"].contains(name), "\(name) must not read the frozen benchmark")
         }
-        // No screening/execution tooling exists yet (stage S2 is a later milestone).
+        // No screening/execution tooling existed at V1.27 (stage S2 was a later milestone). Amended by V1.29 (S2): this
+        // guard is not part of the frozen artifact set (FREEZE_MANIFEST.json hashes the artifacts and the five
+        // ComparisonProtocol sources, not this test); the one execution entry point S2 adds is named explicitly, so any
+        // other comparison run/screen script is still refused. The S2 tests police that script's own isolation.
         let scripts = (try? FileManager.default.contentsOfDirectory(atPath: repoRoot.appendingPathComponent("scripts").path)) ?? []
-        precondition(!scripts.contains { $0.contains("comparison") && ($0.contains("run") || $0.contains("screen")) }, "candidate execution must not be implemented in V1.27")
+        let s2Entry = "intelligence_v1_comparison_s3_run.sh"
+        precondition(
+            !scripts.contains { $0.contains("comparison") && ($0.contains("run") || $0.contains("screen")) && $0 != s2Entry },
+            "no comparison execution tooling other than the V1.29 (S2) guarded runner may exist"
+        )
     }
 }
