@@ -235,6 +235,7 @@ scripts/*
 !scripts/intelligence_v1_comparison_s3_run.sh
 !scripts/intelligence_v1_comparison_s3_analyze.sh
 !scripts/intelligence_v1_s3_posthoc.sh
+!scripts/intelligence_v1_31_policy_probe.sh
 !scripts/verify_intelligence_v1_s3_evidence.sh
 !scripts/intelligence_v1_capability_preflight.sh
 !scripts/intelligence_v1_capability_run.sh
