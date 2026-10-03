@@ -234,6 +234,8 @@ scripts/*
 !scripts/test_intelligence_v1_comparison_s2.sh
 !scripts/intelligence_v1_comparison_s3_run.sh
 !scripts/intelligence_v1_comparison_s3_analyze.sh
+!scripts/intelligence_v1_s3_posthoc.sh
+!scripts/verify_intelligence_v1_s3_evidence.sh
 !scripts/intelligence_v1_capability_preflight.sh
 !scripts/intelligence_v1_capability_run.sh
 !scripts/test_v1_3a_experimental_resolver.sh

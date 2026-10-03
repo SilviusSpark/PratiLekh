@@ -1,0 +1,168 @@
+{
+  "auditEntryIDs" : [
+    "DEV-PUNC-001",
+    "DEV-PUNC-009",
+    "DEV-CAP-001",
+    "DEV-CAP-006",
+    "DEV-WS-001",
+    "DEV-MULTI-002",
+    "DEV-MULTI-005",
+    "DEV-MSENT-002",
+    "DEV-MSENT-005",
+    "DEV-CTRL-001",
+    "DEV-CTRL-011",
+    "DEV-HAZ-NUM-001"
+  ],
+  "candidates" : [
+    {
+      "id" : "CAND-BASE",
+      "modelLayerDigest" : "sha256:6c02683809a8dc4eb05c78d44bc63bcd707703b078998fa58829c858ab337bb0",
+      "ollamaManifestSHA256" : "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+      "ollamaTag" : "granite4:3b",
+      "onDiskBytes" : 2099520968
+    },
+    {
+      "id" : "CAND-001",
+      "modelLayerDigest" : "sha256:662b0626cd58f443baea23559b469df6576a81d349649c59413b36a9fb32eb29",
+      "ollamaManifestSHA256" : "6fd349357287c7ffc9e38189a93b48ea175d24fc566b38f09cfc564fb7f303eb",
+      "ollamaTag" : "granite4.1:3b",
+      "onDiskBytes" : 2099519864
+    },
+    {
+      "id" : "CAND-002",
+      "modelLayerDigest" : "sha256:85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+      "ollamaManifestSHA256" : "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+      "ollamaTag" : "qwen3:4b-instruct-2507-q4_K_M",
+      "onDiskBytes" : 2497293316,
+      "paramsLayerOptions" : {
+        "repeat_penalty" : "1",
+        "stop" : "[\"<|im_start|>\",\"<|im_end|>\"]",
+        "temperature" : "0.69999999999999996",
+        "top_k" : "20",
+        "top_p" : "0.80000000000000004"
+      }
+    },
+    {
+      "id" : "CAND-003",
+      "modelLayerDigest" : "sha256:3c168af1dea0a414299c7d9077e100ac763370e5a98b3c53801a958a47f0a5db",
+      "ollamaManifestSHA256" : "78fad5d182a7c33065e153a5f8ba210754207ba9d91973f57dffa7f487363753",
+      "ollamaTag" : "phi4-mini:latest",
+      "onDiskBytes" : 2491876363
+    },
+    {
+      "id" : "CAND-004",
+      "modelLayerDigest" : "sha256:910e4bf4e2338f181e99796d7452404e85c1b6bbbf8cd0bb094672cf9b6f2f22",
+      "ollamaManifestSHA256" : "f04aa1c738f64e13c625b82ae92504fc0260fa6723b509ed1ece0fa188179b1d",
+      "ollamaTag" : "ministral-3:3b",
+      "onDiskBytes" : 2953840294,
+      "paramsLayerOptions" : {
+        "temperature" : "0.14999999999999999"
+      }
+    }
+  ],
+  "chainSourceSHA256" : {
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityAdjudication.swift" : "bfcc35b50df92c7faf345b14ce2eb1b2f9cc8e7ebe4a79691ecef8ec49adf7b5",
+    "Evaluation/Intelligence/CapabilityEvaluation/CapabilityMetrics.swift" : "564507b499df3fad8538fe2f7046b0662292d52e29de4c4baec937a55113c671",
+    "Evaluation/Intelligence/CapabilitySupplementary/SupplementaryOutcome.swift" : "1490823a7071ddbfcb48b8084fb5fbf7b3cb6b2deeaabedc7c38d1405a180afb",
+    "Evaluation/Intelligence/ComparisonProtocol/ComparisonCorpus.swift" : "c3bf91054908a7180a67a03a155f2b4b3f43817be630fb9c2fa90afdd3072944",
+    "Evaluation/Intelligence/ComparisonProtocol/ComparisonFixtures.swift" : "6ef625091179b87b4b8b5ca5b92722c6800d31039442ccae080902c906926f32",
+    "Evaluation/Intelligence/Harness/IntelligenceHarnessLegalPack.swift" : "a97620e7409a388fafd5348297cdcd097f4fa13d1b60f6bb62e6c87888a9cce2",
+    "Evaluation/Intelligence/Harness/IntelligenceHarnessPipeline.swift" : "f8b254f9bf76d477ab65b6537e24d2bc347f171ff619ac7bf178ae5aa8239d04",
+    "Evaluation/Intelligence/Harness/IntelligenceHarnessTypes.swift" : "ba8929d2bb80ed97b1d1d86ee0c15c66642bdd65f7556821f842a53cf27105b9",
+    "Sources/Fluid/Intelligence/Addressing/IntelligenceAddressingBridge.swift" : "8561f1f59809ca21be93151d9720bb202cf02eee914e6585f60546675243ace4",
+    "Sources/Fluid/Intelligence/Addressing/IntelligenceAddressingResolver.swift" : "18d22d7ba542f9d6e9d252957812d20a966ad4179f6b72684e4d7ae392554f6e",
+    "Sources/Fluid/Intelligence/Addressing/ModelFacingEdit.swift" : "46054a02a3ba9e282521f5427ecd677794e3d9f6ecb12d43d639e52acfc9c849",
+    "Sources/Fluid/Intelligence/Composition/IntelligenceEditComposition.swift" : "e90e59c7105099bb90e84b62d595e6b3d98928671dc0375baef33e9232941d9e",
+    "Sources/Fluid/Intelligence/Generation/IntelligenceGenerationContract.swift" : "5d9480e686118d13221611d9f85718cb3a88672caf081dae0b306de719534465",
+    "Sources/Fluid/Intelligence/Generation/IntelligenceProviderResponse.swift" : "01f15f6028dd363d4fcfa5ecbf2a8efe1b987dcbe5d4cee8c0421a8aee8e65ec",
+    "Sources/Fluid/Intelligence/Generation/IntelligenceProviderResponseAdapter.swift" : "45bc336c7e1a3c2c2c34d207568fa87ddc62f9cf803a2bffdd35a26ad5dda115",
+    "Sources/Fluid/Intelligence/Generation/ModelFacingGenerationContract.swift" : "37fa207358d4c21e610979fdb7284610c6d0cc33133eab93799fcf5cb99f33b2",
+    "Sources/Fluid/Intelligence/Generation/ModelFacingResponseAdapter.swift" : "8049ffa2c9a63ffae0d8edbdcb3d351d2a989529eb6de33bfd7d52dae946b277",
+    "Sources/Fluid/Intelligence/Protection/NumericStructuralProtection.swift" : "e239c1d64a9db8f1997219624bf8fb0aaf272852baf15c079b4a22946a9481ee",
+    "Sources/Fluid/Intelligence/Provenance/ProtectedSpanDerivation.swift" : "61735c690f568a9215f204254d745ca0a3486273d81feed381766aeffa37e103",
+    "Sources/Fluid/Intelligence/Safety/AutonomousPermissionGate.swift" : "336ac6251356a67a7448501ba841edec0f38a53007528bf986531daa3a9b9731",
+    "Sources/Fluid/Intelligence/Safety/IntelligenceEditClassifier.swift" : "98f82cd0f50fbf76b0b1d52b087552e39b51e5fb8f0fa854c90224707d37689b",
+    "Sources/Fluid/Intelligence/Safety/IntelligenceProposal.swift" : "a3408cc36e3361600b6f84a656445da98bbb46328518813f5d02143bfc7bd61a",
+    "Sources/Fluid/Intelligence/Safety/IntelligenceSafetyAuthority.swift" : "83e1ad793b0edd69d30ee999e357b7f9e092ce2218548e1a21c77a409fc878c8",
+    "Sources/Fluid/Intelligence/Safety/ProposalDisposition.swift" : "bd4e008abb1bc5462c55eedfbb674e062ee70c5ce5350ea70a9e912a0002b3c2",
+    "Sources/Fluid/Intelligence/Safety/ProtectedSpan.swift" : "29b7a1d2efc269d23493e45ef644194e795035e7f721f0ecdb04d56319f572a6",
+    "Sources/Fluid/Intelligence/Transport/IntelligenceProposalTransportParser.swift" : "baa7dc59c025e9a709788afc70cf2dd6a91e756055501b36ea3b9cc3a60d47f0",
+    "Sources/Fluid/Intelligence/Transport/ModelFacingEditTransportParser.swift" : "9b00675f0258a56cf0c18fa19b19e9cfac8a4d2e391b76558caf1e771b92803b",
+    "Sources/Fluid/Intelligence/Transport/RawJSONObjectKeyScanner.swift" : "50073c4a8ff8ba9b8fcf0fbc91181a7889712acf60e207b256325c765f8d38d3",
+    "Sources/Fluid/LegalLanguage/LegalDictationProcessor.swift" : "fa2729e1887fe64c9549c01db45d2a7ba44428c48db42c27b5fb053fc83aeb05",
+    "Sources/Fluid/LegalLanguage/LegalLanguageCoordinator.swift" : "ee692cc87dfaa34530dbc8dfb7d2b33a7f5cf3e6ddc9fe26296c2a7f4db1e018",
+    "Sources/Fluid/LegalLanguage/Normalization/LegalNormalizer.swift" : "3705d12a7aa57ab00699b211aeee87540e071425b4e10ac731327c66d2360b3b",
+    "Sources/Fluid/LegalLanguage/Normalization/LookupTableNormalizer.swift" : "ca1590f1d21b7f709a68651e7e22501a72472238d2d182c49c6817ce687cf65e",
+    "Sources/Fluid/LegalLanguage/Normalization/NormalizationContext.swift" : "782cd9ca429fddb3016e47929187070e127b1d6092f7cc3e2ad049150e06bf7b",
+    "Sources/Fluid/LegalLanguage/Normalization/NormalizationOutcome.swift" : "7542910132113172776dc9cc8bdd0f1a365019ab22425cee440289bddf32af30",
+    "Sources/Fluid/LegalLanguage/Normalization/NormalizationReplay.swift" : "3aed7e11768ae9bb96377b797890add92536c1c88169e8dda346a867bbd359a8",
+    "Sources/Fluid/LegalLanguage/Normalization/SpokenNumberParser.swift" : "16559158d9e690467d12ff19238141e164f59375670df8ff81e582cef8af3f92",
+    "Sources/Fluid/LegalLanguage/Normalization/StatuteRecognizer.swift" : "0d6fc523afa03553f7c2e605a983f6074fbe90da6ff6a8c4cba4bc8171eb35ad",
+    "Sources/Fluid/LegalLanguage/Normalization/StatutoryProvisionNormalizer.swift" : "690d0cd4bb8f4630169a17133a6f532c9aeaec0d32239d2ac4325fc1bcaa1732",
+    "Sources/Fluid/LegalLanguage/Normalization/StatutoryProvisionReference.swift" : "643bde2705d4114b50ee376de1084ae34a5ac60ca097a9e1d98deb63cea731c4",
+    "Sources/Fluid/LegalLanguage/Normalization/WitnessReferenceNormalizer.swift" : "4b04a3cbcb588f28a867053bd1428939bba9df0cf8ff7c19475c21f34c2742de",
+    "Sources/Fluid/LegalLanguage/Normalization/WordTokenizer.swift" : "fb2c8f14d841351a25ebaa4f44a46843c632e7a3b96f274c3841be0bdfde1c77",
+    "Sources/Fluid/LegalLanguage/Packs/BuiltInPacks.swift" : "15e48a614141ea4ef782ead36b5c86c9a060edda120cc892f3bc2d080d251aaf",
+    "Sources/Fluid/LegalLanguage/Packs/LanguagePack.swift" : "9113980ca85b28ee1c332ebf7b9bc80f9ae3699c8bb8d58f1264057945467f4a",
+    "Sources/Fluid/LegalLanguage/Packs/PackLoader.swift" : "f59853dc195ec1c622bdc16fabf0aa49c302274a8b37936a8d418a70653a2df4",
+    "Sources/Fluid/LegalLanguage/Packs/PackRepository.swift" : "d76901a4e7c869ef70b47ac283ccba3c5ad8c97e6657c4f9f1f0e6de70c5c293",
+    "Sources/Fluid/LegalLanguage/Recognition/ProviderCapabilityResolver.swift" : "3069e61f15d28e5b5847b204d3e28608f727f7c27b89ed96f544be9d38dcd9dd",
+    "Sources/Fluid/LegalLanguage/Recognition/ProviderRecognitionCapability.swift" : "58defaeda3865f3e5a11e3d7f7a1d23fd2333aaf680ccda50d86d4cb6b3a2de6",
+    "Sources/Fluid/LegalLanguage/Recognition/RecognitionVocabularyAdapter.swift" : "45805c983369f1b1fc8c75e0680a038932450dd660cb1d187de6a11593625723",
+    "Sources/Fluid/LegalLanguage/Resolution/PrecedenceResolver.swift" : "8a51bb62b21ccfac74ede7dbdbbb07178e8c285fbfeb27d6db292b6bd790218a",
+    "Sources/Fluid/LegalLanguage/Resolution/ResolvedLanguageResources.swift" : "3b6384749537f984221eb5d4ef156a109a55af47fe4a8ce373b118744c8204ad"
+  },
+  "contract" : {
+    "arm" : "V1.21-production",
+    "instructionsSHA256" : "249ebb6ae1d7d6df9387d5d82ce818a0ccf5bef0b5104a05211f592caf54ad88",
+    "toolDefinitionSHA256" : "d7a7cc2347d9f9f2b21561e0073f5fef183125edca916f658f9e62130265cc98"
+  },
+  "developmentCorpusEntries" : 66,
+  "freezeManifestRawSHA256" : "e5426006dc85b068c653ee86fb4633fd0255d119a45084abd7691a1ea059f8bd",
+  "frozenArtifactSHA256" : {
+    "Evaluation/References/intelligence-v1-comparison-dev/candidates.json" : "ef68ff0994e0e4c9be03d80fa3eb2b0ae68adaf04b48e646ee4515901d3c9d41",
+    "Evaluation/References/intelligence-v1-comparison-dev/contract_variant.json" : "68b19453707e96251e71961d5aa1383f47a33faae812168a8c0fe72f89b2baec",
+    "Evaluation/References/intelligence-v1-comparison-dev/corpus.json" : "e164297ec472e7f750d8e3e18f52f939e22a89bd7578ecc42df18d5b7941e364",
+    "Evaluation/References/intelligence-v1-comparison-dev/hazard_fixture.json" : "a5353e38c1ac1340a00f9a72904672be0ac9cfb677993b29db11537c1f356202",
+    "Evaluation/References/intelligence-v1-comparison-dev/protocol.json" : "9215c7623ddac8d935bd6c1074af57c918011b987b92d695bb2877fb2c6fefb2"
+  },
+  "manifestSchemaVersion" : 1,
+  "milestone" : "V1.29",
+  "request" : {
+    "attemptsPerStep" : 1,
+    "baseURL" : "http://localhost:11434/v1",
+    "llmClientMaxRetries" : 1,
+    "ollamaVersion" : "0.34.4",
+    "retriesOnFailure" : false,
+    "stream" : false,
+    "temperature" : 0,
+    "timeoutSeconds" : 60,
+    "toolChoice" : "auto"
+  },
+  "s1ArtifactSHA256" : "6e40337605cdf3b3dea4e0b96ecd351434ec1d7f76011d3a642cc9df256042ad",
+  "scriptSHA256" : {
+    "scripts/intelligence_v1_comparison_s3_analyze.sh" : "8c3402557162086c4bf8b8357eca1f6dac81710367d0e8e9e89ba43807bf8550",
+    "scripts/intelligence_v1_comparison_s3_run.sh" : "c2883ef6ab543bb2ff28b75327dc399a1703a16ffd4173b678fa116fc31e981a",
+    "scripts/test_intelligence_v1_comparison_s2.sh" : "e2761aa631153c883b682ed54a288df61074de045dc2f64f59d2d0a86ac3677a"
+  },
+  "stage" : "S3",
+  "status" : "proposed-not-executed; S2 tooling only, no model run",
+  "stepCount" : 390,
+  "stepsSHA256" : "49a58e215133444d1b1e1300d9ca6fe36055bfe2385b144e4c6a4f5333f0ec41",
+  "testSourceSHA256" : {
+    "Tests/IntelligenceV1ComparisonS2Fixtures.swift" : "2be868bd88f266b009cbe41480bc1521b18cfb3585af913cfcff87f793a07ee5",
+    "Tests/IntelligenceV1ComparisonS2ParityTests.swift" : "59881dc7c476960f70d4282aa9236738ba4755cc987643b1eef2ecb9c50b06f2",
+    "Tests/IntelligenceV1ComparisonS2Tests.swift" : "d864ddb4b852b9a5f687207c43877b35d41aeafd007af2ffe65606723f4a3c45"
+  },
+  "toolingSourceSHA256" : {
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonAnalysis.swift" : "4944212de83c310580976c41011a2a761765b9a9efd8fff1badf4b1fd173204b",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonAnalysisRunner.swift" : "7dccc4214b0cfe8dee7c5ddae2b94da9dcab9fc2c99e420e7354e3f1245338f4",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonExecutionEntryTypes.swift" : "652775b65f0a9b5b5af25ea04cb09b3138905489c139b3dee98c9ce250f016ab",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonExecutionPlan.swift" : "ea6ff34350387eb3c20ca5c50797096488527ad1288b7b122eaacfd20ef558c7",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonExecutionRecords.swift" : "2ee603faf2ca40ea0de0706b1ecab60f8d9c538f72c0562535d8439f43cb989b",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonExecutor.swift" : "81eee40a0928d9877ac1e1bce712be3ea237d2bdb4dee837cb6f42d43084c553",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonLiveRunner.swift" : "81d8fc89ce471b6ab8b03368027ab5713d88fecf10343593542ec3914b0c3f66",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonProvider.swift" : "1024787f915762e8763a936068cf7362363921a3c1457e1c209566f41ddbad3d",
+    "Evaluation/Intelligence/ComparisonExecution/ComparisonScoring.swift" : "364f80a0b9398eda76b4b4bee2e3bbba282f4376a99aeaeba76953affa228b9c"
+  }
+}
