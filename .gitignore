@@ -240,6 +240,8 @@ scripts/*
 !scripts/check_intelligence_v1_33_pipeline_trace.sh
 !scripts/check_intelligence_v1_34_spec_consistency.sh
 !scripts/check_intelligence_v1_35_spec_consistency.sh
+!scripts/intelligence_v1_36_whitespace_probe.sh
+!scripts/check_intelligence_v1_36_whitespace_policy_consistency.sh
 !scripts/verify_intelligence_v1_s3_evidence.sh
 !scripts/intelligence_v1_capability_preflight.sh
 !scripts/intelligence_v1_capability_run.sh
