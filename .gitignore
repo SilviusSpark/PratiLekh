@@ -200,7 +200,14 @@ RELEASE_NOTES_*
 **.dmg
 **.dmg.zip
 # Documentation backups (for future reference, not needed in repo)
-docs/
+docs/*
+!docs/migration/
+docs/migration/*
+!docs/migration/MIGRATION_PLAN.md
+!docs/migration/ENVIRONMENT_MANIFEST.md
+!docs/migration/MAC_MINI_BOOTSTRAP.md
+!docs/migration/MIGRATION_VERIFICATION.md
+!docs/migration/MIGRATION_ROLLBACK.md
 
 
 .agent/
