@@ -8,3 +8,6 @@
 
 ## UI retirement — COMPLETED
 Worktree removed after identity checks (path, branch, HEAD `8a5b134`, reachable from `origin/codex/ink-paper-milestone`, 333 entries unchanged). Archive: `~/pratilekh-private-preservation/ui-design-archive/` (manifest verified before and after). Local branch `codex/ui-ux-development` kept at `8a5b134`; to drop it later use `git branch -d` only (reachable from the remote branch). Not restorable except from `origin/codex/ink-paper-milestone` (committed state) and the archive (design docs); discarded uncommitted UI code and screenshots are gone by PO decision.
+
+## Cutover record (2026-10-21)
+PO approved the Mac mini as the primary workstation after all verification checks were recorded (MIGRATION_VERIFICATION.md). Rollback posture is unchanged: the old Mac was not modified and remains the fallback; retention and retirement are PO decisions. No commits had been made on the mini before cutover other than this closure documentation.

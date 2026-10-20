@@ -3,7 +3,7 @@ No secret values recorded.
 
 ## 1. Hardware / OS
 MacBook Air M1, arm64, 8 GB RAM, 228 GB disk (67 GiB free), macOS 27.0.1.
-Target: "Mac mini M6, 24 GB" — **M6 compatibility is unverified** (see VERIFICATION V-1).
+Target: "Mac mini M6, 24 GB" — M6 compatibility **verified** on 2026-10-21 (see §7 and VERIFICATION).
 
 ## 2. Repositories
 | Path | Branch / HEAD | Notes |
@@ -46,3 +46,11 @@ MLX / llama.cpp: no separate PratiLekh-owned runtime installed; Whisper GGUF via
 
 ## 6. UI worktree — RETIRED (completed 2026-10-20, PO-authorized)
 `PratiLekh-UI` was removed with `git worktree remove --force`. It does not migrate. HEAD `8a5b134` remains on `origin/codex/ink-paper-milestone`; the local branch pointer `codex/ui-ux-development` is retained (not pushed, not force-deleted). Design material was archived privately before removal: `~/pratilekh-private-preservation/ui-design-archive/` (67 files: 15 staged review md, 4 ignored design notes, 48 files of `option-b-stage-1/`; working-tree contents, relative paths preserved; `MANIFEST.sha256` hash `37070048…e7207`, all 67 verified against originals and re-verified after removal). The archive stays off GitHub; it is **not** part of the mini migration unless the PO later approves. Future UI work starts on a fresh branch from then-current `main`.
+
+## 7. Mac mini actuals (verified 2026-10-20/21)
+- **Hardware/OS:** Mac mini `Mac18,5`, Apple M6 (12 cores: 2 Super, 4 Performance, 6 Efficiency), 24 GB, macOS 27.0.1 (26A434), arm64. **No built-in microphone**: dictation needs an external USB/Bluetooth microphone (a Bluetooth mic, 16 kHz mono, was used for the smoke test).
+- **Storage split:** repository and `DerivedData` on a dedicated external 1 TB USB SSD, GPT, APFS (case-insensitive, unencrypted), volume `Projects` mounted at `/Volumes/Projects`; repo at `/Volumes/Projects/Pratilekh`. **System tools stay on the internal SSD** (Xcode in `/Applications`, Homebrew in `/opt/homebrew`, Ollama models in `~/.ollama`, FluidAudio models in `~/Library/Application Support`). Do not use ExFAT for the repo (AppleDouble files break Git/status).
+- **Toolchain:** Xcode 27.1 (27A9275, identical to the old Mac), SDK 27.0, Swift 6.4 (swiftlang-6.4.0.34.1), Homebrew 7.0.10 (arm64 native), git 2.54.0 (Apple Git), gh 2.102.0 (old Mac 2.93.0), SwiftLint 0.65.1 (same), SwiftFormat 0.64.0 (old 0.63.0), Ollama 0.40.6 (old client 0.34.4). gh/SwiftFormat/Ollama versions are not pinned (Homebrew current). Ollama's Homebrew install also brought `mlx` 0.32.4 and `python@3.15` as dependencies.
+- **Git/GitHub:** identity `Spandan <92712698+SilviusSpark@users.noreply.github.com>` (global); `gh` authenticated as `SilviusSpark` (HTTPS, credentials in the macOS keyring); `origin` only, no `upstream`.
+- **Models:** the five pinned Ollama tags pulled from the registry (IDs: granite4:3b `89962fcc7523`, granite4.1:3b `6fd349357287`, qwen3:4b-instruct-2507-q4_K_M `0edcdef34593`, phi4-mini:latest `78fad5d182a7`, ministral-3:3b `f04aa1c738f6`; ~11 GB on disk). The two unpinned diagnostic models were not pulled. FluidAudio Parakeet TDT v2 and v3 CoreML models (904 MB) were downloaded by the first XCTest run; v2 is the selected model.
+- **Not migrated (by design):** app state (history database, vocabulary, defaults), real-dictation audio, private evaluation results, Claude Code memory, credentials. Consequence: app settings are at defaults and may differ from the old Mac (e.g. Continuous Dictation Mode, which appends a trailing space between dictations, is off). The Local API is disabled (default); see SEC-1 in MIGRATION_VERIFICATION.md.

@@ -1399,6 +1399,16 @@ unchanged since `d5a37b7`; nothing is wired into dictation.
   GAAV/continuous formatters run after the hand-off. No register state moved. **Adopted PO-I/PO-K:** no finality semantics (none inferable from hotkey release); Intelligence does not own terminal punctuation or segment-initial capitalization (A1 out of Intelligence ownership; A2 narrowed to interior, blocked; A3–A5 unchanged). **V1.34 issued specification v1.1** (`V1_34_AUTONOMOUS_CORRECTION_POLICY_SPECIFICATION_V1_1.md`; V1.32 unchanged): ownership is a prerequisite; A1/A2a retired from Intelligence ownership; A2b blocked (ownership unresolved); A3–A5 unchanged and unauthorized; **no operation authorized; readiness gate still not ready**. **V1.35 (policy v1.2 addendum) reconciled ownership:** the Intelligence register is empty (no confirmed Intelligence-owned prospective T2 operation); A1/A2a presentation-owned, A2b and whitespace deterministic-processing candidates, A4/A5-lexicon evidence infrastructure, A3 and the split operation ownership-unresolved; PO-Q retired; nothing authorized; gate closed. **V1.36 investigated whitespace (DP-2):** a proposed preservation policy and one narrow T1-candidate subset (DP-2a), nothing promoted or authorized; open PO-S/PO-T/PO-U. **V1.37 adopted PO-S/PO-T/PO-U:** broad DP-2 retired; DP-2a the sole remaining whitespace candidate, BLOCKED (not T1/authorized/implemented); DB-1 separate; Intelligence register empty; gate closed. Next: V1.38 = DP-2a exact function and pipeline-placement specification.
 - **Unresolved Product Owner decisions:** PO-2 minimum absolute production usefulness; PO-3 production
   latency/resource thresholds.
+- **Development environment (migration closed 2026-10-21):** the **Mac mini (M6, 24 GB) is the primary workstation**; the
+  old MacBook Air M1 stays untouched as fallback until the PO retires it. Repo: `/Volumes/Projects/Pratilekh` on an external
+  APFS SSD (never ExFAT); system tools on the internal SSD; `origin` only. The migration was verified end to end (baseline **31 pass + 2
+  documented historical failures**, `./build.sh unsigned`, XCTest 535/535, Parakeet TDT v2 transcription and live dictation) with results and
+  qualifications in `docs/migration/MIGRATION_VERIFICATION.md`. The five pinned Ollama models were re-pulled; the S1 verifier reports **41/46** on
+  Ollama 0.40.6 (an extra local-manifest layer, contents identical — qualification only, verifier unchanged). The Mac mini has no built-in
+  microphone; app settings/state were not migrated.
+- **Open non-blocking items:** **SEC-1 (security hardening, separate from all Intelligence work):** the Local API listener binds all
+  interfaces (loopback is enforced only after accept); **keep `LocalAPIEnabled` off** until remediated. One full-XCTest run had two
+  `AudioRouteRecoveryIntegrationTests` failures with no established cause (the next full run passed 535/535).
 
 **A new session must first read** `V1_27_MODEL_COMPARISON_PROTOCOL.md` (and `protocol.json`) and the V1.28 S1
 artifact **before proposing the next stage**, and the V1.30 findings document; S3 is done and must not be re-run or repaired, S4/S5/S6 do not apply (no finalist).

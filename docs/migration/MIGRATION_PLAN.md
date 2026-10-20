@@ -1,6 +1,6 @@
 # PratiLekh Migration Plan — MacBook Air M1 (8 GB) → Mac mini (24 GB)
 
-**Status: DRAFT, uncommitted. Preparation only.** Authoritative project state stays in `CLAUDE.md` and `Evaluation/Intelligence/*`; this plan does not restate it.
+**Status: COMPLETED 2026-10-21 — the Mac mini was approved as the primary development workstation by the Product Owner (see "Closure record" at the end).** The text below is the original plan, kept as written. Authoritative project state stays in `CLAUDE.md` and `Evaluation/Intelligence/*`; this plan does not restate it.
 Legend — **[A]** automatic (scriptable), **[M]** manual action, **[PO]** Product Owner approval required.
 
 ## Phase 0 — Freeze the source (old Mac)
@@ -37,3 +37,8 @@ Mini becomes primary only after Phase 4 passes **and** the PO signs off. The old
 
 ## Out of scope
 No feature work, no Intelligence/normalization/Authority change, no model runs, no benchmark runs, no frozen-evidence edits. Verification ≠ authorization of a new experiment.
+
+## Closure record (2026-10-21)
+- **Outcome:** all verification gates V-1…V-11 passed or are explicitly qualified (MIGRATION_VERIFICATION.md, "Final verification results"); PO approved the Mac mini as the primary workstation. Cutover itself is a status change: the old Mac stays intact as fallback per MIGRATION_ROLLBACK.md until the PO retires it.
+- **Deviations from this plan:** (1) the migration checkpoint `c1f645b` (already on `origin/main`) was cloned fresh; no push was needed from the old Mac. (2) The repository lives on a dedicated external APFS SSD (`/Volumes/Projects/Pratilekh`), not `~/Projects/PratiLekh`; system tools stay on the internal SSD. An earlier ExFAT checkout on that drive was discarded (AppleDouble `._*` files corrupt Git/status on ExFAT). (3) Models were re-pulled from the Ollama registry and the private V1.30 log was transferred by AirDrop (hash-verified), as Phase 2 required. No private recordings, evaluation results, app state or credentials were transferred.
+- **Non-blocking items carried forward:** SEC-1 (Local API binds all interfaces; API disabled), the S1 verifier's 41/46 qualification, and one XCTest run with two unexplained failures — all described in MIGRATION_VERIFICATION.md.

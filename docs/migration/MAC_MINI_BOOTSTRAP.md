@@ -1,4 +1,4 @@
-# Mac mini Bootstrap (nothing here has been run)
+# Mac mini Bootstrap (executed 2026-10-20/21; see "Execution record" at the end)
 Every step [M] unless marked [A]. Each install step needs PO authorization first.
 1. Record `sw_vers`, `uname -m`, `sysctl hw.memsize`; install macOS updates [M].
 2. Xcode (App Store/developer.apple.com) matching or newer than 27.1; `sudo xcodebuild -license accept`; `xcode-select -s /Applications/Xcode.app` [M]. Confirm macOS 15+ SDK builds the target.
@@ -12,3 +12,19 @@ Every step [M] unless marked [A]. Each install step needs PO authorization first
 10. Restore `V1_30_S3_RESULTS/server_requests.log` (hash `79de85f6…a5c12`) to its original path — required by V-5 — then other permitted private assets via encrypted transfer [PO] (never GitHub/cloud sync).
 11. Grant macOS permissions (microphone, accessibility, input monitoring) [M]; these are per-machine and cannot be copied.
 12. Do not enable Local API unless needed (setting read at launch).
+
+## Execution record (2026-10-20/21)
+| Step | Result on the Mac mini |
+|---|---|
+| 1 hardware | recorded (ENVIRONMENT_MANIFEST §7) |
+| 2 Xcode | 27.1 (27A9275) installed by the PO; license accepted, `xcode-select` -> `/Applications/Xcode.app` |
+| 3 Homebrew + packages | Homebrew 7.0.10; `gh`, `swiftlint`, `swiftformat`, `ollama` installed (versions in §7; unpinned) |
+| 4 GitHub/identity | git identity set; `gh auth login` completed by the PO (keyring) |
+| 5 clone | **deviation:** fresh clone to `/Volumes/Projects/Pratilekh` on an APFS external SSD (the first clone on ExFAT was discarded); `main` = `c1f645b`, `origin` only, `git fsck --full` clean, tree clean |
+| 6 CLAUDE.md / Claude Code | read; Claude Code memory not copied |
+| 7 build | `./build.sh unsigned` BUILD SUCCEEDED (same single `transcribe-cpp-swift` symlink warning as the old Mac) |
+| 8 ASR models | downloaded on first XCTest run (not by launching the app); Parakeet TDT v2 loads and transcribes on M6 |
+| 9 Ollama | server started manually; five pinned tags pulled sequentially; S1 `--local` verifier 41/46 (qualified, see VERIFICATION) |
+| 10 private log | `server_requests.log` AirDropped, SHA-256 `79de85f6…a5c12` verified at source copy and destination, restored at the original gitignored path, mode 600 |
+| 11 permissions | microphone and global-hotkey/Accessibility granted by the PO; no Input Monitoring prompt was reported (not independently verifiable from logs) |
+| 12 Local API | disabled; enabled once, per process only (`-LocalAPIEnabled YES`), for the isolated V-8 run, then closed |
