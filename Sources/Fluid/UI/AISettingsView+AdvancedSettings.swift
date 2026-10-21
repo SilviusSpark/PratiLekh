@@ -1127,8 +1127,20 @@ extension AIEnhancementSettingsView {
             if mode.normalized == .edit {
                 self.editModeInlineModelControls
             } else {
-                Button {
-                    self.viewModel.openNewPromptEditor(prefillMode: .dictate)
+                Menu {
+                    Button("Blank Prompt") {
+                        self.viewModel.openNewPromptEditor(prefillMode: .dictate)
+                    }
+
+                    Divider()
+
+                    Section("Indian Legal Templates") {
+                        ForEach(IndianLegalPromptTemplate.allCases) { template in
+                            Button(template.name) {
+                                self.viewModel.openNewPromptEditor(usingTemplate: template)
+                            }
+                        }
+                    }
                 } label: {
                     Label("Add Prompt", systemImage: "plus")
                         .font(.system(size: 12, weight: .semibold))

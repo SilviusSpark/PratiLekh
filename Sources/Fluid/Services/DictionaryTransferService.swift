@@ -285,6 +285,19 @@ final class DictionaryTransferService {
         return "FluidVoice_Dictionary_\(formatter.string(from: date)).json"
     }
 
+    /// Bundled starter pack of Indian legal terminology, Latin legal maxims, court and
+    /// statute names, plus common Indian names and places, for court-dictation use.
+    func loadIndianLegalStarterPack() throws -> DictionaryTransferDocument {
+        guard let url = Bundle.main.url(
+            forResource: "indian_legal_dictionary.default",
+            withExtension: "json"
+        ) else {
+            throw DictionaryTransferServiceError.invalidJSON
+        }
+        let data = try Data(contentsOf: url)
+        return try self.decode(data)
+    }
+
     static func importState(
         document: DictionaryTransferDocument,
         mode: DictionaryTransferImportMode,
